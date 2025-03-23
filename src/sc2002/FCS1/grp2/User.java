@@ -19,9 +19,11 @@ public abstract class User {
 		this.password = splitted.get(4);
 	}
 	
-	public abstract void print();
+	void print() {
+		System.out.printf("%s %s %d %s %s \n", this.name, this.nric, this.age, this.maritalStatus.toString(), this.password);
+	}
 	
-	public String encode() {
+	String encode() {
 		return String.format("%s,%s,%d,%s,%s", name, nric, age, maritalStatus.toString(), password);
 	}
 }

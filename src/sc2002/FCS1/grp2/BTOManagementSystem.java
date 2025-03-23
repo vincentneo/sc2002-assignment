@@ -8,10 +8,11 @@ public class BTOManagementSystem {
 		// TODO Auto-generated method stub
 		CSVParser parser = new CSVParser();
 		
-		ArrayList<User> applicants = parser.parseApplicants();
+		ArrayList<User> users = parser.retrieveAllUsers();
 		
-		for (User applicant : applicants) {
-			applicant.print();
+		for (User user : users) {
+			System.out.printf("%s: ", user.getClass());
+			user.print();
 		}
 	}
 

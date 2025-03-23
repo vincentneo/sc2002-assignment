@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CSVParser {
-	String path;
+	private String path;
 	
 	CSVParser(String path) {
 		this.path = path;
@@ -17,11 +17,11 @@ public class CSVParser {
 		this.path = filesPath;
 	}
 	
-	ArrayList<User> parseApplicants() {
-		ArrayList<User> applicants = new ArrayList<>();
+	private <U extends User> ArrayList<U> parse(String path, Class<U> type) {
+		ArrayList<U> users = new ArrayList<>();
 		try {
 			
-			File file = new File(path + "ApplicantList.csv");
+			File file = new File(path);
 			Scanner scanner = new Scanner(file);
 			
 			// skip first line
@@ -29,7 +29,7 @@ public class CSVParser {
 			
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				applicants.add(new Test(line));
+				users.add(type.getDeclaredConstructor(String.class).newInstance(line));
 			}
 			
 			scanner.close();
@@ -38,6 +38,29 @@ public class CSVParser {
 			e.printStackTrace();
 		}
 		
-		return applicants;
+		return users;
+	}
+	
+	ArrayList<Applicant> parseApplicants() {
+		String filePath = path + "ApplicantList.csv";
+		return parse(filePath, Applicant.class);
+	}
+	
+	ArrayList<HDBManager> parseManagers() {
+		String filePath = path + "ManagerList.csv";
+		return parse(filePath, HDBManager.class);
+	}
+	
+	ArrayList<HDBOfficer> parseOfficer() {
+		String filePath = path + "OfficerList.csv";
+		return parse(filePath, HDBOfficer.class);
+	}
+	
+	ArrayList<User> retrieveAllUsers() {
+		ArrayList<User> users = new ArrayList<>();
+		users.addAll(parseApplicants());
+		users.addAll(parseManagers());
+		users.addAll(parseOfficer());
+		return users;
 	}
 }
