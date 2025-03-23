@@ -23,7 +23,7 @@ public class BTOManagementSystem {
 		System.out.println("-".repeat(60));
 		
 		// cast user out to respective type
-		if (user instanceof Applicant) {
+		if (user instanceof HDBOfficer) {
 			System.out.println("You are signed in as a HDB Officer.");
 			HDBOfficer officer = (HDBOfficer) user;
 		}
@@ -31,7 +31,7 @@ public class BTOManagementSystem {
 			System.out.println("You are signed in as a HDB Manager.");
 			HDBManager manager = (HDBManager) user;
 		}
-		else if (user instanceof HDBOfficer) {
+		else if (user instanceof Applicant) {
 			System.out.println("You are signed in as an Applicant.");
 			Applicant applicant = (Applicant) user;
 		}
