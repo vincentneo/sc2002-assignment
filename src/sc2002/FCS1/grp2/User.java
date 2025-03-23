@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class User {
-	protected String name;
-	protected String nric;
-	protected int age;
-	protected MaritalStatus maritalStatus;
-	protected String password;
+	private String name;
+	private String nric;
+	private int age;
+	private MaritalStatus maritalStatus;
+	private String password;
 	
 	public User(String line) {
 		List<String> splitted = Arrays.asList(line.split(","));
@@ -17,6 +17,46 @@ public abstract class User {
 		this.age = Integer.parseInt(splitted.get(2));
 		this.maritalStatus = MaritalStatus.fromString(splitted.get(3));
 		this.password = splitted.get(4);
+	}
+	
+	String getName() {
+		return name;
+	}
+
+	void setName(String name) {
+		this.name = name;
+	}
+
+	String getNric() {
+		return nric;
+	}
+
+	void setNric(String nric) {
+		this.nric = nric;
+	}
+
+	int getAge() {
+		return age;
+	}
+
+	void setAge(int age) {
+		this.age = age;
+	}
+
+	MaritalStatus getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	void setMaritalStatus(MaritalStatus maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+	
+	boolean checkPassword(String password) {
+		return this.password.equals(password);
+	}
+
+	void setPassword(String password) {
+		this.password = password;
 	}
 	
 	void print() {
