@@ -59,6 +59,8 @@ public abstract class User {
 		this.password = password;
 	}
 	
+	abstract boolean canApplyProject();
+	
 	void print() {
 		System.out.printf("%s %s %d %s %s \n", this.name, this.nric, this.age, this.maritalStatus.toString(), this.password);
 	}

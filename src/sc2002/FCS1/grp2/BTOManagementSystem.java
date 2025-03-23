@@ -12,16 +12,33 @@ public class BTOManagementSystem {
 		
 		ArrayList<User> users = parser.retrieveAllUsers();
 		
-		System.out.println("Welcome to Build-To-Order (BTO) Management System!");
-		System.out.println("-".repeat(60));
 		debugPrintAllUsers(users);
 
 		Scanner scanner = new Scanner(System.in);
 		User user = login(scanner, users);
 		
 
-		
+		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
 		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
+		System.out.println("-".repeat(60));
+		
+		// cast user out to respective type
+		if (user instanceof Applicant) {
+			System.out.println("You are signed in as a HDB Officer.");
+			HDBOfficer officer = (HDBOfficer) user;
+		}
+		else if (user instanceof HDBManager) {
+			System.out.println("You are signed in as a HDB Manager.");
+			HDBManager manager = (HDBManager) user;
+		}
+		else if (user instanceof HDBOfficer) {
+			System.out.println("You are signed in as an Applicant.");
+			Applicant applicant = (Applicant) user;
+		}
+		else {
+			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");
+		}
+		
 		
 		scanner.close();
 	}

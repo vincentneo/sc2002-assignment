@@ -7,4 +7,9 @@ public class HDBManager extends User {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	boolean canApplyProject() {
+		return false;
+	}
+
 }
