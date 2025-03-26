@@ -80,6 +80,7 @@ public abstract class User {
 		return list;
 	}
 	
+	//
 	void print() {
 		System.out.printf("%s %s %d %s %s \n", this.name, this.nric, this.age, this.maritalStatus.toString(), this.password);
 	}
