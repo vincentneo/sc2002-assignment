@@ -50,6 +50,9 @@ public class HDBOfficer extends Applicant {
         // Display project info (including invisible ones)
         System.out.println(project.toString());
     }
-	
 
+	@Override
+	String getReadableTypeName() {
+		return "HDB Officer";
+	}
 }
