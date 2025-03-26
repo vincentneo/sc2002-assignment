@@ -41,4 +41,9 @@ public class Applicant extends User {
 		list.add("View Projects");
 		return list;
 	}
+	
+	@Override
+	String getReadableTypeName() {
+		return "Applicant";
+	}
 }

@@ -66,6 +66,8 @@ public abstract class User {
 	
 	abstract boolean canApplyProject();
 	
+	abstract String getReadableTypeName();
+	
 	/**
 	 * This method should prepare the list of tasks of which a user of such role can perform.
 	 * It can be expected that the contents of the list will be presented to the user to let them know what they can do.

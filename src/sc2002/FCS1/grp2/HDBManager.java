@@ -11,5 +11,10 @@ public class HDBManager extends User {
 	boolean canApplyProject() {
 		return false;
 	}
+	
+	@Override
+	String getReadableTypeName() {
+		return "HDB Manager";
+	}
 
 }
