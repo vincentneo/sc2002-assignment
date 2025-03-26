@@ -19,7 +19,11 @@ public abstract class User {
 		this.password = splitted.get(4);
 	}
 	
-	String getName() {
+	/**
+	 * This getter returns the name of the user.
+	 * @return name The name of the user.
+	 */
+	public String getName() {
 		return name;
 	}
 
