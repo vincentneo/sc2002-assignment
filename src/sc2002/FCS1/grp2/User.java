@@ -92,7 +92,7 @@ public abstract class User {
 	 * It can be expected that the contents of the list will be presented to the user to let them know what they can do.
 	 * Subclasses must add on to the list by the superclass, rather than creating a new list.
 	 * @author Vincent Neo
-	 * @return ArrayList&lt;String&gt; List of tasks that user can do using our BTO system.
+	 * @return List of tasks that user can do using our BTO system.
 	 */
 	ArrayList<String> getMenu() {
 		ArrayList<String> list = new ArrayList<>();
