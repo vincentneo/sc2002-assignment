@@ -12,7 +12,10 @@ jobs:
     - name: Setup Java JDK (v21)
       uses: actions/setup-java@v4.7.0
       with:
+        distribution: 'zulu'
         java-version: 21
     - name: Change Directory
       run: cd src; ls
+    - name: Generate Docs
+      run: javadoc -d docs sc2002.FCS1.grp2
         
