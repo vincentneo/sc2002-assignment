@@ -71,11 +71,11 @@ public class BTOManagementSystem {
 				break;
 			}
 			
-			handleUserResponse(response, user);
+			handleUserResponse(response, scanner, user);
 		}
 	}
 	
-	private static void handleUserResponse(String response, User user) {
+	private static void handleUserResponse(String response, Scanner scanner, User user) {
 		try {
 			int index = Integer.parseInt(response);
 			handleAction(index, user);
