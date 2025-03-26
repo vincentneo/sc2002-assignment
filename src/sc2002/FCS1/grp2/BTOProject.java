@@ -10,23 +10,29 @@ public class BTOProject {
     private String neighborhood;
 
     //TODO: Create a seperate class for room units & Store which floors are assigned to certain users
-    private int maxTwoRoomUnits;   
-    private int maxThreeRoomUnits; 
-    private int remainingTwoRoomUnits;
-    private int remainingThreeRoomUnits;
+    private int maxTwoRoomUnits;
+    private int maxThreeRoomUnits;
+    //private int remainingTwoRoomUnits;
+    //private int remainingThreeRoomUnits;
+    private ArrayList<Flat> remainingTwoRoomUnits;
+    private ArrayList<Flat> remainingThreeRoomUnits;
+    private ArrayList<Flat> bookedTwoRoomUnits;
+    private ArrayList<Flat> bookedThreeRoomUnits;
 
     //TODO: Selling price
+
+    private ArrayList<Application> applications;
 
     private String openingDate;
     private String closingDate;
 
-    private String managerInCharge;
+    private HDBManager managerInCharge;
     private int totalOfficerSlots;
-    private ArrayList<String> officers;
+    private ArrayList<HDBOfficer> officers;
 
     private boolean visibility;
 
-    static final private int MAX_OFFICER_NUM = 10;
+    static private int MAX_OFFICER_NUM = 10;
 
     //region Consturctors
     //Construct with a string parsed from a csv file.
@@ -36,15 +42,18 @@ public class BTOProject {
 		neighborhood = splitted.get(1);
 
 		maxTwoRoomUnits = Integer.parseInt(splitted.get(3));
-        remainingTwoRoomUnits = maxTwoRoomUnits;
+        // TODO: Retrieve booked rooms
         maxThreeRoomUnits = Integer.parseInt(splitted.get(6));
-        remainingThreeRoomUnits = maxThreeRoomUnits;
+        // Retrieve booked rooms
 
 		openingDate = splitted.get(8);
 		closingDate = splitted.get(9);
-        managerInCharge = splitted.get(10);
+        
+        //TODO: Get objects for manager and officers
+        
+        //managerInCharge = splitted.get(10);
         totalOfficerSlots = Integer.parseInt(splitted.get(11));
-        officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
+        //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
     }
 
     //Construct with values
@@ -53,16 +62,17 @@ public class BTOProject {
         this.neighborhood = neighborhood;
         this.maxTwoRoomUnits = maxTwoRoomUnits;
         this.maxThreeRoomUnits = maxThreeRoomUnits;
-        remainingTwoRoomUnits = maxTwoRoomUnits;
-        remainingThreeRoomUnits = maxThreeRoomUnits;
+        // TODO: Retrieve booked rooms
 
+        
         // TODO: Check whether the date range is valid
         this.openingDate = openingDate;
         this.closingDate = closingDate;
 
-        this.managerInCharge = managerInCharge;
+        //TODO: Get objects for managers and officers
+        //this.managerInCharge = managerInCharge;
         this.totalOfficerSlots = officerSlots;
-        this.officers = officers != null ? officers : new ArrayList<String>();
+        //this.officers = officers != null ? officers : new ArrayList<String>();
     }
     //endregion
 
@@ -188,7 +198,7 @@ public class BTOProject {
     //endregion
 
     //region Manager In Charge
-    public String getManagerInCharge() {
+    public HDBManager getManagerInCharge() {
         return managerInCharge;
     }
     //endregion
@@ -215,34 +225,154 @@ public class BTOProject {
         totalOfficerSlots = slots;
     }
 
-    public ArrayList<String> getOfficers() {
+    public ArrayList<HDBOfficer> getOfficers() {
         return officers;
     }
 
-    public void addOfficer(String name) {
+    public void addOfficer(HDBOfficer officer) {
         if (officers.size() >= totalOfficerSlots) {
             System.out.println("Invalid Input! The project is full. Cannot register more officers.");
             return;
         }
 
-        officers.add(name);
+        officers.add(officer);
     }
 
-    public void removeOfficer(String name) {
-        if(officers.contains(name)) {
-            officers.remove(name);
+    public void removeOfficer(HDBOfficer officer) {
+        if(officers.contains(officer)) {
+            officers.remove(officer);
         }
         else if (officers.isEmpty()) {
            System.out.println("Invalid Input! The project does not have any HBD officers.");
         }
         else {
-            System.out.println("Invalid Input! The project does not have HBD officer " + name + ".");
+            System.out.println("Invalid Input! The project does not have HBD officer " + officer + ".");
+        }
+    }
+    //endregion
+
+    //region Applications and allocation of rooms
+    public boolean submitApplication(Applicant applicant, FlatType flatType) {
+        ArrayList<Flat> remainingRooms;
+        if (flatType == FlatType.THREE_ROOM) {
+            remainingRooms = remainingThreeRoomUnits;
+        }
+        else {
+            remainingRooms = remainingTwoRoomUnits;
+        }
+
+        if (remainingRooms.isEmpty()) {
+            System.out.println("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
+            return false;
+        }
+        
+        applications.add(new Application(this, flatType, ApplicationStatus.PENDING, applicant));
+        return true;
+    }
+
+    // The user inputs index to identify which application to approve/reject/book
+    public boolean approveApplication(int index) {
+        if(applications.isEmpty()) {
+            System.out.println("There is no applications for project " + projectName + ".");
+            return false;
+        }
+        else if (index - 1 > applications.size() || index - 1 < 0) {
+            System.out.println("Invalid input!");
+            return false;
+        }
+        
+        ApplicationStatus status = applications.get(index - 1).getStatus();
+        if (status != ApplicationStatus.PENDING) {
+            System.out.println("Invalid input! The Application has been already processed!");
+            return false;
+        }
+
+        applications.get(index - 1).setStatus(ApplicationStatus.SUCCESSFUL);
+        return true;
+    }
+
+    public boolean rejectApplication(int index) {
+        if(applications.isEmpty()) {
+            System.out.println("There is no applications for project " + projectName + ".");
+            return false;
+        }
+        else if (index - 1 > applications.size() || index - 1 < 0) {
+            System.out.println("Invalid input! Index out of bound!");
+            return false;
+        }
+        
+        ApplicationStatus status = applications.get(index - 1).getStatus();
+        if (status != ApplicationStatus.PENDING) {
+            System.out.println("Invalid input! The Application has been already processed!");
+            return false;
+        }
+
+        applications.get(index - 1).setStatus(ApplicationStatus.UNSUCCESSFUL);
+        return true;
+    }
+
+    public boolean bookApplication(int index) {
+        if(applications.isEmpty()) {
+            System.out.println("There is no applications for project " + projectName + ".");
+            return false;
+        }
+        else if (index - 1 > applications.size() || index - 1 < 0) {
+            System.out.println("Invalid input! Index out of bound!");
+            return false;
+        }
+        
+        Application appli = applications.get(index - 1);
+
+        ApplicationStatus status = appli.getStatus();
+        if (status != ApplicationStatus.SUCCESSFUL) {
+            System.out.println("Invalid input! The application is not successful!");
+            return false;
+        }
+        else if (appli.getFlatType() == FlatType.THREE_ROOM && remainingThreeRoomUnits.isEmpty()) {
+            System.out.println("The selected room type has been already fully booked!");
+            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
+            return false;
+        }
+        else if (appli.getFlatType() == FlatType.TWO_ROOM && remainingTwoRoomUnits.isEmpty()) {
+            System.out.println("The selected room type has been already fully booked!");
+            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
+            return false;
+        }
+
+        appli.setStatus(ApplicationStatus.BOOKED);
+        
+        if (appli.getFlatType() == FlatType.TWO_ROOM) {
+            Flat bookedFlat = remainingTwoRoomUnits.removeLast();
+            bookedFlat.setBookedApplicant(appli.getApplicant());
+            bookedTwoRoomUnits.add(bookedFlat);
+        }
+        else {
+            Flat bookedFlat = remainingThreeRoomUnits.removeLast();
+            bookedFlat.setBookedApplicant(appli.getApplicant());
+            bookedThreeRoomUnits.add(bookedFlat);
+        }
+
+        return true;
+    }
+    
+    public void printApplications() {
+        if (applications.isEmpty()) {
+            System.out.println("There is no applications for project " + projectName + ".");
+            return;
+        }
+
+        for(int i = 0; i < applications.size(); i++) {
+            System.out.println((i + 1) + ": " + applications.get(i));
         }
     }
     //endregion
 
     @Override
 	public String toString() {
+        ArrayList<String> officerNames = new ArrayList<String>();
+        for(int i = 0; i < officers.size(); i++) {
+            officerNames.add(officers.get(i).getName());
+        }
         return "BTO Project: " +
                 "Project Name=" + projectName + ", " +
                 "Neighborhood=" + neighborhood + ", " +
@@ -253,7 +383,7 @@ public class BTOProject {
                 "HBD Manager In Charge=" + managerInCharge + ", " + 
                 "Total Officer Slots=" + totalOfficerSlots + ", " +
                 "Number of HBD Officers Assigned" + officers.size() + ", " +
-                "List of HBD Officers" + String.join(", ", officers) + ", " +
+                "List of HBD Officers" + String.join(", ", officerNames) + ", " +
                 "Visibility=" + visibility + ".";
     }
 }
