@@ -15,10 +15,13 @@ jobs:
         java-version: 21
     - name: Generate Docs
       run: cd src; javadoc -d docs sc2002.FCS1.grp2
+    - name: Set git commit hash
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
     - name: Upload docs as workflow artifact
       uses: actions/upload-artifact@v4
       with:
-        name: docs-${{GITHUB_SHA::7}}
+        name: docs-${{ steps.vars.outputs.sha_short }}
         path: src/docs/
-        compression-level: 5
+        compression-level: 6
         
