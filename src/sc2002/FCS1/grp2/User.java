@@ -14,7 +14,7 @@ import java.lang.String;
  * 	<li>Applicant</li>
  * 	<li>HDB Officer</li>
  * 	<li>HDB Manager</li>
- * <ul>
+ * </ul>
  *  
  * @author Vincent Neo
  * 
