@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.EnumMap;
 
 //TODO: Error handling
 public class BTOProject {
@@ -14,10 +15,9 @@ public class BTOProject {
     private int maxThreeRoomUnits;
     //private int remainingTwoRoomUnits;
     //private int remainingThreeRoomUnits;
-    private ArrayList<Flat> remainingTwoRoomUnits;
-    private ArrayList<Flat> remainingThreeRoomUnits;
-    private ArrayList<Flat> bookedTwoRoomUnits;
-    private ArrayList<Flat> bookedThreeRoomUnits;
+
+    private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
+    private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
 
     //TODO: Selling price
 
@@ -98,7 +98,6 @@ public class BTOProject {
 
     //region Room Units
     //TODO: Get and set for room units
-    //TODO: Assinging room units for applicants
     //endregion
 
     //region Dates
@@ -253,15 +252,9 @@ public class BTOProject {
 
     //region Applications and allocation of rooms
     public boolean submitApplication(Applicant applicant, FlatType flatType) {
-        ArrayList<Flat> remainingRooms;
-        if (flatType == FlatType.THREE_ROOM) {
-            remainingRooms = remainingThreeRoomUnits;
-        }
-        else {
-            remainingRooms = remainingTwoRoomUnits;
-        }
+        ArrayList<Flat> remaining = remainingRooms.get(flatType);
 
-        if (remainingRooms.isEmpty()) {
+        if (remaining.isEmpty()) {
             System.out.println("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
             return false;
         }
@@ -281,13 +274,19 @@ public class BTOProject {
             return false;
         }
         
-        ApplicationStatus status = applications.get(index - 1).getStatus();
+        Application appli = applications.get(index - 1);
+        ApplicationStatus status = appli.getStatus();
         if (status != ApplicationStatus.PENDING) {
             System.out.println("Invalid input! The Application has been already processed!");
             return false;
         }
+        else if (remainingRooms.get(appli.getFlatType()).isEmpty()) {
+            System.out.println("The selected room type has been already fully booked!");
+            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
+            return false;
+        }
 
-        applications.get(index - 1).setStatus(ApplicationStatus.SUCCESSFUL);
+        appli.setStatus(ApplicationStatus.SUCCESSFUL);
         return true;
     }
 
@@ -324,16 +323,13 @@ public class BTOProject {
         Application appli = applications.get(index - 1);
 
         ApplicationStatus status = appli.getStatus();
+        ArrayList<Flat> remaining = remainingRooms.get(appli.getFlatType());
+
         if (status != ApplicationStatus.SUCCESSFUL) {
             System.out.println("Invalid input! The application is not successful!");
             return false;
         }
-        else if (appli.getFlatType() == FlatType.THREE_ROOM && remainingThreeRoomUnits.isEmpty()) {
-            System.out.println("The selected room type has been already fully booked!");
-            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-            return false;
-        }
-        else if (appli.getFlatType() == FlatType.TWO_ROOM && remainingTwoRoomUnits.isEmpty()) {
+        else if (remaining.isEmpty()) {
             System.out.println("The selected room type has been already fully booked!");
             appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
             return false;
@@ -341,17 +337,9 @@ public class BTOProject {
 
         appli.setStatus(ApplicationStatus.BOOKED);
         
-        if (appli.getFlatType() == FlatType.TWO_ROOM) {
-            Flat bookedFlat = remainingTwoRoomUnits.removeLast();
-            bookedFlat.setBookedApplicant(appli.getApplicant());
-            bookedTwoRoomUnits.add(bookedFlat);
-        }
-        else {
-            Flat bookedFlat = remainingThreeRoomUnits.removeLast();
-            bookedFlat.setBookedApplicant(appli.getApplicant());
-            bookedThreeRoomUnits.add(bookedFlat);
-        }
-
+        Flat bookedFlat = remaining.removeLast();
+        bookedFlat.setBookedApplicant(appli.getApplicant());
+        bookedRooms.get(appli.getFlatType()).add(bookedFlat);
         return true;
     }
     
