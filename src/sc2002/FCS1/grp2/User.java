@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,6 +65,18 @@ public abstract class User {
 	}
 	
 	abstract boolean canApplyProject();
+	
+	/**
+	 * This method should prepare the list of tasks of which a user of such role can perform.
+	 * It can be expected that the contents of the list will be presented to the user to let them know what they can do.
+	 * Subclasses must add on to the list by the superclass, rather than creating a new list.
+	 * @return ArrayList<String> List of tasks that user can do using our BTO system.
+	 */
+	ArrayList<String> getMenu() {
+		ArrayList<String> list = new ArrayList<>();
+		list.add("Change Password");
+		return list;
+	}
 	
 	void print() {
 		System.out.printf("%s %s %d %s %s \n", this.name, this.nric, this.age, this.maritalStatus.toString(), this.password);

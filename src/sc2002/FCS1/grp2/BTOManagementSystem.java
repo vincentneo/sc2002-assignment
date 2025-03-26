@@ -39,8 +39,21 @@ public class BTOManagementSystem {
 			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");
 		}
 		
-		
+		System.out.print(generateMenu(user));
 		scanner.close();
+	}
+	
+	private static String generateMenu(User user) {
+		ArrayList<String> menuList = user.getMenu();
+		String result = String.format("\n\n%s %s %s\n", "-".repeat(21), "Available Options", "-".repeat(20));
+		
+		for (int i = 0; i < menuList.size(); i++) {
+			result += String.format("%d. %s\n", i, menuList.get(i));
+		}
+		
+		result += "-".repeat(60);
+		
+		return result;
 	}
 	
 	private static String getGreetings() {
