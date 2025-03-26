@@ -7,4 +7,9 @@ public class HDBOfficer extends Applicant {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	String getReadableTypeName() {
+		return "HDB Officer";
+	}
+
 }

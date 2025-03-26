@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,5 +33,17 @@ public class Applicant extends User {
 	@Override
 	boolean canApplyProject() {
 		return true;
+	}
+	
+	@Override
+	ArrayList<String> getMenu() {
+		ArrayList<String> list = super.getMenu();
+		list.add("View Projects");
+		return list;
+	}
+	
+	@Override
+	String getReadableTypeName() {
+		return "Applicant";
 	}
 }
