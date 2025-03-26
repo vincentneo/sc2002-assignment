@@ -3,7 +3,22 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.lang.String;
 
+/**
+ * This class forms as the base of all user types.
+ * All of the above user types must extend this class, as it contains essential fields and common method declarations.
+ * <br/>
+ * User types includes:
+ * <ul>
+ * 	<li>Applicant</li>
+ * 	<li>HDB Officer</li>
+ * 	<li>HDB Manager</li>
+ * <ul>
+ *  
+ * @author Vincent Neo
+ * 
+ */
 public abstract class User {
 	private String name;
 	private String nric;
@@ -28,6 +43,10 @@ public abstract class User {
 		return name;
 	}
 
+	/**
+	 * This setter sets the name of the user.
+	 * @param name The name of the user.
+	 */
 	void setName(String name) {
 		this.name = name;
 	}
@@ -72,7 +91,8 @@ public abstract class User {
 	 * This method should prepare the list of tasks of which a user of such role can perform.
 	 * It can be expected that the contents of the list will be presented to the user to let them know what they can do.
 	 * Subclasses must add on to the list by the superclass, rather than creating a new list.
-	 * @return ArrayList<String> List of tasks that user can do using our BTO system.
+	 * @author Vincent Neo
+	 * @return ArrayList&lt;String&gt; List of tasks that user can do using our BTO system.
 	 */
 	ArrayList<String> getMenu() {
 		ArrayList<String> list = new ArrayList<>();
