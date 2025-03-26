@@ -14,8 +14,12 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 21
-    - name: Change Directory
-      run: cd src; ls
     - name: Generate Docs
       run: javadoc -d docs sc2002.FCS1.grp2
+    - name: Upload docs as workflow artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: docs
+        path: docs/
+        compression-level: 5
         
