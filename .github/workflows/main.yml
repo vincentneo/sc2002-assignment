@@ -14,7 +14,7 @@ jobs:
         distribution: 'zulu'
         java-version: 21
     - name: Generate Docs
-      run: cd src; javadoc -d docs -private --noqualifier all sc2002.FCS1.grp2
+      run: cd src; javadoc -d docs -private -noqualifier all sc2002.FCS1.grp2
     - name: Set git commit hash
       id: vars
       run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
