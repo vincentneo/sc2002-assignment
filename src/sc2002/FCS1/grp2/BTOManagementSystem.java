@@ -20,27 +20,91 @@ public class BTOManagementSystem {
 
 		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
 		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
-		System.out.println("-".repeat(60));
+		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
+		
+		System.out.print(generateMenu(user));
+		
+		startResponseLoop(scanner, user);
+		
+		System.out.println("Thanks for using the BTO system. Goodbye!");
+		
+		scanner.close();
+	}
+	
+	private static String prepareHeader(String title) {
+		int max = 60;
+		
+		int titleSize = title.length() + 2;
+		int remaining = max - titleSize;
+		int left = remaining / 2;
+		int right = remaining / 2;
+		
+		if (remaining % 2 != 0) {
+			left++;
+		}
+		String headerText = String.format("\n\n%s %s %s\n", "-".repeat(left), title, "-".repeat(right));
+		return headerText;
+	}
+	
+	private static String generateMenu(User user) {
+		ArrayList<String> menuList = user.getMenu();
+		String result = prepareHeader("Menu");
+		
+		for (int i = 0; i < menuList.size(); i++) {
+			result += String.format("%d. %s\n", i, menuList.get(i));
+		}
+		
+		result += "To exit, type \"exit\"\n";
+		result += "-".repeat(60);
+		result += "\n";
+		
+		return result;
+	}
+	
+	private static void startResponseLoop(Scanner scanner, User user) {
+		String response = "";
+		
+		while (true) {
+			System.out.print("Your Option: ");
+			response = scanner.nextLine();
+			if (response.equalsIgnoreCase("exit")) {
+				break;
+			}
+			
+			handleUserResponse(response, scanner, user);
+		}
+	}
+	
+	private static void handleUserResponse(String response, Scanner scanner, User user) {
+		try {
+			int index = Integer.parseInt(response);
+			handleAction(index, user);
+		}
+		catch (Exception e) {
+			System.out.println("Invalid option.");
+		}
+	}
+	
+	private static void handleAction(int index, User user) {
+		
+		if (index == 0) {
+			// TODO: Change password flow
+		}
 		
 		// cast user out to respective type
 		if (user instanceof HDBOfficer) {
-			System.out.println("You are signed in as a HDB Officer.");
 			HDBOfficer officer = (HDBOfficer) user;
 		}
 		else if (user instanceof HDBManager) {
-			System.out.println("You are signed in as a HDB Manager.");
 			HDBManager manager = (HDBManager) user;
 		}
 		else if (user instanceof Applicant) {
-			System.out.println("You are signed in as an Applicant.");
 			Applicant applicant = (Applicant) user;
 		}
 		else {
 			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");
+			throw new IllegalArgumentException();
 		}
-		
-		
-		scanner.close();
 	}
 	
 	private static String getGreetings() {
@@ -78,8 +142,8 @@ public class BTOManagementSystem {
 	}
 	
 	private static User login(Scanner scanner, ArrayList<User> users) {
-		System.out.printf("\n\n%s %s %s\n", "-".repeat(20), "Login via SingPass", "-".repeat(20));
-		
+		System.out.print(prepareHeader("Login via SingPass"));
+
 		System.out.print("NRIC Number: ");
 		String nric = scanner.next();
 		User user = findUserByNRIC(nric, users);
@@ -103,6 +167,10 @@ public class BTOManagementSystem {
 			System.out.print("Password: ");
 			password = scanner.next();
 			remainingTries--;
+		}
+		
+		if (scanner.hasNextLine()) {
+			scanner.nextLine();
 		}
 		
 		return user;
