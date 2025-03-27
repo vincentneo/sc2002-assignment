@@ -19,7 +19,7 @@ import java.lang.String;
  * @author Vincent Neo
  * 
  */
-public abstract class User {
+public abstract class User extends CSVDecodable {
 	private String name;
 	private String nric;
 	private int age;
@@ -27,6 +27,7 @@ public abstract class User {
 	private String password;
 	
 	public User(String line) {
+		super(line);
 		List<String> splitted = Arrays.asList(line.split(","));
 		this.name = splitted.get(0);
 		this.nric = splitted.get(1);

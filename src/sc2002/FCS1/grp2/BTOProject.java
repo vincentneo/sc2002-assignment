@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.EnumMap;
 
 //TODO: Error handling
-public class BTOProject {
+public class BTOProject extends CSVDecodable {
     private String projectName;
     private String neighborhood;
 
@@ -37,6 +37,7 @@ public class BTOProject {
     //region Consturctors
     //Construct with a string parsed from a csv file.
     public BTOProject (String line) {
+    	super(line);
         List<String> splitted = Arrays.asList(line.split(","));
 		projectName = splitted.get(0);
 		neighborhood = splitted.get(1);
