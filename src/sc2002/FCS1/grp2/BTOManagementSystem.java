@@ -13,6 +13,9 @@ public class BTOManagementSystem {
 		ArrayList<User> users = parser.retrieveAllUsers();
 		
 		debugPrintAllUsers(users);
+		ArrayList<BTOProject> projects = parser.parseProjects();
+		
+		System.out.print(projects);
 
 		Scanner scanner = new Scanner(System.in);
 		User user = login(scanner, users);

@@ -46,6 +46,13 @@ public class CSVParser {
 			
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
+				
+				ArrayList<>
+				String current = null;
+				
+				for (char c : line.toCharArray()) {
+					
+				}
 				decodables.add(type.getDeclaredConstructor(String.class).newInstance(line));
 			}
 			
