@@ -47,29 +47,7 @@ public class CSVParser {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				
-				ArrayList<CSVCell> cells = new ArrayList<>();
-				
-				String current = "";
-				boolean inString = false;
-				
-				for (char c : line.toCharArray()) {
-					if (c == '"') {
-						inString = !inString;
-					}
-					else if (c == ',') {
-						if (inString) {
-							current += c;
-							continue;
-						}
-						cells.add(new CSVCell(current));
-						current = "";
-					}
-					else {
-						current += c;
-					}
-					
-				}
-				cells.add(new CSVCell(current));
+				ArrayList<CSVCell> cells = parseLine(line);
 				Decodable object = type.getDeclaredConstructor(ArrayList.class).newInstance(cells);
 				decodables.add(object);
 			}
@@ -81,6 +59,35 @@ public class CSVParser {
 		}
 		
 		return decodables;
+	}
+	
+	private ArrayList<CSVCell> parseLine(String line) {
+		ArrayList<CSVCell> cells = new ArrayList<>();
+		
+		String current = "";
+		boolean inString = false;
+		
+		for (char c : line.toCharArray()) {
+			if (c == '"') {
+				inString = !inString;
+			}
+			else if (c == ',') {
+				if (inString) {
+					current += c;
+					continue;
+				}
+				cells.add(new CSVCell(current));
+				current = "";
+			}
+			else {
+				current += c;
+			}
+			
+		}
+		
+		cells.add(new CSVCell(current));
+		
+		return cells;
 	}
 	
 	ArrayList<Applicant> parseApplicants() {
