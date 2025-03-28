@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.EnumMap;
 
 //TODO: Error handling
@@ -28,7 +29,9 @@ public class BTOProject extends CSVDecodable {
 
     private HDBManager managerInCharge;
     private int totalOfficerSlots;
-    private ArrayList<HDBOfficer> officers;
+    
+    private List<String> officerNames;
+    private List<HDBOfficer> officers;
 
     private boolean visibility;
 
@@ -54,8 +57,15 @@ public class BTOProject extends CSVDecodable {
         
         //managerInCharge = splitted.get(10);
         totalOfficerSlots = cells.get(11).getIntValue();
-//        officers = Arrays.asList(cells.get(12).getValues());
+        officerNames = Arrays.asList(cells.get(12).getValues());
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
+    }
+    
+    public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers) {
+    	this.officers = officers
+				    		.stream()
+				    		.filter(o -> officerNames.contains(o.getName()))
+				    		.collect(Collectors.toList());
     }
 
     //Construct with values
@@ -226,7 +236,7 @@ public class BTOProject extends CSVDecodable {
         totalOfficerSlots = slots;
     }
 
-    public ArrayList<HDBOfficer> getOfficers() {
+    public List<HDBOfficer> getOfficers() {
         return officers;
     }
 
