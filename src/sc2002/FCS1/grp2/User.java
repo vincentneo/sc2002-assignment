@@ -108,5 +108,11 @@ public abstract class User extends CSVDecodable {
 	String encode() {
 		return String.format("%s,%s,%d,%s,%s", name, nric, age, maritalStatus.toString(), password);
 	}
+	
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", nric=" + nric + ", age=" + age + ", maritalStatus=" + maritalStatus
+				+ ", password=" + password + "]";
+	}
 }
 
