@@ -3,10 +3,11 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.EnumMap;
 
 //TODO: Error handling
-public class BTOProject {
+public class BTOProject extends CSVDecodable {
     private String projectName;
     private String neighborhood;
 
@@ -28,7 +29,9 @@ public class BTOProject {
 
     private HDBManager managerInCharge;
     private int totalOfficerSlots;
-    private ArrayList<HDBOfficer> officers;
+    
+    private List<String> officerNames;
+    private List<HDBOfficer> officers;
 
     private boolean visibility;
 
@@ -36,24 +39,33 @@ public class BTOProject {
 
     //region Consturctors
     //Construct with a string parsed from a csv file.
-    public BTOProject (String line) {
-        List<String> splitted = Arrays.asList(line.split(","));
-		projectName = splitted.get(0);
-		neighborhood = splitted.get(1);
+    public BTOProject (ArrayList<CSVCell> cells) {
+    	super(cells);
+//        List<String> splitted = Arrays.asList(line.split(","));
+		projectName = cells.get(0).getValue();
+		neighborhood = cells.get(1).getValue();
 
-		maxTwoRoomUnits = Integer.parseInt(splitted.get(3));
+		maxTwoRoomUnits = cells.get(3).getIntValue();
         // TODO: Retrieve booked rooms
-        maxThreeRoomUnits = Integer.parseInt(splitted.get(6));
+        maxThreeRoomUnits = cells.get(6).getIntValue();
         // Retrieve booked rooms
 
-		openingDate = splitted.get(8);
-		closingDate = splitted.get(9);
+		openingDate = cells.get(8).getValue();
+		closingDate = cells.get(9).getValue();
         
         //TODO: Get objects for manager and officers
         
         //managerInCharge = splitted.get(10);
-        totalOfficerSlots = Integer.parseInt(splitted.get(11));
+        totalOfficerSlots = cells.get(11).getIntValue();
+        officerNames = Arrays.asList(cells.get(12).getValues());
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
+    }
+    
+    public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers) {
+    	this.officers = officers
+				    		.stream()
+				    		.filter(o -> officerNames.contains(o.getName()))
+				    		.collect(Collectors.toList());
     }
 
     //Construct with values
@@ -224,7 +236,7 @@ public class BTOProject {
         totalOfficerSlots = slots;
     }
 
-    public ArrayList<HDBOfficer> getOfficers() {
+    public List<HDBOfficer> getOfficers() {
         return officers;
     }
 
