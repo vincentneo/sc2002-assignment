@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class Applicant extends User {
 
-	public Applicant(String line) {
-		super(line);
+	public Applicant(ArrayList<CSVCell> cells) {
+		super(cells);
 		// TODO Auto-generated constructor stub
 	}
 

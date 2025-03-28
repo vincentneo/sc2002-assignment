@@ -36,24 +36,25 @@ public class BTOProject extends CSVDecodable {
 
     //region Consturctors
     //Construct with a string parsed from a csv file.
-    public BTOProject (String line) {
-    	super(line);
-        List<String> splitted = Arrays.asList(line.split(","));
-		projectName = splitted.get(0);
-		neighborhood = splitted.get(1);
+    public BTOProject (ArrayList<CSVCell> cells) {
+    	super(cells);
+//        List<String> splitted = Arrays.asList(line.split(","));
+		projectName = cells.get(0).getValue();
+		neighborhood = cells.get(1).getValue();
 
-		maxTwoRoomUnits = Integer.parseInt(splitted.get(3));
+		maxTwoRoomUnits = cells.get(3).getIntValue();
         // TODO: Retrieve booked rooms
-        maxThreeRoomUnits = Integer.parseInt(splitted.get(6));
+        maxThreeRoomUnits = cells.get(6).getIntValue();
         // Retrieve booked rooms
 
-		openingDate = splitted.get(8);
-		closingDate = splitted.get(9);
+		openingDate = cells.get(8).getValue();
+		closingDate = cells.get(9).getValue();
         
         //TODO: Get objects for manager and officers
         
         //managerInCharge = splitted.get(10);
-        totalOfficerSlots = Integer.parseInt(splitted.get(11));
+        totalOfficerSlots = cells.get(11).getIntValue();
+//        officers = Arrays.asList(cells.get(12).getValues());
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
     }
 

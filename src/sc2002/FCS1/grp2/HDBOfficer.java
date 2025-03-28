@@ -1,12 +1,13 @@
 package sc2002.FCS1.grp2;
 
+import java.util.ArrayList;
+
 public class HDBOfficer extends Applicant {
 
-	public HDBOfficer(String line) {
-		super(line);
+	public HDBOfficer(ArrayList<CSVCell> cells) {
+		super(cells);
 		// TODO Auto-generated constructor stub
 	}
-
 	public boolean isOfficerForProject(BTOProject project)
 	{
 		return project.getOfficers().contains(getNric());

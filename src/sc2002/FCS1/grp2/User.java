@@ -26,14 +26,13 @@ public abstract class User extends CSVDecodable {
 	private MaritalStatus maritalStatus;
 	private String password;
 	
-	public User(String line) {
-		super(line);
-		List<String> splitted = Arrays.asList(line.split(","));
-		this.name = splitted.get(0);
-		this.nric = splitted.get(1);
-		this.age = Integer.parseInt(splitted.get(2));
-		this.maritalStatus = MaritalStatus.fromString(splitted.get(3));
-		this.password = splitted.get(4);
+	public User(ArrayList<CSVCell> cells) {
+		super(cells);
+		this.name = cells.get(0).getValue();
+		this.nric = cells.get(1).getValue();
+		this.age = cells.get(2).getIntValue();
+		this.maritalStatus = MaritalStatus.fromString(cells.get(3).getValue());
+		this.password = cells.get(4).getValue();
 	}
 	
 	/**

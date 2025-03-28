@@ -47,13 +47,31 @@ public class CSVParser {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				
-				ArrayList<>
-				String current = null;
+				ArrayList<CSVCell> cells = new ArrayList<>();
+				
+				String current = "";
+				boolean inString = false;
 				
 				for (char c : line.toCharArray()) {
+					if (c == '"') {
+						inString = !inString;
+					}
+					else if (c == ',') {
+						if (inString) {
+							current += c;
+							continue;
+						}
+						cells.add(new CSVCell(current));
+						current = "";
+					}
+					else {
+						current += c;
+					}
 					
 				}
-				decodables.add(type.getDeclaredConstructor(String.class).newInstance(line));
+				cells.add(new CSVCell(current));
+				Decodable object = type.getDeclaredConstructor(ArrayList.class).newInstance(cells);
+				decodables.add(object);
 			}
 			
 			scanner.close();

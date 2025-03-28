@@ -6,9 +6,8 @@ import java.util.Scanner;
 public class HDBManager extends User {
 
 	Scanner scanner = new Scanner(System.in);
-	public HDBManager(String line) {
-		super(line);
-		
+	public HDBManager(ArrayList<CSVCell> cells) {
+		super(cells);
 	}
 
 	
