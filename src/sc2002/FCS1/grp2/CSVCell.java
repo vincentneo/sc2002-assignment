@@ -36,7 +36,7 @@ public class CSVCell {
 	/**
 	 * Convenience method to get value as an integer.
 	 * @return value of the CSV cell as an {@code int}.
-	 * @throws {@code NumberFormatException} if cell content is not a number.
+	 * @throws NumberFormatException if cell content is not a number.
 	 */
 	public int getIntValue() {
 		return Integer.parseInt(value);
