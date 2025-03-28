@@ -6,7 +6,14 @@ package sc2002.FCS1.grp2;
  * @author Vincent Neo
  */
 public class CSVCell {
+	/**
+	 * Value of each CSV spreadsheet cell, unmodified.
+	 */
 	private String value = null;
+	
+	/**
+	 * Values of comma separated values within a cell.
+	 */
 	private String[] commaSeperatedValues = null;
 	
 	/**
@@ -27,7 +34,7 @@ public class CSVCell {
 	 * Provides the contents of the cell, as parsed by the CSVParser class.
 	 * 
 	 * Note that no contents are manipulated here, so even comma separated values are represented as is.
-	 * @return value of CSV cell as a {@code String}.
+	 * @return Value of CSV cell as a {@code String}.
 	 */
 	public String getValue() {
 		return value;
@@ -36,7 +43,7 @@ public class CSVCell {
 	/**
 	 * Convenience method to get value as an integer.
 	 * @return value of the CSV cell as an {@code int}.
-	 * @throws NumberFormatException if cell content is not a number.
+	 * @throws NumberFormatException - if cell content is not a number.
 	 */
 	public int getIntValue() {
 		return Integer.parseInt(value);
@@ -53,7 +60,8 @@ public class CSVCell {
 	
 	/**
 	 * Provides a way to tell if there are multiple values retrievable in this cell.
-	 * @return {@code true} if >1 values can be retrieved, {@code false} if cell only contains one value.
+	 * @return {@code true} if >1 values can be retrieved,
+	 *  	   {@code false} if cell only contains one value.
 	 */
 	public boolean hasMultipleValues() {
 		return commaSeperatedValues != null;
