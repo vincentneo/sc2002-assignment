@@ -19,7 +19,7 @@ import java.lang.String;
  * @author Vincent Neo
  * 
  */
-public abstract class User extends CSVDecodable {
+public abstract class User extends CSVDecodable implements CSVEncodable {
 	/**
 	 * User's name.
 	 */
@@ -151,7 +151,7 @@ public abstract class User extends CSVDecodable {
 	 * Prepares text for CSV encoding purposes.
 	 * @return A string that is intended to represent a spreadsheet row, to be written in a CSV file.
 	 */
-	String encode() {
+	public String encode() {
 		return String.format("%s,%s,%d,%s,%s", name, nric, age, maritalStatus.toString(), password);
 	}
 	

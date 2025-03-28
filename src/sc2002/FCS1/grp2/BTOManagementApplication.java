@@ -70,7 +70,7 @@ public class BTOManagementApplication {
 				scanner.nextLine();
 			}
 			
-			System.out.print("Your Option: ");
+			System.out.print("Select Menu Option: ");
 			response = scanner.nextLine();
 			if (response.equalsIgnoreCase("exit")) {
 				break;
@@ -91,31 +91,10 @@ public class BTOManagementApplication {
 	}
 	
 	private static void handleAction(int index) {
-		
 		User user = system.getActiveUser();
 		
 		if (index == 0) {
-			// TODO: Change password flow
-			System.out.print("Please enter your current password for verification: ");
-			String currentPassword = scanner.next();
-			
-			if (user.checkPassword(currentPassword)) {
-				System.out.print("New password: ");
-				String newPassword = scanner.next();
-				System.out.print("Confirm your new password: ");
-				String confirmPassword = scanner.next();
-				
-				if (newPassword.equals(confirmPassword)) {
-					user.setPassword(newPassword);
-					System.out.println("Your password has been updated.");
-				}
-				else {
-					System.out.println("We did not change your password, as your new passwords did not match.");
-				}
-			}
-			else {
-				System.out.println("Current password is incorrect. Please try again later.");
-			}
+			changePassword();
 		}
 		
 		// cast user out to respective type
@@ -131,6 +110,32 @@ public class BTOManagementApplication {
 		else {
 			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");
 			throw new IllegalArgumentException();
+		}
+	}
+	
+	private static void changePassword() {
+		User user = system.getActiveUser();
+		
+		System.out.print("Please enter your current password for verification: ");
+		String currentPassword = scanner.next();
+		
+		if (user.checkPassword(currentPassword)) {
+			System.out.print("New password: ");
+			String newPassword = scanner.next();
+			System.out.print("Confirm your new password: ");
+			String confirmPassword = scanner.next();
+			
+			if (newPassword.equals(confirmPassword)) {
+				user.setPassword(newPassword);
+				system.saveChanges(user.sourceFileType());
+				System.out.println("Your password has been updated.");
+			}
+			else {
+				System.out.println("We did not change your password, as your new passwords did not match.");
+			}
+		}
+		else {
+			System.out.println("Current password is incorrect. Please try again later.");
 		}
 	}
 	
