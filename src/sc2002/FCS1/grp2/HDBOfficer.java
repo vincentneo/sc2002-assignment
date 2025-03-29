@@ -56,4 +56,8 @@ public class HDBOfficer extends Applicant {
 	String getReadableTypeName() {
 		return "HDB Officer";
 	}
+	
+	public CSVFileTypes sourceFileType() {
+		return CSVFileTypes.OFFICER_LIST;
+	}
 }

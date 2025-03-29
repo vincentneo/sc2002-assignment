@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class BTOManagementApplication {
 	
 	private static BTOManagementSystem system = new BTOManagementSystem();
+	private static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
@@ -16,16 +17,13 @@ public class BTOManagementApplication {
 		System.out.print("Proj 1 officers: ");
 		System.out.println(system.getProjects().getFirst().getOfficers());
 
-		Scanner scanner = new Scanner(System.in);
-		User user = login(scanner);
+		User user = login();
 		
 		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
 		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
-		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
+		System.out.printf("You are signed in as a %s.", user.getReadableTypeName());
 		
-		System.out.print(generateMenu(user));
-		
-		startResponseLoop(scanner, user);
+		startResponseLoop();
 		
 		System.out.println("Thanks for using the BTO system. Goodbye!");
 		
@@ -47,8 +45,8 @@ public class BTOManagementApplication {
 		return headerText;
 	}
 	
-	private static String generateMenu(User user) {
-		ArrayList<String> menuList = user.getMenu();
+	private static String generateMenu() {
+		ArrayList<String> menuList = system.getActiveUser().getMenu();
 		String result = prepareHeader("Menu");
 		
 		for (int i = 0; i < menuList.size(); i++) {
@@ -62,34 +60,41 @@ public class BTOManagementApplication {
 		return result;
 	}
 	
-	private static void startResponseLoop(Scanner scanner, User user) {
+	private static void startResponseLoop() {
 		String response = "";
 		
 		while (true) {
-			System.out.print("Your Option: ");
+			System.out.print(generateMenu());
+			
+			if (scanner.hasNextLine()) {
+				scanner.nextLine();
+			}
+			
+			System.out.print("Select Menu Option: ");
 			response = scanner.nextLine();
 			if (response.equalsIgnoreCase("exit")) {
 				break;
 			}
 			
-			handleUserResponse(response, scanner, user);
+			handleUserResponse(response);
 		}
 	}
 	
-	private static void handleUserResponse(String response, Scanner scanner, User user) {
+	private static void handleUserResponse(String response) {
 		try {
 			int index = Integer.parseInt(response);
-			handleAction(index, user);
+			handleAction(index);
 		}
 		catch (Exception e) {
 			System.out.println("Invalid option.");
 		}
 	}
 	
-	private static void handleAction(int index, User user) {
+	private static void handleAction(int index) {
+		User user = system.getActiveUser();
 		
 		if (index == 0) {
-			// TODO: Change password flow
+			changePassword();
 		}
 		
 		// cast user out to respective type
@@ -105,6 +110,32 @@ public class BTOManagementApplication {
 		else {
 			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");
 			throw new IllegalArgumentException();
+		}
+	}
+	
+	private static void changePassword() {
+		User user = system.getActiveUser();
+		
+		System.out.print("Please enter your current password for verification: ");
+		String currentPassword = scanner.next();
+		
+		if (user.checkPassword(currentPassword)) {
+			System.out.print("New password: ");
+			String newPassword = scanner.next();
+			System.out.print("Confirm your new password: ");
+			String confirmPassword = scanner.next();
+			
+			if (newPassword.equals(confirmPassword)) {
+				user.setPassword(newPassword);
+				system.saveChanges(user.sourceFileType());
+				System.out.println("Your password has been updated.");
+			}
+			else {
+				System.out.println("We did not change your password, as your new passwords did not match.");
+			}
+		}
+		else {
+			System.out.println("Current password is incorrect. Please try again later.");
 		}
 	}
 	
@@ -124,7 +155,7 @@ public class BTOManagementApplication {
 	}
 	
 
-	private static User login(Scanner scanner) {
+	private static User login() {
 		System.out.print(prepareHeader("Login via SingPass"));
 
 		System.out.print("NRIC Number: ");
@@ -144,16 +175,12 @@ public class BTOManagementApplication {
 		while (!system.attemptLogin(user, password)) {
 			if (remainingTries == 0) {
 				System.out.println("Too many failed login attempts. Please try again later.");
-				return login(scanner);
+				return login();
 			}
 			System.out.println("Invalid password.");
 			System.out.print("Password: ");
 			password = scanner.next();
 			remainingTries--;
-		}
-		
-		if (scanner.hasNextLine()) {
-			scanner.nextLine();
 		}
 		
 		return user;

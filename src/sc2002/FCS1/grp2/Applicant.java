@@ -46,4 +46,8 @@ public class Applicant extends User {
 	String getReadableTypeName() {
 		return "Applicant";
 	}
+	
+	public CSVFileTypes sourceFileType() {
+		return CSVFileTypes.APPLICANT_LIST;
+	}
 }
