@@ -10,9 +10,8 @@ public class Applicant<Project> extends User {
 	private boolean hasBookedFlat = false;
 	private List<String> enquiries = new ArrayList<>();
 
-	public Applicant(String line) {
-		super(line);
-		// TODO Auto-generated constructor stub
+	public Applicant(ArrayList<CSVCell> cells) {
+		super(cells);
 	}
 
 	Set<FlatType> getEligibleFlatTypes() {
