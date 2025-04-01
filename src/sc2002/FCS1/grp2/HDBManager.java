@@ -36,12 +36,15 @@ public class HDBManager extends User {
 
 	}
 	
-	public void  editHDBProject(String ProjectName) {
+	public void editHDBProject(String ProjectName) {
+		
+			
+			
+		}
 		
 		
-	}
 	
-	public void deleteHDBProject() {
+	public void deleteHDBProject(String ProjectName) {
 		
 	}
 	
