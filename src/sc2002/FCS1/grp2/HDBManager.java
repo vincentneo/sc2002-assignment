@@ -57,4 +57,8 @@ public class HDBManager extends User {
 	boolean canApplyProject() {
 		return false;
 	}
+	
+	public CSVFileTypes sourceFileType() {
+		return CSVFileTypes.MANAGER_LIST;
+	}
 }
