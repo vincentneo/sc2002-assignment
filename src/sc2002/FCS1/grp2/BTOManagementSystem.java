@@ -11,7 +11,11 @@ public class BTOManagementSystem {
 	
 	private User activeUser = null;
 	
+	private Scanner scanner;
+	
 	public BTOManagementSystem() {
+		this.scanner = new Scanner(System.in);
+		
 		CSVParser parser = new CSVParser();
 		
 		ArrayList<Applicant> applicants = parser.parseApplicants();
@@ -94,6 +98,17 @@ public class BTOManagementSystem {
 	
 	public ArrayList<BTOProject> getProjects() {
 		return projects;
+	}
+	
+	public Scanner getScanner() {
+		return scanner;
+	}
+	
+	/**
+	 * call when finished
+	 */
+	public void cleanup() {
+		scanner.close();
 	}
 
 	// TODO: Delete once done. This method is only intended for testing.

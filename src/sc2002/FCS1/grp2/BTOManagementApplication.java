@@ -7,11 +7,13 @@ import java.util.Scanner;
 public class BTOManagementApplication {
 	
 	private static BTOManagementSystem system = new BTOManagementSystem();
-	private static Scanner scanner = new Scanner(System.in);
+//	private static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		system.debugPrintAllUsers();
+		
+		HDBManagerActions.setSystem(system);
 		
 		// TODO: Delete once finish debugging
 		System.out.print("Proj 1 officers: ");
@@ -27,7 +29,7 @@ public class BTOManagementApplication {
 		
 		System.out.println("Thanks for using the BTO system. Goodbye!");
 		
-		scanner.close();
+		system.cleanup();
 	}
 	
 	private static String prepareHeader(String title) {
@@ -62,6 +64,7 @@ public class BTOManagementApplication {
 	
 	private static void startResponseLoop() {
 		String response = "";
+		Scanner scanner = system.getScanner();
 		
 		while (true) {
 			System.out.print(generateMenu());
@@ -103,6 +106,9 @@ public class BTOManagementApplication {
 		}
 		else if (user instanceof HDBManager) {
 			HDBManager manager = (HDBManager) user;
+			
+			HDBManager.Menu selectedOption = HDBManager.Menu.fromOrdinal(index-1);
+			HDBManagerActions.handleAction(selectedOption, manager);
 		}
 		else if (user instanceof Applicant) {
 			Applicant applicant = (Applicant) user;
@@ -115,6 +121,8 @@ public class BTOManagementApplication {
 	
 	private static void changePassword() {
 		User user = system.getActiveUser();
+		
+		Scanner scanner = system.getScanner();
 		
 		System.out.print("Please enter your current password for verification: ");
 		String currentPassword = scanner.next();
@@ -156,6 +164,8 @@ public class BTOManagementApplication {
 	
 
 	private static User login() {
+		Scanner scanner = system.getScanner();
+		
 		System.out.print(prepareHeader("Login via SingPass"));
 
 		System.out.print("NRIC Number: ");

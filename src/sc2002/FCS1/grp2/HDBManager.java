@@ -11,30 +11,11 @@ public class HDBManager extends User {
 	}
 
 	
-	public void createHDBProject() {
-		
-		System.out.println("Enter Project Name: ");
-		String ProjectName = scanner.toString();
-		System.out.println("Enter Neighbourhood: ");
-		String Neighborhood = scanner.toString();
-		System.out.println("Enter Maximum two room units: ");
-		int maxTwoRoomUnits = scanner.nextInt();
-		System.out.println("Enter Maximum three room units: ");
-		int maxThreeRoomUnits = scanner.nextInt();
-		System.out.println("Enter Opening Date: ");
-		String openingDate = scanner.toString();
-		System.out.println("Enter Closing Date: ");
-		String closingDate = scanner.toString();
-		System.out.println("Enter number of officer slots: ");
-		int officerSlots = scanner.nextInt();
-		ArrayList<HDBOfficer> officers; //;
-		// to do officers
-		
-		
-		BTOProject project = new BTOProject(ProjectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
-		
-
-	}
+//	public void createHDBProject() {
+//		
+//
+//
+//	}
 	
 	public void  editHDBProject(String ProjectName) {
 		
@@ -58,4 +39,41 @@ public class HDBManager extends User {
 	public CSVFileTypes sourceFileType() {
 		return CSVFileTypes.MANAGER_LIST;
 	}
+	
+	ArrayList<String> getMenu() {
+		ArrayList<String> list = super.getMenu();
+		
+		for (UserMenu menu : Menu.values()) {
+			list.add(menu.getMenuName());
+		}
+		
+		return list;
+	}
+	
+	enum Menu implements UserMenu {
+		CREATE_PROJECT;
+		
+		public String getMenuName() {
+			switch (this) {
+			case CREATE_PROJECT: 
+				return "Create Project";
+			default:
+				return null;
+			}
+		}
+		
+		public static Menu fromOrdinal(int o) {
+			return Menu.values()[o];
+		}
+	}
+
+	@Override
+	String getReadableTypeName() {
+		// TODO Auto-generated method stub
+		return "HDB Manager";
+	}
+}
+
+interface UserMenu {
+	public String getMenuName();
 }
