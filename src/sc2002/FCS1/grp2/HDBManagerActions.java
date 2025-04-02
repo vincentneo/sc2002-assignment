@@ -21,8 +21,8 @@ public class HDBManagerActions {
 	private static void createProject() {
 		Scanner scanner = system.getScanner();
 		
-		System.out.println("Enter Project Name: ");
-		String projectName = scanner.nextLine();
+		System.out.print("Enter Project Name: ");
+		String projectName = scanner.next();
 //		System.out.println("Enter Neighbourhood: ");
 //		String Neighborhood = scanner.toString();
 //		System.out.println("Enter Maximum two room units: ");
@@ -38,8 +38,9 @@ public class HDBManagerActions {
 //		ArrayList<HDBOfficer> officers; //;
 		// to do officers
 		
-		
-//		BTOProject project = new BTOProject(ProjectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
+		BTOProject project = new BTOProject(projectName, "x", 0, 0, "", "", "", 0, new ArrayList<>());
+		system.addProject(project);
+//		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		
 	}
 }

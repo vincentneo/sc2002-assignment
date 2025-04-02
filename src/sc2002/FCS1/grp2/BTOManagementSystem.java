@@ -100,6 +100,12 @@ public class BTOManagementSystem {
 		return projects;
 	}
 	
+	public void addProject(BTOProject project) {
+		projects.add(project);
+//		project.retrieveConnectedUsers(officers);
+		System.out.println(projects);
+	}
+	
 	public Scanner getScanner() {
 		return scanner;
 	}

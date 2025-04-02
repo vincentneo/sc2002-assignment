@@ -88,8 +88,11 @@ public class BTOManagementApplication {
 			int index = Integer.parseInt(response);
 			handleAction(index);
 		}
-		catch (Exception e) {
+		catch (NumberFormatException e) {
 			System.out.println("Invalid option.");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
