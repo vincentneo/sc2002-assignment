@@ -40,20 +40,25 @@ public class HDBManager extends User {
 		return CSVFileTypes.MANAGER_LIST;
 	}
 	
+	/**
+	 * Prepares a list of menu options that includes options specific to managers only.
+	 * 
+	 *  @return list of menu options, including both common and access control scoped options.
+	 */
+	@Override
 	ArrayList<String> getMenu() {
-		ArrayList<String> list = super.getMenu();
-		
-		for (UserMenu menu : Menu.values()) {
-			list.add(menu.getMenuName());
-		}
-		
-		return list;
+		return super.getMenuWithScopedOptions(Menu.allMenuOptions);
 	}
 	
-	enum Menu implements UserMenu {
+	/**
+	 * Possible menu options for a HDB Manager role
+	 * 
+	 * Each option listed here are options that only a HDB Manager can interact with. 
+	 */
+	enum Menu implements ScopedOption {
 		CREATE_PROJECT;
 		
-		public String getMenuName() {
+		public String getOptionName() {
 			switch (this) {
 			case CREATE_PROJECT: 
 				return "Create Project";
@@ -62,8 +67,10 @@ public class HDBManager extends User {
 			}
 		}
 		
+		public static Menu[] allMenuOptions = Menu.values();
+		
 		public static Menu fromOrdinal(int o) {
-			return Menu.values()[o];
+			return allMenuOptions[o];
 		}
 	}
 
@@ -72,8 +79,4 @@ public class HDBManager extends User {
 		// TODO Auto-generated method stub
 		return "HDB Manager";
 	}
-}
-
-interface UserMenu {
-	public String getMenuName();
 }

@@ -99,6 +99,9 @@ public class BTOManagementApplication {
 	private static void handleAction(int index) {
 		User user = system.getActiveUser();
 		
+		// this index starts at 0, for each of the specific access control index of specific user types.
+		int scopedIndex = index - User.getCommonMenuOptions();
+		
 		if (index == 0) {
 			changePassword();
 		}
@@ -110,7 +113,7 @@ public class BTOManagementApplication {
 		else if (user instanceof HDBManager) {
 			HDBManager manager = (HDBManager) user;
 			
-			HDBManager.Menu selectedOption = HDBManager.Menu.fromOrdinal(index-1);
+			HDBManager.Menu selectedOption = HDBManager.Menu.fromOrdinal(scopedIndex);
 			HDBManagerActions.handleAction(selectedOption, manager);
 		}
 		else if (user instanceof Applicant) {

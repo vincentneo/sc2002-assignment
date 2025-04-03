@@ -108,5 +108,11 @@ public class Applicant<Project> extends User {
 	    boolean canApplyProject() {
 	        return appliedProject == null;
 	    }
+	    
+	    // TODO: Similar to HDBManager implementation, list each scoped feature by creating an enum for it
+	    @Override
+	    ArrayList<String> getMenu() {
+	    	return new ArrayList<>();
+	    }
 	}
 

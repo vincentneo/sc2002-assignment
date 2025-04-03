@@ -3,6 +3,9 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import sc2002.FCS1.grp2.HDBManager.Menu;
+
 import java.lang.String;
 
 /**
@@ -44,6 +47,17 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * User's password.
 	 */
 	private String password;
+	
+	/**
+	 * Options that are common to all user types
+	 */
+	private static String[] commonMenuOptions = {
+			"Change Password",
+	};
+	
+	public static int getCommonMenuOptions() {
+		return commonMenuOptions.length;
+	}
 	
 	/**
 	 * Constructor that is intended for use by (@code CSVParser} class only.
@@ -134,9 +148,20 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * @author Vincent Neo
 	 * @return List of tasks that user can do using our BTO system.
 	 */
-	ArrayList<String> getMenu() {
-		ArrayList<String> list = new ArrayList<>();
-		list.add("Change Password");
+	abstract ArrayList<String> getMenu();
+	
+	/**
+	 * This method facilitates the generation of a menu that includes options specific to a certain user type.
+	 * Child classes should call this method when overriding getMenu().
+	 * 
+	 * @param options Scoped options that are only accessible depending on the user type.
+	 * @return List of tasks that user can do using our BTO system.
+	 */
+	ArrayList<String> getMenuWithScopedOptions(ScopedOption[] options) {
+		ArrayList<String> list = new ArrayList<>(Arrays.asList(commonMenuOptions));
+		for (ScopedOption option : options) {
+			list.add(option.getOptionName());
+		}
 		return list;
 	}
 	
