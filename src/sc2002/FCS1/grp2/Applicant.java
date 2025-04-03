@@ -10,15 +10,9 @@ public class Applicant extends User {
     private ApplicationStatus applicationStatus;
     private Set<BTOProject> previouslyAppliedProjects = new HashSet<>(); 
 
-<<<<<<< Updated upstream
 	public Applicant(ArrayList<CSVCell> cells) {
 		super(cells);
 	}
-=======
-    public Applicant(String nric, String name, int age, MaritalStatus maritalStatus) {
-        super(nric, name, age, maritalStatus);
-    }
->>>>>>> Stashed changes
 
 	Set<FlatType> getEligibleFlatTypes() {
 		Set<FlatType> set = new HashSet<>();
