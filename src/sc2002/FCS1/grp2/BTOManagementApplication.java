@@ -23,7 +23,7 @@ public class BTOManagementApplication {
 		
 		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
 		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
-		System.out.printf("You are signed in as a %s.", user.getReadableTypeName());
+		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
 		
 		startResponseLoop();
 		
