@@ -341,8 +341,10 @@ public class BTOProject extends CSVDecodable {
     @Override
 	public String toString() {
         ArrayList<String> officerNames = new ArrayList<String>();
-        for(int i = 0; i < officers.size(); i++) {
-            officerNames.add(officers.get(i).getName());
+        if (officers != null) {
+	        for(int i = 0; i < officers.size(); i++) {
+	            officerNames.add(officers.get(i).getName());
+	        }
         }
         return "BTO Project: " +
                 "Project Name=" + projectName + ", " +
@@ -353,7 +355,7 @@ public class BTOProject extends CSVDecodable {
                 "Application Closing Date=" + closingDate + ", " +
                 "HBD Manager In Charge=" + managerInCharge + ", " + 
                 "Total Officer Slots=" + totalOfficerSlots + ", " +
-                "Number of HBD Officers Assigned" + officers.size() + ", " +
+//                "Number of HBD Officers Assigned" + officers.size() + ", " +
                 "List of HBD Officers" + String.join(", ", officerNames) + ", " +
                 "Visibility=" + visibility + ".";
     }

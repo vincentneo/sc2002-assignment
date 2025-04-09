@@ -108,7 +108,12 @@ public class Applicant extends User {
 	    boolean canApplyProject() {
 	        return appliedProject == null;
 	    }
-
+	    
+	    // TODO: Similar to HDBManager implementation, list each scoped feature by creating an enum for it
+	    @Override
+	    ArrayList<String> getMenu() {
+	    	return new ArrayList<>();
+	    }
 		@Override
 		public CSVFileTypes sourceFileType() {
 			// TODO Auto-generated method stub

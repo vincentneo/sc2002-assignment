@@ -60,4 +60,11 @@ public class HDBOfficer extends Applicant {
 	public CSVFileTypes sourceFileType() {
 		return CSVFileTypes.OFFICER_LIST;
 	}
+	
+    // TODO: Similar to HDBManager implementation, list each scoped feature by creating an enum for it
+    @Override
+    ArrayList<String> getMenu() {
+    	return new ArrayList<>();
+    }
 }
+

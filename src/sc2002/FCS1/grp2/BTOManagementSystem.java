@@ -2,6 +2,7 @@ package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class BTOManagementSystem {
 	private ArrayList<Applicant> applicants;
@@ -11,7 +12,11 @@ public class BTOManagementSystem {
 	
 	private User activeUser = null;
 	
+	private Scanner scanner;
+	
 	public BTOManagementSystem() {
+		this.scanner = new Scanner(System.in);
+		
 		CSVParser parser = new CSVParser();
 		
 		ArrayList<Applicant> applicants = parser.parseApplicants();
@@ -94,6 +99,39 @@ public class BTOManagementSystem {
 	
 	public ArrayList<BTOProject> getProjects() {
 		return projects;
+	}
+	
+	/**
+	 * Decide if the current active user should be permitted to do a certain task, based on access rights by type of user.
+	 * 
+	 * @param <U> Type of User
+	 * @param expectedType Provide the expected user class type here.
+	 * @return true if active user is of given user type, hence permitted, false if otherwise.
+	 */
+	public <U extends User> boolean isActiveUserPermitted(Class<U> expectedType) {
+		if (activeUser == null) return false;
+		
+		return expectedType.isInstance(activeUser);
+	}
+
+	public void addProject(BTOProject project) {//throws InsufficientAccessRightsException {
+		// always check if logged-in user is permitted for activity, else return;
+		if (!isActiveUserPermitted(HDBManager.class)) return;//throw new InsufficientAccessRightsException();
+
+		projects.add(project);
+//		project.retrieveConnectedUsers(officers);
+		System.out.println(projects);
+	}
+	
+	public Scanner getScanner() {
+		return scanner;
+	}
+	
+	/**
+	 * call when finished
+	 */
+	public void cleanup() {
+		scanner.close();
 	}
 
 	// TODO: Delete once done. This method is only intended for testing.
