@@ -21,15 +21,12 @@ public class BTOProject extends CSVDecodable {
     //TODO: Store which floors are assigned to certain users
     private int maxTwoRoomUnits;
     private int maxThreeRoomUnits;
-    //private int remainingTwoRoomUnits;
-    //private int remainingThreeRoomUnits;
 
     private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
     private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
 
-    //TODO: Selling price
-    private double twoRoomPrice;
-    private double threeRoomPrice;
+    private int twoRoomPrice;
+    private int threeRoomPrice;
 
     private ArrayList<Application> applications;
 
@@ -55,8 +52,10 @@ public class BTOProject extends CSVDecodable {
 		neighborhood = cells.get(1).getValue();
 
 		maxTwoRoomUnits = cells.get(3).getIntValue();
+        twoRoomPrice = cells.get(4).getIntValue();
         // TODO: Retrieve booked rooms
         maxThreeRoomUnits = cells.get(6).getIntValue();
+        threeRoomPrice = cells.get(7).getIntValue();
         // Retrieve booked rooms
 
 		openingDate = LocalDate.parse(cells.get(8).getValue());
@@ -78,17 +77,19 @@ public class BTOProject extends CSVDecodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers) {
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers) {
         this.projectName = projectName;
         this.neighborhood = neighborhood;
         this.maxTwoRoomUnits = maxTwoRoomUnits;
         this.maxThreeRoomUnits = maxThreeRoomUnits;
+        this.twoRoomPrice = twoRoomPrice;
+        this.threeRoomPrice = threeRoomPrice;
         // TODO: Retrieve booked rooms
-
         
         // TODO: Check whether the date range is valid
         this.openingDate = LocalDate.parse(openingDate);
         this.closingDate = LocalDate.parse(closingDate);
+
 
         //TODO: Get objects for managers and officers
         //this.managerInCharge = managerInCharge;
@@ -119,6 +120,23 @@ public class BTOProject extends CSVDecodable {
 
     //region Room Units
     //TODO: Get and set for room units
+
+    public void setTwoRoomPrice(int twoRoomPrice) {
+        this.twoRoomPrice = twoRoomPrice;
+    }
+
+    public void setThreeRoomPrice(int threeRoomPrice) {
+        this.threeRoomPrice = threeRoomPrice;
+    }
+
+    public int getTwoRoomPrice() {
+        return twoRoomPrice;
+    }
+
+    public int getThreeRoomPrice() {
+        return threeRoomPrice;
+    }
+
     //endregion
 
     //region Dates
