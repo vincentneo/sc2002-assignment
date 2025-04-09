@@ -1,14 +1,14 @@
 package sc2002.FCS1.grp2;
 
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class Applicant<Project> extends User {
-	private Project appliedProject;
-	private boolean hasBookedFlat = false;
-	private List<String> enquiries = new ArrayList<>();
+public class Applicant extends User {
+	
+	private BTOProject appliedProject;
+	private boolean hasBookedFlat;
+	private Set<String> enquiries = new HashSet<>();
+    private ApplicationStatus applicationStatus;
+    private Set<BTOProject> previouslyAppliedProjects = new HashSet<>(); 
 
 	public Applicant(ArrayList<CSVCell> cells) {
 		super(cells);
@@ -33,31 +33,31 @@ public class Applicant<Project> extends User {
 		return set;
 	}
 	
-	public List<Project> viewApplicableProjects(List<Project> allProjects){
-		 List<Project> applicableProjects = new ArrayList<>();
-	        for (Project project : allProjects) {
-	            if (project.isVisible() && ((Object) project).isEligible(this)) {
-	                applicableProjects.add(project);
+	public Set<BTOProject> viewEligibleProjects(Set<BTOProject> allProjects){
+		 Set<BTOProject> applicableProjects = new HashSet<>();
+	        for (BTOProject project : allProjects) {
+	            if (project.isVisible() && isEligible(BTOProject) {
+	                applicableProjects.add(BTOProject);
 	            }
 	        }
 	        return applicableProjects;
 	}
 
-	  public boolean applyForProject(Project project) {
+	  public boolean applyForProject(BTOProject project, FlatType flattype) {
 	        if (appliedProject != null) {
 	            System.out.println("You have already applied for a project.");
 	            return false;
 	        }
-	        if (!project.isEligible(this)) {
+	        if (isEligible(BTOProject) {
 	            System.out.println("You are not eligible for this project.");
 	            return false;
 	        }
 	        appliedProject = project;
-	        project.addApplicant(this);
+	        appliedProject.add(project);
 	        System.out.println("Application successful.");
 	        return true;
 	    }
-	  public Project getAppliedProject() {
+	  public BTOProject getAppliedProject() {
 	        return appliedProject;
 	    }
 
@@ -66,13 +66,13 @@ public class Applicant<Project> extends User {
 	            System.out.println("No active application to withdraw.");
 	            return;
 	        }
-	        appliedProject.removeApplicant(this);
+	        appliedProject.remove(appliedProject);
 	        appliedProject = null;
 	        hasBookedFlat = false;
 	        System.out.println("Application withdrawn successfully.");
 	    }
 	    public void bookFlat() {
-	        if (appliedProject == null || appliedProject.getApplicationStatus(this) != ApplicationStatus.SUCCESSFUL) {
+	        if (appliedProject == null || applicationStatus != ApplicationStatus.SUCCESSFUL) {
 	            throw new IllegalStateException("You cannot book a flat unless your application is successful.");
 	        }
 	        if (hasBookedFlat) {
@@ -108,5 +108,17 @@ public class Applicant<Project> extends User {
 	    boolean canApplyProject() {
 	        return appliedProject == null;
 	    }
+
+		@Override
+		public CSVFileTypes sourceFileType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		String getReadableTypeName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
