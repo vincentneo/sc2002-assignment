@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,11 +8,17 @@ import java.util.stream.Collectors;
 import java.util.EnumMap;
 
 //TODO: Error handling
+
+/**
+ * A class representing BTO Project containing information for the project and has functions to modify the project information and handle users' applications to the project.
+ * 
+ *  @author Ryu Hyungjoon
+ */
 public class BTOProject extends CSVDecodable {
     private String projectName;
     private String neighborhood;
 
-    //TODO: Create a seperate class for room units & Store which floors are assigned to certain users
+    //TODO: Store which floors are assigned to certain users
     private int maxTwoRoomUnits;
     private int maxThreeRoomUnits;
     //private int remainingTwoRoomUnits;
@@ -21,11 +28,13 @@ public class BTOProject extends CSVDecodable {
     private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
 
     //TODO: Selling price
+    private double twoRoomPrice;
+    private double threeRoomPrice;
 
     private ArrayList<Application> applications;
 
-    private String openingDate;
-    private String closingDate;
+    private LocalDate openingDate;
+    private LocalDate closingDate;
 
     private HDBManager managerInCharge;
     private int totalOfficerSlots;
@@ -50,8 +59,8 @@ public class BTOProject extends CSVDecodable {
         maxThreeRoomUnits = cells.get(6).getIntValue();
         // Retrieve booked rooms
 
-		openingDate = cells.get(8).getValue();
-		closingDate = cells.get(9).getValue();
+		openingDate = LocalDate.parse(cells.get(8).getValue());
+		closingDate = LocalDate.parse(cells.get(9).getValue());
         
         //TODO: Get objects for manager and officers
         
@@ -78,8 +87,8 @@ public class BTOProject extends CSVDecodable {
 
         
         // TODO: Check whether the date range is valid
-        this.openingDate = openingDate;
-        this.closingDate = closingDate;
+        this.openingDate = LocalDate.parse(openingDate);
+        this.closingDate = LocalDate.parse(closingDate);
 
         //TODO: Get objects for managers and officers
         //this.managerInCharge = managerInCharge;
@@ -114,83 +123,45 @@ public class BTOProject extends CSVDecodable {
 
     //region Dates
 
-    /**
-     * Converts date formatted in string to an unique number
-     * calculating the total number of days since 1900-01-01.
-    */
-    public static long stringDateToNum(String date)
-    {
-        String[] parts = date.split("-");
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid date format. Use yyyy-MM-dd.");
-        }
-
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
-
-        long totalDays = 0;
-
-        // Calculate days from 1900 to input year
-        for (int y = 1900; y < year; y++) {
-            if (isLeapYear(y)) {
-                totalDays += 366;
-            } else {
-                totalDays += 365;
-            }
-        }
-
-        // Calculate days from start of year to input month
-        int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        if (isLeapYear(year)) {
-            monthDays[1] = 29; // February has 29 days in a leap year
-        }
-        for (int m = 1; m < month; m++) {
-            totalDays += monthDays[m - 1];
-        }
-
-        // Add days of the month
-        totalDays += day - 1; // Subtract 1 because we're counting from 0
-
-        return totalDays;
-    }
-
-    private static boolean isLeapYear(int year) {
-        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-    }
-
-    public long getNumOpeningDate() {
-        return stringDateToNum(openingDate);
-    }
-
-    public long getNumClosingDate() {
-        return stringDateToNum(closingDate);
-    }
-
-    public String getStringOpeningDate() {
+    public LocalDate getOpeningDate() {
         return openingDate;
     }
 
-    public String getStringEndDate() {
-    
+    public LocalDate getClosingDate() {
         return closingDate;
+    }
+
+    public String getStringOpeningDate() {
+        return openingDate.toString();
+    }
+
+    public String getStringEndDate() {
+        return closingDate.toString();
     }
 
     //TODO: Check whether the date range is valid.
     public void setOpeningDate(String date) {
+        openingDate = LocalDate.parse(date);
+    }
+
+    public void setOpeningDate(LocalDate date) {
         openingDate = date;
     }
 
     public void setClosingDate(String date) {
+        closingDate = LocalDate.parse(date);
+    }
+
+    public void setClosingDate(LocalDate date) {
         closingDate = date;
     }
 
     public boolean isDateWithin(String date) {
-        return isDateWithin(stringDateToNum(date));
+        return isDateWithin(LocalDate.parse(date));
     }
 
-    public boolean isDateWithin(long date) {
-        return date >= getNumOpeningDate() && date <= getNumClosingDate();
+    public boolean isDateWithin(LocalDate date) {
+        return date.compareTo(closingDate) <= 0 && date.compareTo(openingDate) >= 0;
     }
     //endregion
 
