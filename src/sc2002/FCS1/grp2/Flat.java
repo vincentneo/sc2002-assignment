@@ -1,5 +1,8 @@
 package sc2002.FCS1.grp2;
 
+/**
+ * A class taht represents a flat that has a flat type and can be assigned to an applicant if booked.
+ */
 public class Flat {
     private FlatType type;
     private Applicant bookedApplicant;

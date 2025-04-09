@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,21 +46,23 @@ public class BTOProject extends CSVDecodable {
 
     //region Consturctors
     //Construct with a string parsed from a csv file.
-    public BTOProject (ArrayList<CSVCell> cells) {
+    public BTOProject (ArrayList<CSVCell> cells) throws Exception {
     	super(cells);
 //        List<String> splitted = Arrays.asList(line.split(","));
 		projectName = cells.get(0).getValue();
 		neighborhood = cells.get(1).getValue();
 
 		maxTwoRoomUnits = cells.get(3).getIntValue();
-        twoRoomPrice = cells.get(4).getIntValue();
-        // TODO: Retrieve booked rooms
         maxThreeRoomUnits = cells.get(6).getIntValue();
-        threeRoomPrice = cells.get(7).getIntValue();
-        // Retrieve booked rooms
+        // TODO: Retrieve booked rooms
+
+        // For throwing exception
+        setTwoRoomPrice(cells.get(4).getIntValue());
+        setThreeRoomPrice(cells.get(7).getIntValue());
 
 		openingDate = LocalDate.parse(cells.get(8).getValue());
-		closingDate = LocalDate.parse(cells.get(9).getValue());
+        //For throwing exception
+		setClosingDate(LocalDate.parse(cells.get(9).getValue()));
         
         //TODO: Get objects for manager and officers
         
@@ -77,18 +80,19 @@ public class BTOProject extends CSVDecodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers) {
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers)
+    throws Exception
+    {
         this.projectName = projectName;
         this.neighborhood = neighborhood;
         this.maxTwoRoomUnits = maxTwoRoomUnits;
         this.maxThreeRoomUnits = maxThreeRoomUnits;
-        this.twoRoomPrice = twoRoomPrice;
-        this.threeRoomPrice = threeRoomPrice;
+        setTwoRoomPrice(twoRoomPrice);
+        setThreeRoomPrice(threeRoomPrice);
         // TODO: Retrieve booked rooms
         
-        // TODO: Check whether the date range is valid
-        this.openingDate = LocalDate.parse(openingDate);
-        this.closingDate = LocalDate.parse(closingDate);
+        setOpeningDate(openingDate);
+        setClosingDate(closingDate);
 
 
         //TODO: Get objects for managers and officers
@@ -121,11 +125,17 @@ public class BTOProject extends CSVDecodable {
     //region Room Units
     //TODO: Get and set for room units
 
-    public void setTwoRoomPrice(int twoRoomPrice) {
+    public void setTwoRoomPrice(int twoRoomPrice) throws IllegalArgumentException {
+        if (twoRoomPrice < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         this.twoRoomPrice = twoRoomPrice;
     }
 
-    public void setThreeRoomPrice(int threeRoomPrice) {
+    public void setThreeRoomPrice(int threeRoomPrice) throws IllegalArgumentException {
+        if (threeRoomPrice < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         this.threeRoomPrice = threeRoomPrice;
     }
 
@@ -157,20 +167,25 @@ public class BTOProject extends CSVDecodable {
         return closingDate.toString();
     }
 
-    //TODO: Check whether the date range is valid.
-    public void setOpeningDate(String date) {
-        openingDate = LocalDate.parse(date);
+    public void setOpeningDate(String date) throws DateTimeException {
+        setOpeningDate(LocalDate.parse(date));
     }
 
-    public void setOpeningDate(LocalDate date) {
+    public void setOpeningDate(LocalDate date) throws DateTimeException {
+        if(date.compareTo(closingDate) > 0) {
+            throw new DateTimeException("The new opening date is greater than the closing date!");
+        }
         openingDate = date;
     }
 
-    public void setClosingDate(String date) {
-        closingDate = LocalDate.parse(date);
+    public void setClosingDate(String date) throws DateTimeException {
+        setClosingDate(LocalDate.parse(date));
     }
 
-    public void setClosingDate(LocalDate date) {
+    public void setClosingDate(LocalDate date) throws DateTimeException {
+        if(date.compareTo(openingDate) < 0) {
+            throw new DateTimeException("The new closing date is lesser than the opening date!");
+        }
         closingDate = date;
     }
 
@@ -252,73 +267,62 @@ public class BTOProject extends CSVDecodable {
     //endregion
 
     //region Applications and allocation of rooms
-    public boolean submitApplication(Applicant applicant, FlatType flatType) {
+    public void submitApplication(Applicant applicant, FlatType flatType) throws IllegalArgumentException {
         ArrayList<Flat> remaining = remainingRooms.get(flatType);
 
         if (remaining.isEmpty()) {
-            System.out.println("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
-            return false;
+            throw new IllegalArgumentException("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
         }
         
         applications.add(new Application(this, flatType, ApplicationStatus.PENDING, applicant));
-        return true;
     }
 
     // The user inputs index to identify which application to approve/reject/book
-    public boolean approveApplication(int index) {
+    public void approveApplication(int index) throws IllegalArgumentException {
         if(applications.isEmpty()) {
-            System.out.println("There is no applications for project " + projectName + ".");
-            return false;
+            throw new IllegalArgumentException("There is no applications for the project " + projectName + ".");
         }
         else if (index - 1 > applications.size() || index - 1 < 0) {
-            System.out.println("Invalid input!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! The index out of bound!");
         }
         
         Application appli = applications.get(index - 1);
         ApplicationStatus status = appli.getStatus();
         if (status != ApplicationStatus.PENDING) {
-            System.out.println("Invalid input! The Application has been already processed!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
         }
         else if (remainingRooms.get(appli.getFlatType()).isEmpty()) {
-            System.out.println("The selected room type has been already fully booked!");
             appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-            return false;
+            throw new IllegalArgumentException("The selected room type has been already fully booked!");
         }
 
         appli.setStatus(ApplicationStatus.SUCCESSFUL);
-        return true;
+        System.out.println("Approval successful.");
     }
 
-    public boolean rejectApplication(int index) {
+    public void rejectApplication(int index) throws IllegalArgumentException {
         if(applications.isEmpty()) {
-            System.out.println("There is no applications for project " + projectName + ".");
-            return false;
+            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
         }
         else if (index - 1 > applications.size() || index - 1 < 0) {
-            System.out.println("Invalid input! Index out of bound!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! Index out of bound!");
         }
         
         ApplicationStatus status = applications.get(index - 1).getStatus();
         if (status != ApplicationStatus.PENDING) {
-            System.out.println("Invalid input! The Application has been already processed!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
         }
 
         applications.get(index - 1).setStatus(ApplicationStatus.UNSUCCESSFUL);
-        return true;
+        System.out.println("Rejection successful.");
     }
 
-    public boolean bookApplication(int index) {
+    public void bookApplication(int index) throws IllegalArgumentException {
         if(applications.isEmpty()) {
-            System.out.println("There is no applications for project " + projectName + ".");
-            return false;
+            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
         }
         else if (index - 1 > applications.size() || index - 1 < 0) {
-            System.out.println("Invalid input! Index out of bound!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! Index out of bound!");
         }
         
         Application appli = applications.get(index - 1);
@@ -327,13 +331,11 @@ public class BTOProject extends CSVDecodable {
         ArrayList<Flat> remaining = remainingRooms.get(appli.getFlatType());
 
         if (status != ApplicationStatus.SUCCESSFUL) {
-            System.out.println("Invalid input! The application is not successful!");
-            return false;
+            throw new IllegalArgumentException("Invalid input! The application is not successful!");
         }
         else if (remaining.isEmpty()) {
-            System.out.println("The selected room type has been already fully booked!");
             appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-            return false;
+            throw new IllegalArgumentException("The selected room type has been already fully booked!");
         }
 
         appli.setStatus(ApplicationStatus.BOOKED);
@@ -341,7 +343,7 @@ public class BTOProject extends CSVDecodable {
         Flat bookedFlat = remaining.removeLast();
         bookedFlat.setBookedApplicant(appli.getApplicant());
         bookedRooms.get(appli.getFlatType()).add(bookedFlat);
-        return true;
+        System.out.println("Booking successful.");
     }
     
     public void printApplications() {
