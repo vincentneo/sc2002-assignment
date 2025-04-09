@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,25 +8,30 @@ import java.util.stream.Collectors;
 import java.util.EnumMap;
 
 //TODO: Error handling
+
+/**
+ * A class representing BTO Project containing information for the project and has functions to modify the project information and handle users' applications to the project.
+ * 
+ *  @author Ryu Hyungjoon
+ */
 public class BTOProject extends CSVDecodable {
     private String projectName;
     private String neighborhood;
 
-    //TODO: Create a seperate class for room units & Store which floors are assigned to certain users
+    //TODO: Store which floors are assigned to certain users
     private int maxTwoRoomUnits;
     private int maxThreeRoomUnits;
-    //private int remainingTwoRoomUnits;
-    //private int remainingThreeRoomUnits;
 
     private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
     private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
 
-    //TODO: Selling price
+    private int twoRoomPrice;
+    private int threeRoomPrice;
 
     private ArrayList<Application> applications;
 
-    private String openingDate;
-    private String closingDate;
+    private LocalDate openingDate;
+    private LocalDate closingDate;
 
     private HDBManager managerInCharge;
     private int totalOfficerSlots;
@@ -46,12 +52,14 @@ public class BTOProject extends CSVDecodable {
 		neighborhood = cells.get(1).getValue();
 
 		maxTwoRoomUnits = cells.get(3).getIntValue();
+        twoRoomPrice = cells.get(4).getIntValue();
         // TODO: Retrieve booked rooms
         maxThreeRoomUnits = cells.get(6).getIntValue();
+        threeRoomPrice = cells.get(7).getIntValue();
         // Retrieve booked rooms
 
-		openingDate = cells.get(8).getValue();
-		closingDate = cells.get(9).getValue();
+		openingDate = LocalDate.parse(cells.get(8).getValue());
+		closingDate = LocalDate.parse(cells.get(9).getValue());
         
         //TODO: Get objects for manager and officers
         
@@ -69,17 +77,19 @@ public class BTOProject extends CSVDecodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers) {
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers) {
         this.projectName = projectName;
         this.neighborhood = neighborhood;
         this.maxTwoRoomUnits = maxTwoRoomUnits;
         this.maxThreeRoomUnits = maxThreeRoomUnits;
+        this.twoRoomPrice = twoRoomPrice;
+        this.threeRoomPrice = threeRoomPrice;
         // TODO: Retrieve booked rooms
-
         
         // TODO: Check whether the date range is valid
-        this.openingDate = openingDate;
-        this.closingDate = closingDate;
+        this.openingDate = LocalDate.parse(openingDate);
+        this.closingDate = LocalDate.parse(closingDate);
+
 
         //TODO: Get objects for managers and officers
         //this.managerInCharge = managerInCharge;
@@ -110,87 +120,66 @@ public class BTOProject extends CSVDecodable {
 
     //region Room Units
     //TODO: Get and set for room units
+
+    public void setTwoRoomPrice(int twoRoomPrice) {
+        this.twoRoomPrice = twoRoomPrice;
+    }
+
+    public void setThreeRoomPrice(int threeRoomPrice) {
+        this.threeRoomPrice = threeRoomPrice;
+    }
+
+    public int getTwoRoomPrice() {
+        return twoRoomPrice;
+    }
+
+    public int getThreeRoomPrice() {
+        return threeRoomPrice;
+    }
+
     //endregion
 
     //region Dates
 
-    /**
-     * Converts date formatted in string to an unique number
-     * calculating the total number of days since 1900-01-01.
-    */
-    public static long stringDateToNum(String date)
-    {
-        String[] parts = date.split("-");
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid date format. Use yyyy-MM-dd.");
-        }
-
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
-
-        long totalDays = 0;
-
-        // Calculate days from 1900 to input year
-        for (int y = 1900; y < year; y++) {
-            if (isLeapYear(y)) {
-                totalDays += 366;
-            } else {
-                totalDays += 365;
-            }
-        }
-
-        // Calculate days from start of year to input month
-        int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        if (isLeapYear(year)) {
-            monthDays[1] = 29; // February has 29 days in a leap year
-        }
-        for (int m = 1; m < month; m++) {
-            totalDays += monthDays[m - 1];
-        }
-
-        // Add days of the month
-        totalDays += day - 1; // Subtract 1 because we're counting from 0
-
-        return totalDays;
-    }
-
-    private static boolean isLeapYear(int year) {
-        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-    }
-
-    public long getNumOpeningDate() {
-        return stringDateToNum(openingDate);
-    }
-
-    public long getNumClosingDate() {
-        return stringDateToNum(closingDate);
-    }
-
-    public String getStringOpeningDate() {
+    public LocalDate getOpeningDate() {
         return openingDate;
     }
 
-    public String getStringEndDate() {
-    
+    public LocalDate getClosingDate() {
         return closingDate;
+    }
+
+    public String getStringOpeningDate() {
+        return openingDate.toString();
+    }
+
+    public String getStringEndDate() {
+        return closingDate.toString();
     }
 
     //TODO: Check whether the date range is valid.
     public void setOpeningDate(String date) {
+        openingDate = LocalDate.parse(date);
+    }
+
+    public void setOpeningDate(LocalDate date) {
         openingDate = date;
     }
 
     public void setClosingDate(String date) {
+        closingDate = LocalDate.parse(date);
+    }
+
+    public void setClosingDate(LocalDate date) {
         closingDate = date;
     }
 
     public boolean isDateWithin(String date) {
-        return isDateWithin(stringDateToNum(date));
+        return isDateWithin(LocalDate.parse(date));
     }
 
-    public boolean isDateWithin(long date) {
-        return date >= getNumOpeningDate() && date <= getNumClosingDate();
+    public boolean isDateWithin(LocalDate date) {
+        return date.compareTo(closingDate) <= 0 && date.compareTo(openingDate) >= 0;
     }
     //endregion
 
@@ -370,19 +359,23 @@ public class BTOProject extends CSVDecodable {
     @Override
 	public String toString() {
         ArrayList<String> officerNames = new ArrayList<String>();
-        for(int i = 0; i < officers.size(); i++) {
-            officerNames.add(officers.get(i).getName());
+        if (officers != null) {
+	        for(int i = 0; i < officers.size(); i++) {
+	            officerNames.add(officers.get(i).getName());
+	        }
         }
         return "BTO Project: " +
                 "Project Name=" + projectName + ", " +
                 "Neighborhood=" + neighborhood + ", " +
                 "Two Room Units=" + maxTwoRoomUnits + ", " +
-                "Thre Room Units=" + maxThreeRoomUnits + ", " +
+                "Two Room Price=" + twoRoomPrice + ", " +
+                "Three Room Units=" + maxThreeRoomUnits + ", " +
+                "Three Room Units=" + threeRoomPrice + ", " +
                 "Application Opening Date=" + openingDate + ", " +
                 "Application Closing Date=" + closingDate + ", " +
                 "HBD Manager In Charge=" + managerInCharge + ", " + 
                 "Total Officer Slots=" + totalOfficerSlots + ", " +
-                "Number of HBD Officers Assigned" + officers.size() + ", " +
+//                "Number of HBD Officers Assigned" + officers.size() + ", " +
                 "List of HBD Officers" + String.join(", ", officerNames) + ", " +
                 "Visibility=" + visibility + ".";
     }
