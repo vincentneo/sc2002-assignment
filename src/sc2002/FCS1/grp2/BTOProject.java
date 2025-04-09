@@ -368,7 +368,9 @@ public class BTOProject extends CSVDecodable {
                 "Project Name=" + projectName + ", " +
                 "Neighborhood=" + neighborhood + ", " +
                 "Two Room Units=" + maxTwoRoomUnits + ", " +
-                "Thre Room Units=" + maxThreeRoomUnits + ", " +
+                "Two Room Price=" + twoRoomPrice + ", " +
+                "Three Room Units=" + maxThreeRoomUnits + ", " +
+                "Three Room Units=" + threeRoomPrice + ", " +
                 "Application Opening Date=" + openingDate + ", " +
                 "Application Closing Date=" + closingDate + ", " +
                 "HBD Manager In Charge=" + managerInCharge + ", " + 
