@@ -56,13 +56,12 @@ public class BTOProject extends CSVDecodable {
         maxThreeRoomUnits = cells.get(6).getIntValue();
         // TODO: Retrieve booked rooms
 
-        // For throwing exception
-        setTwoRoomPrice(cells.get(4).getIntValue());
-        setThreeRoomPrice(cells.get(7).getIntValue());
+        twoRoomPrice = cells.get(4).getIntValue();
+        threeRoomPrice = cells.get(7).getIntValue();
 
-		openingDate = LocalDate.parse(cells.get(8).getValue());
+		openingDate = LocalDate.parse(cells.get(8).getValue()); //the parse method throws a DateTimeParseExecption if the string is in wrong format.
         //For throwing exception
-		setClosingDate(LocalDate.parse(cells.get(9).getValue()));
+		closingDate = LocalDate.parse(cells.get(9).getValue());
         
         //TODO: Get objects for manager and officers
         
@@ -70,6 +69,25 @@ public class BTOProject extends CSVDecodable {
         totalOfficerSlots = cells.get(11).getIntValue();
         officerNames = Arrays.asList(cells.get(12).getValues());
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
+
+        if (projectName == null || projectName.isEmpty()) {
+            throw new IllegalArgumentException("Project name cannot be empty.");
+        }
+        else if (neighborhood == null || neighborhood.isEmpty()) {
+            throw new IllegalArgumentException("Neighborhood cannot be empty.");
+        }
+        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+            throw new IllegalArgumentException("Number of units cannot be negative.");
+        }
+        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+            throw new IllegalArgumentException("Number of price cannot be negative.");
+        }
+        else if (openingDate.isAfter(closingDate)) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
+            throw new IllegalArgumentException("Opening date cannot be after closing date.");
+        }
+        else if (totalOfficerSlots < 0) {
+            throw new IllegalArgumentException("Number of price cannot be negative.");
+        }
     }
     
     public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers) {
@@ -80,24 +98,43 @@ public class BTOProject extends CSVDecodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int officerSlots, ArrayList<String> officers)
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int totalOfficerSlots, ArrayList<String> officers)
     throws Exception
     {
+        if (projectName == null || projectName.isEmpty()) {
+            throw new IllegalArgumentException("Project name cannot be empty.");
+        }
+        else if (neighborhood == null || neighborhood.isEmpty()) {
+            throw new IllegalArgumentException("Neighborhood cannot be empty.");
+        }
+        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+            throw new IllegalArgumentException("Number of units cannot be negative.");
+        }
+        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+            throw new IllegalArgumentException("Number of price cannot be negative.");
+        }
+        else if (LocalDate.parse(openingDate).isAfter(LocalDate.parse(closingDate))) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
+            throw new IllegalArgumentException("Opening date cannot be after closing date.");
+        }
+        else if (totalOfficerSlots < 0) {
+            throw new IllegalArgumentException("Number of price cannot be negative.");
+        }
+
         this.projectName = projectName;
         this.neighborhood = neighborhood;
         this.maxTwoRoomUnits = maxTwoRoomUnits;
         this.maxThreeRoomUnits = maxThreeRoomUnits;
-        setTwoRoomPrice(twoRoomPrice);
-        setThreeRoomPrice(threeRoomPrice);
+        this.twoRoomPrice = twoRoomPrice;
+        this.threeRoomPrice = threeRoomPrice;
         // TODO: Retrieve booked rooms
         
-        setOpeningDate(openingDate);
-        setClosingDate(closingDate);
+        this.openingDate = LocalDate.parse(openingDate);
+        this.closingDate = LocalDate.parse(closingDate);
 
 
         //TODO: Get objects for managers and officers
         //this.managerInCharge = managerInCharge;
-        this.totalOfficerSlots = officerSlots;
+        this.totalOfficerSlots = totalOfficerSlots;
         //this.officers = officers != null ? officers : new ArrayList<String>();
     }
     //endregion
