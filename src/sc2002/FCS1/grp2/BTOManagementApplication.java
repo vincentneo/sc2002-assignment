@@ -91,12 +91,15 @@ public class BTOManagementApplication {
 		catch (NumberFormatException e) {
 			System.out.println("Invalid option.");
 		}
+		catch (InsufficientAccessRightsException e) {
+			
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private static void handleAction(int index) {
+	private static void handleAction(int index) throws Exception {
 		User user = system.getActiveUser();
 		
 		// this index starts at 0, for each of the specific access control index of specific user types.

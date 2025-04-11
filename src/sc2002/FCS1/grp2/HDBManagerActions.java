@@ -10,7 +10,7 @@ public class HDBManagerActions {
 		HDBManagerActions.system = system;
 	}
 	
-	public static void handleAction(HDBManager.Menu option, HDBManager user) {
+	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {
 		case CREATE_PROJECT:
 			createProject();
@@ -18,15 +18,15 @@ public class HDBManagerActions {
 		}
 	}
 	
-	private static void createProject() {
+	private static void createProject() throws Exception {
 		Scanner scanner = system.getScanner();
 		
 		System.out.print("Enter Project Name: ");
 		String projectName = scanner.next();
-//		System.out.println("Enter Neighbourhood: ");
-//		String Neighborhood = scanner.toString();
-//		System.out.println("Enter Maximum two room units: ");
-//		int maxTwoRoomUnits = scanner.nextInt();
+		System.out.print("Enter Neighbourhood: ");
+		String neighbourhood = scanner.next();
+//		System.out.print("Enter maximum number of two room units: ");
+//		String maxTwoRoomUnits = scanner.next();
 //		System.out.println("Enter Maximum three room units: ");
 //		int maxThreeRoomUnits = scanner.nextInt();
 //		System.out.println("Enter Opening Date: ");
@@ -38,7 +38,7 @@ public class HDBManagerActions {
 //		ArrayList<HDBOfficer> officers; //;
 		// to do officers
 		
-		BTOProject project = new BTOProject(projectName, "x", 0, 0, "", "", "", 0, new ArrayList<>());
+		BTOProject project = new BTOProject(projectName, neighbourhood, 0, 0, 0, 0, "", "", "", 0, new ArrayList<>());
 		system.addProject(project);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		

@@ -114,9 +114,9 @@ public class BTOManagementSystem {
 		return expectedType.isInstance(activeUser);
 	}
 
-	public void addProject(BTOProject project) {//throws InsufficientAccessRightsException {
+	public void addProject(BTOProject project) throws Exception {
 		// always check if logged-in user is permitted for activity, else return;
-		if (!isActiveUserPermitted(HDBManager.class)) return;//throw new InsufficientAccessRightsException();
+		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
 
 		projects.add(project);
 //		project.retrieveConnectedUsers(officers);
