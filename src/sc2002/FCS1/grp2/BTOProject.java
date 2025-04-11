@@ -59,9 +59,9 @@ public class BTOProject extends CSVDecodable {
         twoRoomPrice = cells.get(4).getIntValue();
         threeRoomPrice = cells.get(7).getIntValue();
 
-		openingDate = LocalDate.parse(cells.get(8).getValue()); //the parse method throws a DateTimeParseExecption if the string is in wrong format.
+		openingDate = cells.get(8).getDateValue();//the parse method throws a DateTimeParseExecption if the string is in wrong format.
         //For throwing exception
-		closingDate = LocalDate.parse(cells.get(9).getValue());
+		closingDate = cells.get(9).getDateValue();
         
         //TODO: Get objects for manager and officers
         

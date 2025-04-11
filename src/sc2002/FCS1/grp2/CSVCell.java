@@ -1,5 +1,8 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * A simple class for representing an individual cell of any specific row and column of a CSV file.
  * 
@@ -47,6 +50,16 @@ public class CSVCell {
 	 */
 	public int getIntValue() {
 		return Integer.parseInt(value);
+	}
+	
+	/**
+	 * Convenience method to get value as date.
+	 * @return value of the CSV cell as an {@code LocalDate}.
+	 * @throws DateTimeParseException - if cell content is not of d/M/yy date format.
+	 */
+	public LocalDate getDateValue() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yy");
+		return LocalDate.parse(value, formatter);
 	}
 
 	/**
