@@ -126,7 +126,7 @@ public class Applicant extends User {
 	@Override
 	public CSVFileTypes sourceFileType() {
 		// TODO Auto-generated method stub
-		return null;
+		return CSVFileTypes.APPLICANT_LIST;
 	}
 
 	@Override
