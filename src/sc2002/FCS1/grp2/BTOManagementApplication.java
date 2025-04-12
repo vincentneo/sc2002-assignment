@@ -47,19 +47,28 @@ public class BTOManagementApplication {
 		return headerText;
 	}
 	
-	private static String generateMenu() {
+	private static void generateMenu() {
+		
+		
 		ArrayList<String> menuList = system.getActiveUser().getMenu();
-		String result = prepareHeader("Menu");
+		ArrayList<String> contents = new ArrayList<>();
+//		String result = prepareHeader("Menu");
 		
 		for (int i = 0; i < menuList.size(); i++) {
-			result += String.format("%d. %s\n", i, menuList.get(i));
+			contents.add(String.format("%d. %s\n", i, menuList.get(i)));
 		}
 		
-		result += "To exit, type \"exit\"\n";
-		result += "-".repeat(60);
-		result += "\n";
+		new DisplayMenu.Builder()
+				.setTitle("Menu")
+				.setContents(contents)
+				.build()
+				.display();
 		
-		return result;
+//		result += "To exit, type \"exit\"\n";
+//		result += "-".repeat(60);
+//		result += "\n";
+//		
+//		return result;
 	}
 	
 	private static void startResponseLoop() {
@@ -67,7 +76,7 @@ public class BTOManagementApplication {
 		Scanner scanner = system.getScanner();
 		
 		while (true) {
-			System.out.print(generateMenu());
+//			System.out.print(generateMenu());
 			
 			if (scanner.hasNextLine()) {
 				scanner.nextLine();
