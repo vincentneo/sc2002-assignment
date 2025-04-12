@@ -21,15 +21,16 @@ public class HDBOfficer extends Applicant {
         }
 
         // 2. Ask the manager for approval. approveOffcierAssignment yet to be done. Passing entire offcier obj via "this".
-        boolean approved = manager.approveOfficerAssignment(this, project); 
+        // TODO: fix missing 
+//        boolean approved = manager.approveOfficerAssignment(this, project); 
 
 		// need to decide if need to check if manager is acutally manager for the specific project
 	
-        if (!approved) {
-            System.out.printf("Manager %s did not approve assignment for Officer %s.\n",
-                              manager.getName(), this.getName());
-            return;
-        }
+//        if (!approved) {
+//            System.out.printf("Manager %s did not approve assignment for Officer %s.\n",
+//                              manager.getName(), this.getName());
+//            return;
+//        }
 
         // 3. If approved, proceed to register
         if (isOfficerForProject(project)) {
@@ -39,7 +40,8 @@ public class HDBOfficer extends Applicant {
         }
 
         // Attempt to add the officer’s name to the project’s officer list
-        project.addOfficer(this.getName());
+        // TODO addOfficer does not exist
+//        project.addOfficer(this.getName());
         System.out.println("Registered as HDB Officer for project: " + project.getProjectName());
     }
 
