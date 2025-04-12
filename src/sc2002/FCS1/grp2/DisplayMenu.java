@@ -3,7 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Menu {
+public class DisplayMenu {
 	private String title;
 	private List<String> descriptions;
 	private List<String> contents;
@@ -17,7 +17,7 @@ public class Menu {
 	
 	private int maxWidth = 100;
 	
-	Menu(Builder builder) {
+	DisplayMenu(Builder builder) {
 		this.title = builder.title;
 		this.descriptions = builder.descriptions;
 		this.contents = builder.contents;
@@ -61,8 +61,8 @@ public class Menu {
 			return this;
 		}
 		
-		public Menu build() {
-			return new Menu(this);
+		public DisplayMenu build() {
+			return new DisplayMenu(this);
 		}
 		
 	}
