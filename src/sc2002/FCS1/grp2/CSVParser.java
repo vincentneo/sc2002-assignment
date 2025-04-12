@@ -91,22 +91,22 @@ public class CSVParser {
 	}
 	
 	ArrayList<Applicant> parseApplicants() {
-		String filePath = path + "ApplicantList.csv";
+		String filePath = path + CSVFileTypes.APPLICANT_LIST.getFileName();
 		return parse(filePath, Applicant.class);
 	}
 	
 	ArrayList<HDBManager> parseManagers() {
-		String filePath = path + "ManagerList.csv";
+		String filePath = path + CSVFileTypes.MANAGER_LIST.getFileName();
 		return parse(filePath, HDBManager.class);
 	}
 	
 	ArrayList<HDBOfficer> parseOfficer() {
-		String filePath = path + "OfficerList.csv";
+		String filePath = path + CSVFileTypes.OFFICER_LIST.getFileName();
 		return parse(filePath, HDBOfficer.class);
 	}
 	
 	ArrayList<BTOProject> parseProjects() {
-		String filePath = path + "ProjectList.csv";
+		String filePath = path + CSVFileTypes.PROJECT_LIST.getFileName();
 		return parse(filePath, BTOProject.class);
 	}
 	

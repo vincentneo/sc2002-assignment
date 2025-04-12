@@ -5,31 +5,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BTOManagementApplication {
-	
 	private static BTOManagementSystem system = new BTOManagementSystem();
-//	private static Scanner scanner = new Scanner(System.in);
-
+	
 	public static void main(String[] args) {
 
 		system.debugPrintAllUsers();
-		
-		HDBManagerActions.setSystem(system);
+		setup();
 		
 		// TODO: Delete once finish debugging
 		System.out.print("Proj 1 officers: ");
 		System.out.println(system.getProjects().getFirst().getOfficers());
 
-		User user = login();
-		
-		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
-		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
-		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
+		login();
 		
 		startResponseLoop();
 		
 		System.out.println("Thanks for using the BTO system. Goodbye!");
 		
 		system.cleanup();
+	}
+	
+	private static void setup() {
+		HDBManagerActions.setSystem(system);
+		ApplicantActions.setSystem(system);
 	}
 	
 	private static String prepareHeader(String title) {
@@ -56,6 +54,7 @@ public class BTOManagementApplication {
 		}
 		
 		result += "To exit, type \"exit\"\n";
+		result += "To logout, type \"logout\"\n";
 		result += "-".repeat(60);
 		result += "\n";
 		
@@ -77,6 +76,12 @@ public class BTOManagementApplication {
 			response = scanner.nextLine();
 			if (response.equalsIgnoreCase("exit")) {
 				break;
+			}
+			
+			if (response.equalsIgnoreCase("logout")) {
+				system.logout();
+				login();
+				continue;
 			}
 			
 			handleUserResponse(response);
@@ -151,7 +156,7 @@ public class BTOManagementApplication {
 				System.out.println("Your password has been updated.");
 			}
 			else {
-				System.out.println("We did not change your password, as your new passwords did not match.");
+				System.out.println("We did not change your password, as the passwords you've entered did not match.");
 			}
 		}
 		else {
@@ -175,7 +180,7 @@ public class BTOManagementApplication {
 	}
 	
 
-	private static User login() {
+	private static void login() {
 		Scanner scanner = system.getScanner();
 		
 		System.out.print(prepareHeader("Login via SingPass"));
@@ -197,7 +202,7 @@ public class BTOManagementApplication {
 		while (!system.attemptLogin(user, password)) {
 			if (remainingTries == 0) {
 				System.out.println("Too many failed login attempts. Please try again later.");
-				return login();
+				login();
 			}
 			System.out.println("Invalid password.");
 			System.out.print("Password: ");
@@ -205,6 +210,8 @@ public class BTOManagementApplication {
 			remainingTries--;
 		}
 		
-		return user;
+		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
+		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
+		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
 	}
 }

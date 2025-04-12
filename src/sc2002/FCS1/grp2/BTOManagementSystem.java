@@ -61,6 +61,10 @@ public class BTOManagementSystem {
 		return result;
 	}
 	
+	public void logout() {
+		this.activeUser = null;
+	}
+	
 	public void saveChanges(CSVFileTypes type) {
 		ArrayList<CSVEncodable> encodables = new ArrayList<>();
 		
