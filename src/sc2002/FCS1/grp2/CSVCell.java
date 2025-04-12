@@ -58,8 +58,7 @@ public class CSVCell {
 	 * @throws DateTimeParseException - if cell content is not of d/M/yy date format.
 	 */
 	public LocalDate getDateValue() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yy");
-		return LocalDate.parse(value, formatter);
+		return Utilities.getInstance().parseDate(value);
 	}
 
 	/**

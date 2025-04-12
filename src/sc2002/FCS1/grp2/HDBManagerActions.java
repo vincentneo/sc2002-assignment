@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,32 +14,36 @@ public class HDBManagerActions {
 	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {
 		case CREATE_PROJECT:
-			createProject();
+			createProject(user);
 			break;
 		}
 	}
 	
-	private static void createProject() throws Exception {
+	private static void createProject(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
 		
 		System.out.print("Enter Project Name: ");
 		String projectName = scanner.next();
 		System.out.print("Enter Neighbourhood: ");
 		String neighbourhood = scanner.next();
-//		System.out.print("Enter maximum number of two room units: ");
-//		String maxTwoRoomUnits = scanner.next();
-//		System.out.println("Enter Maximum three room units: ");
-//		int maxThreeRoomUnits = scanner.nextInt();
-//		System.out.println("Enter Opening Date: ");
-//		String openingDate = scanner.toString();
-//		System.out.println("Enter Closing Date: ");
-//		String closingDate = scanner.toString();
-//		System.out.println("Enter number of officer slots: ");
+		int maxRoomOne = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 1 units: ");
+		int priceRoomOne = superScanner.nextIntUntilCorrect("Enter price of Type 1 unit: $");
+		
+		int maxRoomTwo = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 2 units: ");
+		int priceRoomTwo = superScanner.nextIntUntilCorrect("Enter price of Type 2 unit: $");
+		
+		LocalDate openingDate = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
+		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
+
+		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 //		int officerSlots = scanner.nextInt();
 //		ArrayList<HDBOfficer> officers; //;
-		// to do officers
+		// TODO: officers
 		
-		BTOProject project = new BTOProject(projectName, neighbourhood, 0, 0, 0, 0, "", "", "", 0, new ArrayList<>());
+		BTOProject project = new BTOProject(projectName, neighbourhood,
+				maxRoomOne, maxRoomTwo, priceRoomOne, priceRoomTwo,
+				openingDate, closingDate, manager.getName(), officerSlots, new ArrayList<>());
 		system.addProject(project);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		

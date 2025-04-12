@@ -15,7 +15,7 @@ import java.util.EnumMap;
  * 
  *  @author Ryu Hyungjoon
  */
-public class BTOProject extends CSVDecodable {
+public class BTOProject extends CSVDecodable implements CSVEncodable {
     private String projectName;
     private String neighborhood;
 
@@ -98,9 +98,10 @@ public class BTOProject extends CSVDecodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, String openingDate, String closingDate, String managerInCharge, int totalOfficerSlots, ArrayList<String> officers)
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, LocalDate openingDate, LocalDate closingDate, String managerInCharge, int totalOfficerSlots, ArrayList<String> officers)
     throws Exception
     {
+    	
         if (projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Project name cannot be empty.");
         }
@@ -113,7 +114,7 @@ public class BTOProject extends CSVDecodable {
         else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
             throw new IllegalArgumentException("Number of price cannot be negative.");
         }
-        else if (LocalDate.parse(openingDate).isAfter(LocalDate.parse(closingDate))) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
+        else if (openingDate.isAfter(closingDate)) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
             throw new IllegalArgumentException("Opening date cannot be after closing date.");
         }
         else if (totalOfficerSlots < 0) {
@@ -128,8 +129,8 @@ public class BTOProject extends CSVDecodable {
         this.threeRoomPrice = threeRoomPrice;
         // TODO: Retrieve booked rooms
         
-        this.openingDate = LocalDate.parse(openingDate);
-        this.closingDate = LocalDate.parse(closingDate);
+        this.openingDate = openingDate;
+        this.closingDate = closingDate;
 
 
         //TODO: Get objects for managers and officers
@@ -394,6 +395,13 @@ public class BTOProject extends CSVDecodable {
         }
     }
     //endregion
+    
+    private List<String> getHDBOfficersNames() {
+    	return officers
+    			.stream()
+    			.map(o -> o.getName())
+    			.collect(Collectors.toList());
+    }
 
     @Override
 	public String toString() {
@@ -418,4 +426,37 @@ public class BTOProject extends CSVDecodable {
                 "List of HBD Officers" + String.join(", ", officerNames) + ", " +
                 "Visibility=" + visibility + ".";
     }
+
+	@Override
+	public String encode() {
+		// TODO: Flat Type should be stored not hardcoded.
+		FlatType roomOneType = FlatType.TWO_ROOM;
+		FlatType roomTwoType = FlatType.THREE_ROOM;
+		
+		String formattedOpeningDate = Utilities.getInstance().formatDate(openingDate);
+		String formattedClosingDate = Utilities.getInstance().formatDate(closingDate);
+		
+		String officerNames = String.format("\"%s\"", String.join(",", getHDBOfficersNames()));
+		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s",
+				projectName,
+				neighborhood,
+				roomOneType.toString(),
+				maxTwoRoomUnits,
+				twoRoomPrice,
+				roomTwoType.toString(),
+				maxThreeRoomUnits,
+				threeRoomPrice,
+				formattedOpeningDate,
+				formattedClosingDate,
+				managerInCharge.getName(),
+				totalOfficerSlots,
+				officerNames
+				);
+	}
+
+	@Override
+	public CSVFileTypes sourceFileType() {
+		// TODO Auto-generated method stub
+		return CSVFileTypes.PROJECT_LIST;
+	}
 }
