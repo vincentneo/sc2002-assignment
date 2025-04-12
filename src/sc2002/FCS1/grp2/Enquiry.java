@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Enquiry extends CSVDecodable {
+public class Enquiry extends CSVDecodable implements CSVEncodable {
 	private UUID id;
 	private String title;
 	private ArrayList<Message> messages;
@@ -45,6 +45,16 @@ public class Enquiry extends CSVDecodable {
 				.collect(Collectors.toCollection(ArrayList::new));
 		
 		this.messages = messages;
+	}
+
+	@Override
+	public String encode() {
+		return null;
+	}
+
+	@Override
+	public CSVFileTypes sourceFileType() {
+		return CSVFileTypes.ENQUIRIES_LIST;
 	}
 	
 }

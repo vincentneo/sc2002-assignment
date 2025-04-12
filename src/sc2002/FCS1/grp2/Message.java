@@ -12,7 +12,7 @@ public class Message extends CSVDecodable {
 	
 	private String nric;
 	
-	Message(ArrayList<CSVCell> cells) {		
+	Message(ArrayList<CSVCell> cells) {
 		this.query = cells.get(1).getValue();
 	}
 	
