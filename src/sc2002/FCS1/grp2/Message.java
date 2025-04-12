@@ -1,13 +1,20 @@
 package sc2002.FCS1.grp2;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
-public class Message {
+public class Message extends CSVDecodable {
 	private User user;
 	private String query;
 	private LocalDateTime timestamp;
 	private UUID enquiryId;
+	
+	private String nric;
+	
+	Message(ArrayList<CSVCell> cells) {		
+		this.query = cells.get(1).getValue();
+	}
 	
 	Message(User user, String query) {
 		this.user = user;

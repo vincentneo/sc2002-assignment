@@ -1,5 +1,8 @@
 package sc2002.FCS1.grp2;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class ApplicantActions {
 	private static BTOManagementSystem system;
 	
@@ -18,6 +21,27 @@ public class ApplicantActions {
 	}
 	
 	private static void enquiryFlow(Applicant applicant) {
+		Scanner scanner = system.getScanner();
 		
+		// TODO: print out projects for user to select first
+		System.out.println("Give you enquiry a short title for easier identification.");
+		System.out.print("Enquiry Title: ");
+		String title = scanner.nextLine();
+		
+		System.out.print("\n");
+		
+		System.out.println("Ask any question regarding our project.");
+		System.out.print("Question: ");
+		String query = scanner.nextLine();
+		
+		ArrayList<Message> messages = new ArrayList<>();
+		Message firstMessage = new Message(applicant, query);
+		
+		messages.add(firstMessage);
+		
+		// TODO: Link with a project.
+		Enquiry enquiry = new Enquiry(title, messages, null);
+		
+		System.out.println("Thank you. We will reply back in 3-5 business days.");
 	}
 }
