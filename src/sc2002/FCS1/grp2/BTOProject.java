@@ -68,7 +68,14 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         
         managerName = cells.get(10).getValue();
         totalOfficerSlots = cells.get(11).getIntValue();
-        officerNames = Arrays.asList(cells.get(12).getValues());
+        
+        String[] officerCell = cells.get(12).getValues();
+        if (officerCell != null) {
+        	officerNames = Arrays.asList(officerCell);
+        }
+        else {
+        	officerNames = new ArrayList<>();
+        }
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
 
         if (projectName == null || projectName.isEmpty()) {
