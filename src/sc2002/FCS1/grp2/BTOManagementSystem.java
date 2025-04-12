@@ -25,7 +25,7 @@ public class BTOManagementSystem {
 		ArrayList<BTOProject> projects = parser.parseProjects();
 		
 		for (BTOProject project : projects) {
-			project.retrieveConnectedUsers(officers);
+			project.retrieveConnectedUsers(officers, managers);
 		}
 		
 		this.applicants = applicants;
@@ -78,8 +78,7 @@ public class BTOManagementSystem {
 				break;
 			}
 			case PROJECT_LIST: {
-				// TODO: implement for BTOProject class
-				//encodables.addAll(projects);
+				encodables.addAll(projects);
 				break;
 			}
 		}
@@ -119,6 +118,7 @@ public class BTOManagementSystem {
 		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
 
 		projects.add(project);
+		saveChanges(CSVFileTypes.PROJECT_LIST);
 //		project.retrieveConnectedUsers(officers);
 		System.out.println(projects);
 	}

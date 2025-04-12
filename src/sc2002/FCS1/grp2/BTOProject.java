@@ -34,6 +34,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     private LocalDate openingDate;
     private LocalDate closingDate;
 
+    private String managerName;
     private HDBManager managerInCharge;
     private int totalOfficerSlots;
     
@@ -65,7 +66,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         
         //TODO: Get objects for manager and officers
         
-        //managerInCharge = splitted.get(10);
+        managerName = cells.get(10).getValue();
         totalOfficerSlots = cells.get(11).getIntValue();
         officerNames = Arrays.asList(cells.get(12).getValues());
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
@@ -89,16 +90,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
             throw new IllegalArgumentException("Number of price cannot be negative.");
         }
     }
-    
-    public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers) {
-    	this.officers = officers
-				    		.stream()
-				    		.filter(o -> officerNames.contains(o.getName()))
-				    		.collect(Collectors.toList());
-    }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, LocalDate openingDate, LocalDate closingDate, String managerInCharge, int totalOfficerSlots, ArrayList<String> officers)
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, LocalDate openingDate, LocalDate closingDate, HDBManager managerInCharge, int totalOfficerSlots, ArrayList<HDBOfficer> officers)
     throws Exception
     {
     	
@@ -134,11 +128,27 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
 
         //TODO: Get objects for managers and officers
-        //this.managerInCharge = managerInCharge;
+        this.managerInCharge = managerInCharge;
         this.totalOfficerSlots = totalOfficerSlots;
+        this.officers = officers;
         //this.officers = officers != null ? officers : new ArrayList<String>();
     }
     //endregion
+    
+    
+    public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers, ArrayList<HDBManager> managers) {
+    	this.officers = officers
+				    		.stream()
+				    		.filter(o -> officerNames.contains(o.getName()))
+				    		.collect(Collectors.toList());
+    	this.officerNames = null;
+    	this.managerInCharge = managers
+    			.stream()
+    			.filter(m -> m.getName().equals(managerName))
+    			.findFirst()
+    			.orElse(null);
+    	this.managerName = null;
+    }
 
     //region Project Name
     public String getProjectName() {
@@ -436,6 +446,12 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		String formattedOpeningDate = Utilities.getInstance().formatDate(openingDate);
 		String formattedClosingDate = Utilities.getInstance().formatDate(closingDate);
 		
+		String managerName = "";
+		
+		if (managerInCharge != null) {
+			managerName = managerInCharge.getName();
+		}
+		
 		String officerNames = String.format("\"%s\"", String.join(",", getHDBOfficersNames()));
 		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s",
 				projectName,
@@ -448,7 +464,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				threeRoomPrice,
 				formattedOpeningDate,
 				formattedClosingDate,
-				managerInCharge.getName(),
+				managerName,
 				totalOfficerSlots,
 				officerNames
 				);

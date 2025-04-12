@@ -123,7 +123,7 @@ public class BTOManagementApplication {
 			Applicant applicant = (Applicant) user;
 			
 			Applicant.Menu selectedOption = Applicant.Menu.fromOrdinal(scopedIndex);
-			ApplicantActions.handleAction(selectedOption, null);
+			ApplicantActions.handleAction(selectedOption, applicant);
 		}
 		else {
 			System.out.println("Logged in user appears to be of an undefined type. Unable to proceed further.");

@@ -43,7 +43,7 @@ public class HDBManagerActions {
 		
 		BTOProject project = new BTOProject(projectName, neighbourhood,
 				maxRoomOne, maxRoomTwo, priceRoomOne, priceRoomTwo,
-				openingDate, closingDate, manager.getName(), officerSlots, new ArrayList<>());
+				openingDate, closingDate, manager, officerSlots, new ArrayList<>());
 		system.addProject(project);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		
