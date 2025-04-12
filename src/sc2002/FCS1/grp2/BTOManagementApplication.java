@@ -72,9 +72,9 @@ public class BTOManagementApplication {
 		while (true) {
 			displayMenu();
 			
-			if (scanner.hasNextLine()) {
-				scanner.nextLine();
-			}
+//			if (scanner.hasNextLine()) {
+//				scanner.nextLine();
+//			}
 			
 			System.out.print("Select Menu Option: ");
 			response = scanner.nextLine();
@@ -120,6 +120,7 @@ public class BTOManagementApplication {
 		
 		if (index == 1) {
 			changePassword();
+			return;
 		}
 		
 		// cast user out to respective type
@@ -150,13 +151,13 @@ public class BTOManagementApplication {
 		Scanner scanner = system.getScanner();
 		
 		System.out.print("Please enter your current password for verification: ");
-		String currentPassword = scanner.next();
+		String currentPassword = scanner.nextLine();
 		
 		if (user.checkPassword(currentPassword)) {
 			System.out.print("New password: ");
-			String newPassword = scanner.next();
+			String newPassword = scanner.nextLine();
 			System.out.print("Confirm your new password: ");
-			String confirmPassword = scanner.next();
+			String confirmPassword = scanner.nextLine();
 			
 			if (newPassword.equals(confirmPassword)) {
 				user.setPassword(newPassword);
@@ -194,17 +195,17 @@ public class BTOManagementApplication {
 		System.out.print(prepareHeader("Login via SingPass"));
 
 		System.out.print("NRIC Number: ");
-		String nric = scanner.next();
+		String nric = scanner.nextLine();
 		User user = system.findUserByNRIC(nric);
 		while (user == null) {
 			System.out.println("Invalid NRIC Number. Please try again.");
 			System.out.print("NRIC Number: ");
-			nric = scanner.next();
+			nric = scanner.nextLine();
 			user = system.findUserByNRIC(nric);
 		}
 		
 		System.out.print("Password: ");
-		String password = scanner.next();
+		String password = scanner.nextLine();
 		
 		int remainingTries = 2;
 		while (!system.attemptLogin(user, password)) {
@@ -214,7 +215,7 @@ public class BTOManagementApplication {
 			}
 			System.out.println("Invalid password.");
 			System.out.print("Password: ");
-			password = scanner.next();
+			password = scanner.nextLine();
 			remainingTries--;
 		}
 		
