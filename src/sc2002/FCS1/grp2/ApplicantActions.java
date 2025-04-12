@@ -9,7 +9,7 @@ public class ApplicantActions {
 	
 	public static void handleAction(Applicant.Menu option, Applicant user) {
 		switch (option) {
-		case CREATE_PROJECT:
+		case VIEW_PROJECTS:
 			System.out.println("Work in progress");
 			break;
 		}
