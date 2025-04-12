@@ -45,29 +45,24 @@ public class BTOManagementApplication {
 		return headerText;
 	}
 	
-	private static void generateMenu() {
-		
-		
+	private static void displayMenu() {
 		ArrayList<String> menuList = system.getActiveUser().getMenu();
-		ArrayList<String> contents = new ArrayList<>();
-//		String result = prepareHeader("Menu");
+		ArrayList<String> menuContents = new ArrayList<>();
 		
-		for (int i = 0; i < menuList.size(); i++) {
-			contents.add(String.format("%d. %s\n", i, menuList.get(i)));
+		for (int i = 1; i <= menuList.size(); i++) {
+			menuContents.add(String.format("%d. %s", i, menuList.get(i-1)));
 		}
+		
+		ArrayList<String> additionalDetails = new ArrayList<>();
+		additionalDetails.add("To exit, type \"exit\"");
+		additionalDetails.add("To logout, type \"logout\"");
 		
 		new DisplayMenu.Builder()
 				.setTitle("Menu")
-				.setContents(contents)
+				.addContents(menuContents)
+				.addContents(additionalDetails)
 				.build()
 				.display();
-
-		
-//		result += "To exit, type \"exit\"\n";
-//		result += "-".repeat(60);
-//		result += "\n";
-//		
-//		return result;
 	}
 	
 	private static void startResponseLoop() {
@@ -75,7 +70,7 @@ public class BTOManagementApplication {
 		Scanner scanner = system.getScanner();
 		
 		while (true) {
-//			System.out.print(generateMenu());
+			displayMenu();
 			
 			if (scanner.hasNextLine()) {
 				scanner.nextLine();
@@ -119,7 +114,11 @@ public class BTOManagementApplication {
 		// this index starts at 0, for each of the specific access control index of specific user types.
 		int scopedIndex = index - User.getCommonMenuOptions() - 1;
 		
-		if (index == 0) {
+		if (index < 1) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (index == 1) {
 			changePassword();
 		}
 		
