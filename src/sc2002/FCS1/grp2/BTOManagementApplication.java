@@ -49,8 +49,8 @@ public class BTOManagementApplication {
 		ArrayList<String> menuList = system.getActiveUser().getMenu();
 		String result = prepareHeader("Menu");
 		
-		for (int i = 0; i < menuList.size(); i++) {
-			result += String.format("%d. %s\n", i, menuList.get(i));
+		for (int i = 1; i <= menuList.size(); i++) {
+			result += String.format("%d. %s\n", i, menuList.get(i-1));
 		}
 		
 		result += "To exit, type \"exit\"\n";
@@ -108,7 +108,7 @@ public class BTOManagementApplication {
 		User user = system.getActiveUser();
 		
 		// this index starts at 0, for each of the specific access control index of specific user types.
-		int scopedIndex = index - User.getCommonMenuOptions();
+		int scopedIndex = index - User.getCommonMenuOptions() - 1;
 		
 		if (index == 0) {
 			changePassword();
