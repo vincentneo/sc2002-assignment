@@ -10,6 +10,7 @@ public class BTOManagementSystem {
 	private ArrayList<HDBManager> managers;
 	private ArrayList<HDBOfficer> officers;
 	private ArrayList<BTOProject> projects;
+	private ArrayList<Enquiry> enquiries;
 	
 	private User activeUser = null;
 	

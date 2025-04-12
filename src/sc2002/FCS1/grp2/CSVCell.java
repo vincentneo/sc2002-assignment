@@ -2,6 +2,7 @@ package sc2002.FCS1.grp2;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * A simple class for representing an individual cell of any specific row and column of a CSV file.
@@ -59,6 +60,15 @@ public class CSVCell {
 	 */
 	public LocalDate getDateValue() {
 		return Utilities.getInstance().parseDate(value);
+	}
+	
+	/**
+	 * Convenience method to get value as a UUID.
+	 * @return value of the CSV cell as an {@code UUID}.
+	 * @throws IllegalArgumentException - if cell content is not UUID compliant.
+	 */
+	public UUID getUUIDValue() {
+		return UUID.fromString(value);
 	}
 
 	/**

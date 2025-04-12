@@ -135,8 +135,10 @@ public class Applicant extends User {
 		return "Applicant";
 	}
 	
+	
+	// TODO: Change this
 	/**
-	 * Possible menu options for a HDB Manager role
+	 * Possible menu options for a applicant role
 	 * 
 	 * Each option listed here are options that only a HDB Manager can interact with. 
 	 */

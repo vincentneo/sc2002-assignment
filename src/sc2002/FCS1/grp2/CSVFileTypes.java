@@ -4,7 +4,9 @@ public enum CSVFileTypes {
 	APPLICANT_LIST("ApplicantList.csv"),
 	MANAGER_LIST("ManagerList.csv"),
 	OFFICER_LIST("OfficerList.csv"),
-	PROJECT_LIST("ProjectList.csv");
+	PROJECT_LIST("ProjectList.csv"),
+	ENQUIRIES_LIST("EnquiriesList.csv"),
+	MESSAGES_LIST("MessagesList.csv");
 	
 	private String fileName;
 	
