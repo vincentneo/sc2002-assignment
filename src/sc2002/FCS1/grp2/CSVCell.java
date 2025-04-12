@@ -55,7 +55,7 @@ public class CSVCell {
 	/**
 	 * Convenience method to get value as date.
 	 * @return value of the CSV cell as an {@code LocalDate}.
-	 * @throws DateTimeParseException - if cell content is not of d/M/yy date format.
+	 * @throws java.time.format.DateTimeParseException - if cell content is not of d/M/yy date format.
 	 */
 	public LocalDate getDateValue() {
 		return Utilities.getInstance().parseDate(value);
