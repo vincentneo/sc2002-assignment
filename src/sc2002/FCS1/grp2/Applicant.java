@@ -143,12 +143,15 @@ public class Applicant extends User {
 	 * Each option listed here are options that only a HDB Manager can interact with. 
 	 */
 	enum Menu implements ScopedOption {
-		VIEW_PROJECTS;
+		VIEW_PROJECTS,
+		SEND_ENQUIRY;
 		
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
 				return "View Projects";
+			case SEND_ENQUIRY: 
+				return "Enquire about something";
 			default:
 				return null;
 			}

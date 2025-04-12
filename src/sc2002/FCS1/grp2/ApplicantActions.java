@@ -11,7 +11,13 @@ public class ApplicantActions {
 		switch (option) {
 		case VIEW_PROJECTS:
 			System.out.println("Work in progress");
+		case SEND_ENQUIRY:
+			enquiryFlow(user);
 			break;
 		}
+	}
+	
+	private static void enquiryFlow(Applicant applicant) {
+		
 	}
 }
