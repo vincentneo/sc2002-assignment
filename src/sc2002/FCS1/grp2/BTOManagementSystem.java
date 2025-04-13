@@ -87,7 +87,7 @@ public class BTOManagementSystem {
 			}
 		}
 		try {
-			CSVEncoder encoder = new CSVEncoder(type.getFileName(), encodables);
+			CSVEncoder encoder = new CSVEncoder(type.getFileName(), type.getHeader(), encodables);
 			encoder.encode();
 		}
 		catch (Exception e) {

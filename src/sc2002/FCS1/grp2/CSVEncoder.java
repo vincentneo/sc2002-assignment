@@ -20,6 +20,11 @@ public class CSVEncoder {
 	private String path;
 	
 	/**
+	 * Represents the header row.
+	 */
+	private String headerLine;
+	
+	/**
 	 * Each row of data that should be written in the CSV file.
 	 */
 	private ArrayList<CSVEncodable> encodables;
@@ -29,10 +34,11 @@ public class CSVEncoder {
 	 * @param fileName The name of the file.
 	 * @param encodables Data that represents each row of the CSV file to be written.
 	 */
-	CSVEncoder(String fileName, ArrayList<CSVEncodable> encodables) {
+	CSVEncoder(String fileName, String headerLine, ArrayList<CSVEncodable> encodables) {
 		String classpath = System.getProperty("java.class.path");
 		String filesPath = classpath + "/sc2002/FCS1/grp2/files/";
 		this.path = filesPath + fileName;
+		this.headerLine = headerLine;
 		this.encodables = encodables;
 	}
 	
@@ -42,17 +48,17 @@ public class CSVEncoder {
 	 */
 	public void encode() throws IOException {
 		// TODO: support case whereby callable without retrieval of header row.
-		File file = new File(path);
-		Scanner reader = new Scanner(file);
+		//File file = new File(path);
+		//Scanner reader = new Scanner(file);
 		
 		// get the header row from the current file.
-		String headerLine = reader.nextLine();
-		reader.close();
+		//String headerLine = reader.nextLine();
+		//reader.close();
 		
 		FileWriter writer = new FileWriter(path);
 		BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		
-		// write the header row as retrieved earlier.
+		// write the header row.
 		bufferedWriter.write(headerLine);
 		bufferedWriter.newLine();
 		
