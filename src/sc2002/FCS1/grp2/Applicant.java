@@ -152,9 +152,9 @@ public class Applicant extends User {
 			case VIEW_PROJECTS: 
 				return "View Projects";
 			case VIEW_ENQUIRIES:
-				return "Enquiries";
+				return "View My Enquiries";
 			case SEND_ENQUIRY: 
-				return "Enquire about something";
+				return "Submit New Enquiry";
 			default:
 				return null;
 			}
