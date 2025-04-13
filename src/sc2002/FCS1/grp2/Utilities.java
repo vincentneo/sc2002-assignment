@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  * Singleton class that handles certain common utility features such as date parsing.
@@ -74,6 +75,10 @@ public class Utilities {
 	
 	public String formatDateTime(LocalDateTime dateTime) {
 		return dateTime.format(formatterForCSVDateTime());
+	}
+	
+	public String formatUserReadableDateTime(LocalDateTime dateTime) {
+		return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
 	}
 	
 	public void printYellow(String text) {

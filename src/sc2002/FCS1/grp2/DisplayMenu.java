@@ -67,7 +67,7 @@ public class DisplayMenu {
 			for (int i = 0; i < size; i++) {
 				List<String> list = contents.get(i);
 				for (String content : list) {
-					int lineWidth = width;
+					int lineWidth = width + ansiEscapeCodeExtraCharacters(content);
 					String format = "%-" + lineWidth + "s";
 					text += String.format("%s " + format + " %s\n", LINE_VERTICAL, content, LINE_VERTICAL);
 				}
@@ -81,6 +81,13 @@ public class DisplayMenu {
 		text += String.format("%s%s%s\n", BOX_BOTTOM_LEFT_CORNER, LINE_HORIZONTAL.repeat(width + 2), BOX_BOTTOM_RIGHT_CORNER);
 		
 		return text;
+	}
+	
+	private int ansiEscapeCodeExtraCharacters(String string) {
+		int full = string.length();
+		int withoutANSI = string.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length();
+		int ansi = full - withoutANSI;
+		return ansi;
 	}
 	
 	private String findLongestLine() {
@@ -110,6 +117,10 @@ public class DisplayMenu {
 		
 		
 		public Builder addContents(List<String> contents) {
+			if (contents == null) {
+				return this;
+			}
+			
 			if (this.contents == null) {
 				this.contents = new ArrayList<>();
 			}

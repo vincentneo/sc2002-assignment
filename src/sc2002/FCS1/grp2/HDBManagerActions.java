@@ -208,7 +208,8 @@ public class HDBManagerActions {
 	}
 	
 	private static void viewAllEnquiries(HDBManager manager) throws Exception {
-		manager.getEnquiriesSystem().displayEnquiriesMenu();
+		EnquiriesSystem eSystem = manager.getEnquiriesSystem();
+		eSystem.displayEnquiriesMenu();
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
@@ -220,5 +221,68 @@ public class HDBManagerActions {
 				.build()
 				.display();
 		
+		boolean shouldExit = false;
+		int userOption = -1;
+		
+		while (true) {
+			System.out.print("Choose option: ");
+			String userInput = scanner.nextLine();
+			
+			if (userInput.equalsIgnoreCase("back")) {
+				shouldExit = true;
+				break;
+			}
+			
+			try {
+				userOption = Integer.parseInt(userInput);
+				break;
+			}
+			catch (Exception e) {
+				continue;
+			}
+		}
+		
+		if (shouldExit || userOption < 0) return;
+		
+		Enquiry enquiry = eSystem.getEnquiries().get(userOption - 1);
+		int width = 100;
+		
+		String userRow = enquiry.getQuestion().getUser().getName() + " asks:";
+		ArrayList<String> rows = new ArrayList<>();
+
+		String questionDate = Utilities.getInstance().formatUserReadableDateTime(enquiry.getQuestion().getTimestamp());
+		rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", questionDate));
+		rows.add(String.format("\u001B[1m%-" + (width - userRow.length()) + "s\u001B[0m", userRow));
+		rows.add(enquiry.getQuestion().getContent());
+		
+		if (enquiry.getResponse() != null) {
+			rows.add("");
+			Message response = enquiry.getResponse();
+			
+			String responseDate = Utilities.getInstance().formatUserReadableDateTime(response.getTimestamp());
+			rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", responseDate));
+			
+			String responseInfo = String.format("%s (%s) replied:", response.getUser().getName(), response.getUser().getReadableTypeName());
+			rows.add(String.format("\u001B[1m%-" + (width - responseInfo.length()) + "s\u001B[0m", responseInfo));
+			rows.add(String.format("%-" + (width - response.getContent().length()) + "s", response.getContent()));
+		}
+		
+		new DisplayMenu.Builder()
+			.addContents(rows)
+			.build()
+			.display();
+		
+		if (!enquiry.hasResponded()) {
+			Boolean wantsReply = superScanner.nextBoolUntilCorrect("Would you like to reply? (Y/N): ");
+			
+			if (wantsReply) {
+				System.out.print("Your reply: ");
+				String reply = scanner.nextLine();
+				enquiry.setResponse(new Message(manager, reply));
+				system.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+				
+				System.out.println("Your response has been sent.");
+			}
+		}
 	}
 }

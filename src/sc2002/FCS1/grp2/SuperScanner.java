@@ -44,6 +44,17 @@ public class SuperScanner {
 		}
 	}
 	
+	public Boolean nextBoolUntilCorrect(String prompt) {
+		try {
+			return nextBool(prompt);
+		}
+		catch (IllegalArgumentException e) {
+			Utilities.getInstance().printYellow("Invalid input.");
+			System.out.println();
+			return nextBoolUntilCorrect(prompt);
+		}
+	}
+	
 	private int nextInt(String prompt) {
 		System.out.print(prompt);
 		String userInput = scanner.next();
@@ -54,5 +65,22 @@ public class SuperScanner {
 		System.out.print(prompt);
 		String userInput = scanner.next();
 		return Utilities.getInstance().parseDate(userInput);
+	}
+	
+	private Boolean nextBool(String prompt) throws IllegalArgumentException {
+		System.out.print(prompt);
+		String userInput = scanner.nextLine();
+		
+		if (userInput.equals("back")) {
+			return null;
+		}
+		if (userInput.equalsIgnoreCase("false") || userInput.equalsIgnoreCase("f") || userInput.equalsIgnoreCase("no") || userInput.equalsIgnoreCase("n")) {
+			return false;
+		} 
+		if (userInput.equalsIgnoreCase("true") || userInput.equalsIgnoreCase("t") || userInput.equalsIgnoreCase("yes") || userInput.equalsIgnoreCase("y")) {
+			return true;
+		}
+		
+		throw new IllegalArgumentException();
 	}
 }
