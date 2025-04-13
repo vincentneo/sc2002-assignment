@@ -63,7 +63,7 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * Constructor that is intended for use by (@code CSVParser} class only.
 	 * @param cells Represents a row of a CSV spreadsheet.
 	 */
-	public User(ArrayList<CSVCell> cells) {
+	public User(List<CSVCell> cells) {
 		super(cells);
 		this.name = cells.get(0).getValue();
 		this.nric = cells.get(1).getValue();

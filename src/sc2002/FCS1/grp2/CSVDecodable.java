@@ -1,6 +1,6 @@
 package sc2002.FCS1.grp2;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /*
  * The purpose of this abstract class is to provide a common constructor for the CSVParser class to construct objects.
@@ -14,7 +14,7 @@ public abstract class CSVDecodable {
 	 * 
 	 * @param cells Represents a row of values, in the CSV file. Should only be provided by the CSVParser class.
 	 */
-	CSVDecodable(ArrayList<CSVCell> cells) {}
+	CSVDecodable(List<CSVCell> cells) {}
 	
 	/** 
 	 * Default constructor.

@@ -2,6 +2,7 @@ package sc2002.FCS1.grp2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -48,7 +49,7 @@ public class CSVParser {
 				String line = scanner.nextLine();
 				
 				ArrayList<CSVCell> cells = parseLine(line);
-				Decodable object = type.getDeclaredConstructor(ArrayList.class).newInstance(cells);
+				Decodable object = type.getDeclaredConstructor(List.class).newInstance(cells);
 				decodables.add(object);
 			}
 			

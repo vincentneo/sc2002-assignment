@@ -47,7 +47,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
     //region Consturctors
     //Construct with a string parsed from a csv file.
-    public BTOProject (ArrayList<CSVCell> cells) throws Exception {
+    public BTOProject (List<CSVCell> cells) throws Exception {
     	super(cells);
 //        List<String> splitted = Arrays.asList(line.split(","));
 		projectName = cells.get(0).getValue();

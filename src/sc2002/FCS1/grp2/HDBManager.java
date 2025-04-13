@@ -1,12 +1,13 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class HDBManager extends User {
 
 	Scanner scanner = new Scanner(System.in);
-	public HDBManager(ArrayList<CSVCell> cells) {
+	public HDBManager(List<CSVCell> cells) {
 		super(cells);
 	}
 

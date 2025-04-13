@@ -12,7 +12,7 @@ public class Applicant extends User {
 	private ApplicationStatus applicationStatus;
 	private Set<BTOProject> previouslyAppliedProjects = new HashSet<>();
 
-	public Applicant(ArrayList<CSVCell> cells) {
+	public Applicant(List<CSVCell> cells) {
 		super(cells);
 	}
 

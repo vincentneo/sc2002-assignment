@@ -1,10 +1,10 @@
 package sc2002.FCS1.grp2;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class HDBOfficer extends Applicant {
 
-	public HDBOfficer(ArrayList<CSVCell> cells) {
+	public HDBOfficer(List<CSVCell> cells) {
 		super(cells);
 		// TODO Auto-generated constructor stub
 	}
