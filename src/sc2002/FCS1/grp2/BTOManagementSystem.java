@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BTOManagementSystem {
 	private ArrayList<Applicant> applicants;
@@ -102,6 +103,19 @@ public class BTOManagementSystem {
 	
 	public ArrayList<BTOProject> getProjects() {
 		return projects;
+	}
+	
+	public ArrayList<BTOProject> getApplicableProjects() {
+		if (activeUser instanceof HDBManager) {
+			return projects.stream()
+					.filter(p -> p.getManagerInCharge()
+							.getNric()
+							.equals(activeUser.getNric())
+							)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		
+		return new ArrayList<>();
 	}
 	
 	/**
