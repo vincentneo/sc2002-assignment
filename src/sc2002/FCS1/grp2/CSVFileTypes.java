@@ -18,12 +18,12 @@ public enum CSVFileTypes {
 	
 	public String getHeader() {
 		switch (this) {
-		case APPLICANT_LIST:
-		case MANAGER_LIST:
-		case OFFICER_LIST:
+		case APPLICANT_LIST, MANAGER_LIST, OFFICER_LIST:
 			return "Name,NRIC,Age,Marital Status,Password";
 		case PROJECT_LIST:
 			return "Project Name,Neighborhood,Type 1,Number of units for Type 1,Selling price for Type 1,Type 2,Number of units for Type 2,Selling price for Type 2,Application opening date,Application closing date,Manager,Officer Slot,Officer";
+		default:
+			return null;
 		}
 	}
 	
