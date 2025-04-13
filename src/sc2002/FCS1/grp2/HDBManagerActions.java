@@ -209,5 +209,16 @@ public class HDBManagerActions {
 	
 	private static void viewAllEnquiries(HDBManager manager) throws Exception {
 		manager.getEnquiriesSystem().displayEnquiriesMenu();
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+		
+		new DisplayMenu.Builder()
+				.addContent("Which enquiry would you like to view more details or reply?")
+				.addContent("Choose based on the number option shown above.")
+				.addDivider()
+				.addContent("To go back, type \"back\"")
+				.build()
+				.display();
+		
 	}
 }
