@@ -39,6 +39,12 @@ public class EnquiriesSystem {
 			
 			index++;
 		}
+		
+		if (contents.isEmpty()) {
+			contents.add(String.format("%s%s%s", " ".repeat(10), "No enquiries were found.", " ".repeat(10)));
+		}
+		
+		
 		new DisplayMenu.Builder()
 				.addContents(contents)
 				.setTitle("Enquiries")
