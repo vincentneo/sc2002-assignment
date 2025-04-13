@@ -30,7 +30,7 @@ public class DisplayMenu {
 		String longestContentLine = findLongestLine();
 		int width = longestContentLine.length();
 		
-		if (title.length() > width) {
+		if (title != null && title.length() > width) {
 			width = title.length();
 		}
 		
@@ -40,18 +40,23 @@ public class DisplayMenu {
 		
 //		width += title.length();
 		
-		int spacers = width - title.length();
-		int halfSpacer = spacers / 2;
-		
-		String titleLine = String.format("%s%s %s %s%s\n",
-				BOX_TOP_LEFT_CORNER,
-				LINE_HORIZONTAL.repeat(halfSpacer),
-				title,
-				LINE_HORIZONTAL.repeat((spacers % 2 == 0) ? halfSpacer : halfSpacer + 1),
-				BOX_TOP_RIGHT_CORNER
-				);
-		
-		text += titleLine;
+		if (title != null) {
+			int spacers = width - title.length();
+			int halfSpacer = spacers / 2;
+			
+			String titleLine = String.format("%s%s %s %s%s\n",
+					BOX_TOP_LEFT_CORNER,
+					LINE_HORIZONTAL.repeat(halfSpacer),
+					title,
+					LINE_HORIZONTAL.repeat((spacers % 2 == 0) ? halfSpacer : halfSpacer + 1),
+					BOX_TOP_RIGHT_CORNER
+					);
+			
+			text += titleLine;
+		}
+		else {
+			text += String.format("%s%s%s\n", BOX_TOP_LEFT_CORNER, LINE_HORIZONTAL.repeat(width + 2), BOX_TOP_RIGHT_CORNER);
+		}
 		
 //		if (halfSpacer % 2 == 0) {
 //			width += 1;
@@ -94,7 +99,7 @@ public class DisplayMenu {
 	
 	public static class Builder {
 		private String title;
-		private List<List<String>> contents;
+		private List<List<String>> contents = new ArrayList<>();
 		
 		private List<String> current;
 		
