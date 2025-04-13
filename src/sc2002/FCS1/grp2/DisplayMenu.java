@@ -38,7 +38,7 @@ public class DisplayMenu {
 			width = 20;
 		}
 		
-		width += title.length();
+//		width += title.length();
 		
 		int spacers = width - title.length();
 		int halfSpacer = spacers / 2;
@@ -62,7 +62,8 @@ public class DisplayMenu {
 			for (int i = 0; i < size; i++) {
 				List<String> list = contents.get(i);
 				for (String content : list) {
-					String format = "%-" + width + "s";
+					int lineWidth = width;
+					String format = "%-" + lineWidth + "s";
 					text += String.format("%s " + format + " %s\n", LINE_VERTICAL, content, LINE_VERTICAL);
 				}
 				if (i < size - 1 && size != 1) {
