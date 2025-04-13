@@ -48,4 +48,19 @@ public class HDBManagerActions {
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		
 	}
+	
+	private static void editProject(HDBManager manager) {
+		Scanner scanner = system.getScanner();
+		System.out.println("Enter Project Name: ");
+		String project = scanner.next();
+		ArrayList<BTOProject>  projects = system.getProjects(); 
+		ArrayList<BTOProject> ProjectsFinder = projects.stream()
+				.filter(p -> projects == project)
+				.collect(Collectors.toArrayList);
+		
+		
+		
+		
+		
+	}
 }
