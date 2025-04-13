@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Each enquiry acts as a question and answer session, between applicants and officers or managers of a project.
+ * 
+ * @author Vincent Neo
+ */
 public class Enquiry extends CSVDecodable implements CSVEncodable {
 	/**
 	 * A unique identifier to identify each enquiry.

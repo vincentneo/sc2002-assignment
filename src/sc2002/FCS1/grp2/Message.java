@@ -1,10 +1,15 @@
 package sc2002.FCS1.grp2;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+/**
+ * This class represents a message of an enquiry, by a user of our application, typically an applicant.
+ * 
+ * It contains essential metadata such as the submitter's identity, date and time, as well as the message's content.
+ * 
+ * @author Vincent Neo
+ */
 public class Message extends CSVDecodable implements CSVEncodable {
 	private User user;
 	private String content;
