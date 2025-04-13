@@ -21,6 +21,9 @@ public class HDBManagerActions {
 			editProject(user);
 		case DELETE_PROJECT:
 			deleteProject(user);
+		case VIEW_ALL_ENQUIRIES:
+			viewAllEnquiries(user);
+			break;
 		}
 	}
 	
@@ -204,6 +207,7 @@ public class HDBManagerActions {
 		
 	}
 	
-	
-	
+	private static void viewAllEnquiries(HDBManager manager) throws Exception {
+		manager.getEnquiriesSystem().displayEnquiriesMenu();
+	}
 }

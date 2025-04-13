@@ -185,6 +185,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 	@Override
 	public List<Enquiry> getApplicableEnquiries(User user) {
+		if (user instanceof HDBManager) {
+			return enquiries;
+		}
+		
 		if (user instanceof Applicant) {
 			return enquiries.stream().filter(e -> e.isUserInvolved(user)).collect(Collectors.toList());
 		}

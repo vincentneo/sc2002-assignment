@@ -14,6 +14,7 @@ public class ApplicantActions {
 		switch (option) {
 		case VIEW_PROJECTS:
 			System.out.println("Work in progress");
+			break;
 		case VIEW_ENQUIRIES:
 			showEnquiries(user);
 			break;

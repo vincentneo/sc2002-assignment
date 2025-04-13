@@ -208,7 +208,6 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	public void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
 		if (enquiriesSystem == null) {
 			this.enquiriesSystem.setDelegate(null);
-			return;
 		}
 		this.enquiriesSystem = enquiriesSystem;
 	}
