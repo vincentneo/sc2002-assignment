@@ -21,4 +21,28 @@ public class EnquiriesSystem {
 		this.enquiries.add(enquiry);
 	}
 	
+	public List<Enquiry> getEnquiries() {
+		return enquiries;
+	}
+	
+	public void displayEnquiriesMenu() {
+		List<String> contents = new ArrayList<>();
+		
+		int index = 1;
+		for (Enquiry enquiry : enquiries) {
+			Message question = enquiry.getQuestion();
+			if (question == null) continue;
+			
+			String responseState = enquiry.hasResponded() ? "Responded" : "Not Responded";
+			
+			contents.add(String.format("%3d. %-50s %30s", index, question.getContent(), responseState));
+			
+			index++;
+		}
+		new DisplayMenu.Builder()
+				.addContents(contents)
+				.setTitle("Enquiries")
+				.build()
+				.display();
+	}
 }

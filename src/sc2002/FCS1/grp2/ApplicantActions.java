@@ -14,10 +14,17 @@ public class ApplicantActions {
 		switch (option) {
 		case VIEW_PROJECTS:
 			System.out.println("Work in progress");
+		case VIEW_ENQUIRIES:
+			showEnquiries(user);
+			break;
 		case SEND_ENQUIRY:
 			enquiryFlow(user);
 			break;
 		}
+	}
+	
+	private static void showEnquiries(Applicant applicant) throws Exception {
+		applicant.getEnquiriesSystem().displayEnquiriesMenu();
 	}
 	
 	private static void enquiryFlow(Applicant applicant) throws Exception {

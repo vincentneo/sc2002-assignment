@@ -13,7 +13,7 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	private String projectName;
 	private BTOProject project;
 	
-	public Enquiry(ArrayList<CSVCell> cells) {
+	public Enquiry(List<CSVCell> cells) {
 		this.id = cells.get(0).getUUIDValue();
 		if (!cells.get(1).isBlank()) {
 			this.question = new Message(cells.subList(1, 4));
@@ -62,6 +62,22 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	
 	public boolean isUserInvolved(User user) {
 		return (question != null && question.getUser().equals(user)) || (response != null && response.getUser().equals(user));
+	}
+
+	public Message getResponse() {
+		return response;
+	}
+
+	public void setResponse(Message response) {
+		this.response = response;
+	}
+
+	public Message getQuestion() {
+		return question;
+	}
+	
+	public boolean hasResponded() {
+		return response != null;
 	}
 
 	@Override

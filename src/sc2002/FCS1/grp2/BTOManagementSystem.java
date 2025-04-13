@@ -38,6 +38,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		this.officers = officers;
 		this.projects = projects;
 		this.enquiries = enquiries;
+		
+		ArrayList<User> all = allUsers();
+		for (Enquiry enquiry : enquiries) {
+			enquiry.linkUsers(all);
+		}
 	}
 	
 	private ArrayList<User> allUsers() {

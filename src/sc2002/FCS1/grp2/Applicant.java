@@ -144,12 +144,15 @@ public class Applicant extends User {
 	 */
 	enum Menu implements ScopedOption {
 		VIEW_PROJECTS,
+		VIEW_ENQUIRIES,
 		SEND_ENQUIRY;
 		
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
 				return "View Projects";
+			case VIEW_ENQUIRIES:
+				return "Enquiries";
 			case SEND_ENQUIRY: 
 				return "Enquire about something";
 			default:
