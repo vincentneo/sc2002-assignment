@@ -47,6 +47,8 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * User's password.
 	 */
 	private String password;
+
+	private EnquiriesSystem enquiriesSystem;
 	
 	/**
 	 * Options that are common to all user types
@@ -184,6 +186,31 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	public String toString() {
 		return "User [name=" + name + ", nric=" + nric + ", age=" + age + ", maritalStatus=" + maritalStatus
 				+ ", password=" + password + "]";
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		
+		if (!(object instanceof User)) {
+			return false;
+		}
+		
+		return ((User) object).getNric().equals(this.getNric());
+	}
+	
+	public EnquiriesSystem getEnquiriesSystem() {
+		return enquiriesSystem;
+	}
+
+	public void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
+		if (enquiriesSystem == null) {
+			this.enquiriesSystem.setDelegate(null);
+			return;
+		}
+		this.enquiriesSystem = enquiriesSystem;
 	}
 }
 

@@ -1,30 +1,41 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Enquiry extends CSVDecodable implements CSVEncodable {
 	private UUID id;
-	private String title;
-	private ArrayList<Message> messages;
+	private Message question;
+	private Message response = null;
 	
 	private String projectName;
 	private BTOProject project;
 	
 	public Enquiry(ArrayList<CSVCell> cells) {
 		this.id = cells.get(0).getUUIDValue();
-		this.title = cells.get(1).getValue();
-		this.projectName = cells.get(2).getValue();
+		if (!cells.get(1).isBlank()) {
+			this.question = new Message(cells.subList(1, 4));
+		}
+		
+		if (!cells.get(4).isBlank()) {
+			this.response = new Message(cells.subList(4, 7));
+		}
+		
+		this.projectName = cells.get(7).getValue();
 	}
 	
-	public Enquiry(String title, ArrayList<Message> messages, BTOProject project) {
+	public Enquiry(Message question, BTOProject project) {
 		this.id = UUID.randomUUID();
-		this.title = title;
-		this.messages = messages;
+		this.question = question;
 		this.project = project;
 	}
 	
+	public UUID getId() {
+		return id;
+	}
+
 	/** 
 	 * Only call if projectName is provided by CSV parsing and not null.
 	 */
@@ -39,17 +50,26 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 		this.projectName = null;
 	}
 	
-	public void linkMessages(ArrayList<Message> messagePool) {
-		ArrayList<Message> messages = messagePool.stream()
-				.filter(m -> m.getEnquiryId() == id)
-				.collect(Collectors.toCollection(ArrayList::new));
+	public void linkUsers(List<User> users) {
+		if (question != null) {
+			question.linkUser(users);
+		}
 		
-		this.messages = messages;
+		if (response != null) {
+			response.linkUser(users);
+		}
+	}
+	
+	public boolean isUserInvolved(User user) {
+		return (question != null && question.getUser().equals(user)) || (response != null && response.getUser().equals(user));
 	}
 
 	@Override
 	public String encode() {
-		return null;
+		String questionEncoded = question == null ? ",," : question.encode();
+		String responseEncoded = response == null ? ",," : response.encode();
+		String projectName = project == null ? "" : project.getProjectName();
+		return String.format("%s,%s,%s,%s", id.toString(), questionEncoded, responseEncoded, projectName);
 	}
 
 	@Override

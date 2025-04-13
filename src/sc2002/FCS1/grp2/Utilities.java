@@ -1,6 +1,7 @@
 package sc2002.FCS1.grp2;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -16,7 +17,7 @@ public class Utilities {
 	/**
 	 * Common Date formatter, based on provided CSV file's date format of d/M/yy.
 	 */
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d'/'M'/'uu");
+	private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d'/'M'/'yy");
 	
 	/**
 	 * Escape code to tint text to yellow.
@@ -51,7 +52,7 @@ public class Utilities {
 	 * @throws java.time.format.DateTimeParseException if the text is not of expected date format, or isn't a date.
 	 */
 	public LocalDate parseDate(String dateString) {
-		return LocalDate.parse(dateString, formatter);
+		return LocalDate.parse(dateString, dateFormatter);
 	}
 	
 	/**
@@ -60,7 +61,19 @@ public class Utilities {
 	 * @return A string that is formatted based on d/M/yy.
 	 */
 	public String formatDate(LocalDate date) {
-		return date.format(formatter);
+		return date.format(dateFormatter);
+	}
+	
+	private DateTimeFormatter formatterForCSVDateTime() {
+		return DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+	}
+	
+	public LocalDateTime parseDateTime(String string) {
+		return LocalDateTime.parse(string, formatterForCSVDateTime());
+	}
+	
+	public String formatDateTime(LocalDateTime dateTime) {
+		return dateTime.format(formatterForCSVDateTime());
 	}
 	
 	public void printYellow(String text) {

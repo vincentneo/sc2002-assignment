@@ -1,11 +1,13 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BTOManagementSystem {
+public class BTOManagementSystem implements EnquiriesDelegate {
 	private ArrayList<Applicant> applicants;
 	private ArrayList<HDBManager> managers;
 	private ArrayList<HDBOfficer> officers;
@@ -25,6 +27,7 @@ public class BTOManagementSystem {
 		ArrayList<HDBManager> managers = parser.parseManagers();
 		ArrayList<HDBOfficer> officers = parser.parseOfficer();
 		ArrayList<BTOProject> projects = parser.parseProjects();
+		ArrayList<Enquiry> enquiries = parser.parseEnquiries();
 		
 		for (BTOProject project : projects) {
 			project.retrieveConnectedUsers(officers, managers);
@@ -34,6 +37,7 @@ public class BTOManagementSystem {
 		this.managers = managers;
 		this.officers = officers;
 		this.projects = projects;
+		this.enquiries = enquiries;
 	}
 	
 	private ArrayList<User> allUsers() {
@@ -64,6 +68,7 @@ public class BTOManagementSystem {
 	}
 	
 	public void logout() {
+		this.activeUser.setEnquiriesSystem(null);
 		this.activeUser = null;
 	}
 	
@@ -86,6 +91,9 @@ public class BTOManagementSystem {
 			case PROJECT_LIST: {
 				encodables.addAll(projects);
 				break;
+			}
+			case ENQUIRIES_LIST: {
+				encodables.addAll(enquiries);
 			}
 		}
 		try {
@@ -161,6 +169,22 @@ public class BTOManagementSystem {
 			user.print();
 		}
 		
+	}
+
+	@Override
+	public void addEnquiry(Enquiry enquiry) throws Exception {
+		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
+		this.enquiries.add(enquiry);
+		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+	}
+
+	@Override
+	public List<Enquiry> getApplicableEnquiries(User user) {
+		if (user instanceof Applicant) {
+			return enquiries.stream().filter(e -> e.isUserInvolved(user)).collect(Collectors.toList());
+		}
+		
+		return new ArrayList<>();
 	}
 	
 }
