@@ -19,7 +19,32 @@ public class HDBManagerActions {
 		}
 	}
 	
+	private static boolean checkProjectCreationEligibility() {
+		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
+		
+		LocalDate today = LocalDate.now();
+		long count = applicableProjects.stream()
+				.filter(p -> {
+					if (today.isEqual(p.getOpeningDate())) {
+						return true;
+					}
+					
+					if (today.isEqual(p.getClosingDate())) {
+						return true;
+					}
+						
+					return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
+					})
+				.count();
+		return count < 1;
+	}
+	
 	private static void createProject(HDBManager manager) throws Exception {
+		if (!checkProjectCreationEligibility()) {
+			System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
+			return;
+		}
+		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
