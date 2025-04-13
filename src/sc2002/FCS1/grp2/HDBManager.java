@@ -74,6 +74,7 @@ public class HDBManager extends User {
 		public static Menu[] allMenuOptions = Menu.values();
 		
 		public static Menu fromOrdinal(int o) {
+			if (o >= allMenuOptions.length) return null;
 			return allMenuOptions[o];
 		}
 	}

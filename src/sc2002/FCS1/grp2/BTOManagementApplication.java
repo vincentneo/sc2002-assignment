@@ -72,10 +72,6 @@ public class BTOManagementApplication {
 		while (true) {
 			displayMenu();
 			
-//			if (scanner.hasNextLine()) {
-//				scanner.nextLine();
-//			}
-			
 			System.out.print("Select Menu Option: ");
 			response = scanner.nextLine();
 			if (response.equalsIgnoreCase("exit")) {
@@ -88,6 +84,7 @@ public class BTOManagementApplication {
 				continue;
 			}
 			
+			System.out.println("");
 			handleUserResponse(response);
 		}
 	}
@@ -131,12 +128,14 @@ public class BTOManagementApplication {
 			HDBManager manager = (HDBManager) user;
 			
 			HDBManager.Menu selectedOption = HDBManager.Menu.fromOrdinal(scopedIndex);
+			if (selectedOption == null) throw new NumberFormatException();
 			HDBManagerActions.handleAction(selectedOption, manager);
 		}
 		else if (user instanceof Applicant) {
 			Applicant applicant = (Applicant) user;
 			
 			Applicant.Menu selectedOption = Applicant.Menu.fromOrdinal(scopedIndex);
+			if (selectedOption == null) throw new NumberFormatException();
 			ApplicantActions.handleAction(selectedOption, applicant);
 		}
 		else {
