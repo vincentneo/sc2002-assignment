@@ -96,6 +96,8 @@ public class DisplayMenu {
 		private String title;
 		private List<List<String>> contents;
 		
+		private List<String> current;
+		
 		public Builder setTitle(String title) {
 			this.title = title;
 			return this;
@@ -106,12 +108,42 @@ public class DisplayMenu {
 			if (this.contents == null) {
 				this.contents = new ArrayList<>();
 			}
+			
+			if (this.current != null) {
+				this.contents.add(current);
+				this.current = null;
+			}
+			
 			this.contents.add(contents);
 			
 			return this;
 		}
 		
+		public Builder addContent(String content) {
+			if (this.current == null) {
+				this.current = new ArrayList<>();
+			}
+			
+			current.add(content);
+			
+			return this;
+		}
+		
+		public Builder addDivider() {
+			if (this.current == null) return this;
+			
+			if (this.current.isEmpty()) return this;
+			
+			this.contents.add(current);
+			this.current = null;
+			
+			return this;
+		}
+		
 		public DisplayMenu build() {
+			if (this.current != null && !this.current.isEmpty()) {
+				contents.add(current);
+			}
 			return new DisplayMenu(this);
 		}
 		
