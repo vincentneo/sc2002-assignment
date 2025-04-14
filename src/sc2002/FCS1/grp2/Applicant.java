@@ -13,7 +13,10 @@ public class Applicant extends User {
 	public Applicant(List<CSVCell> cells) {
 		super(cells);
 	}
-
+	/**
+	 * This method gives the eligible flat types available to the applicant
+	 * @return Eligible Flat Types
+	 */
 	Set<FlatType> getEligibleFlatTypes() {
 		Set<FlatType> set = new HashSet<>();
 		int age = getAge();
