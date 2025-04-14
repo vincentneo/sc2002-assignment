@@ -124,6 +124,10 @@ public class BTOManagementApplication {
 		// cast user out to respective type
 		if (user instanceof HDBOfficer) {
 			HDBOfficer officer = (HDBOfficer) user;
+			
+			HDBOfficer.Menu selectedOption = HDBOfficer.Menu.fromOrdinal(scopedIndex);
+			if (selectedOption == null) throw new NumberFormatException();
+			HDBOfficerActions.handleAction(selectedOption, officer);
 		}
 		else if (user instanceof HDBManager) {
 			HDBManager manager = (HDBManager) user;
