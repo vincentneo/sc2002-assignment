@@ -1,11 +1,6 @@
 package sc2002.FCS1.grp2;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 
 public class HDBOfficerActions {
-	
 	
 	private static BTOManagementSystem system;
 	

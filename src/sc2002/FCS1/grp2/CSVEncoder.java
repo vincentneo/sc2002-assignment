@@ -1,11 +1,9 @@
 package sc2002.FCS1.grp2;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Use this class to write CSV files for each supported types (such as the users and projects).

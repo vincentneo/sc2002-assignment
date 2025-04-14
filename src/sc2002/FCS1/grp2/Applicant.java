@@ -2,8 +2,6 @@ package sc2002.FCS1.grp2;
 
 import java.util.*;
 
-import sc2002.FCS1.grp2.HDBManager.Menu;
-
 public class Applicant extends User {
 
 	private BTOProject appliedProject;
