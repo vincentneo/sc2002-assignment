@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BTOManagementSystem implements EnquiriesDelegate {
@@ -124,6 +125,16 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 							.getNric()
 							.equals(activeUser.getNric())
 							)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		else if (activeUser instanceof Applicant) {
+			Applicant ap = (Applicant) activeUser;
+			Set<FlatType> types = ap.getEligibleFlatTypes();
+			
+			return projects.stream()
+					.filter(p -> { 
+						return p.getVisibility() && p.isEligible(types);
+					})
 					.collect(Collectors.toCollection(ArrayList::new));
 		}
 		

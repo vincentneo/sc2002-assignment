@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.EnumMap;
+import java.util.Set;
 
 //TODO: Error handling
 
@@ -448,6 +449,21 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         }
     }
     //endregion
+    
+    public boolean isEligible(Set<FlatType> flatTypes) {
+    	for (FlatType type : flatTypes) {
+    		switch (type) {
+    		case TWO_ROOM:
+    			if (maxTwoRoomUnits > 0) return true;
+    			break;
+    		case THREE_ROOM:
+    			if (maxThreeRoomUnits > 0) return true;
+    			break;
+    		}
+    	}
+    	
+    	return false;
+    }
     
     private List<String> getHDBOfficersNames() {
     	return officers

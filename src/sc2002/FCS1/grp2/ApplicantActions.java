@@ -1,5 +1,6 @@
 package sc2002.FCS1.grp2;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ApplicantActions {
@@ -12,7 +13,7 @@ public class ApplicantActions {
 	public static void handleAction(Applicant.Menu option, Applicant user) throws Exception {
 		switch (option) {
 		case VIEW_PROJECTS:
-			System.out.println("Work in progress");
+			viewProjects(user);
 			break;
 		case VIEW_ENQUIRIES:
 			showEnquiries(user);
@@ -21,6 +22,11 @@ public class ApplicantActions {
 			enquiryFlow(user);
 			break;
 		}
+	}
+	
+	private static void viewProjects(Applicant applicant) throws Exception {
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		BTOProject.display(projects, false);
 	}
 	
 	private static void showEnquiries(Applicant applicant) throws Exception {
