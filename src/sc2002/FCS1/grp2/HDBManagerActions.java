@@ -92,10 +92,12 @@ public class HDBManagerActions {
 		
 		
 		ArrayList<BTOProject> project = system.getApplicableProjects();
-		for(int i = 0; i<project.size(); i++) {
-			System.out.println((i+1) + ". " + project.get(i));
-		}
+//		for(int i = 0; i<project.size(); i++) {
+//			System.out.println((i+1) + ". " + project.get(i));
+//		}
 		
+		BTOProject.display(project, true);
+//		
 		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number):");
 		String projectName = project.get(choose-1).getProjectName();
 		

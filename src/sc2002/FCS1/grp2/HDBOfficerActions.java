@@ -12,7 +12,7 @@ public class HDBOfficerActions {
 		switch (option) {
 		case VIEW_PROJECTS:
 			 // TODO: filtering, access control etc etc
-			BTOProject.display(system.getProjects());
+			BTOProject.display(system.getProjects(), false);
 			break;
 		}
 //		switch (option) {

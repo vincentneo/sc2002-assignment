@@ -521,9 +521,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		return CSVFileTypes.PROJECT_LIST;
 	}
 	
-	static void display(List<BTOProject> projects) {
+	static void display(List<BTOProject> projects, boolean displayIndex) {
 		
 		List<String> values = new ArrayList<>();
+		
+		int index = 0;
 		
 		for (BTOProject project : projects) {
 			HDBManager manager = project.getManagerInCharge();
@@ -532,10 +534,26 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			String formattedOpenDate = Utilities.getInstance().formatUserReadableDate(project.openingDate);
 			String formattedCloseDate = Utilities.getInstance().formatUserReadableDate(project.closingDate);
 			
-			values.add(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+			if (displayIndex) {
+				values.add(String.format("%3d. │ %-25s │ %-25s │ %-12s │ %-15s │ %-15s", index + 1, project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+			}
+			else {
+				values.add(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+			}
+			
+			index++;
 		}
+		String header;
+		
+		if (displayIndex) {
+			header = String.format("%3s.   %-25s │ %-25s │ %-12s │ %-15s │ %-15s", "", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
+		}
+		else {
+			header = String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
+		}
+		
 		new DisplayMenu.Builder()
-			.addContent(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date"))
+			.addContent(header)
 			.addContents(values)
 			.build()
 			.display();
