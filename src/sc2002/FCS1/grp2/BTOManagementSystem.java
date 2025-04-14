@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 public class BTOManagementSystem implements EnquiriesDelegate {
 	private ArrayList<Applicant> applicants;
@@ -42,6 +43,29 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		for (Enquiry enquiry : enquiries) {
 			enquiry.linkUsers(all);
 		}
+		
+		automatedChecks();
+	}
+	
+	/**
+	 * Call this on every system init for automated checks on expirable content.
+	 */
+	private void automatedChecks() {
+		projectsClosureUponExpiry();
+	}
+	
+	/**
+	 * Sets all expired projects as non-visible.
+	 */
+	private void projectsClosureUponExpiry() {
+		LocalDate now = LocalDate.now();
+		for (BTOProject project : projects) {
+			if (project.getClosingDate().isBefore(now)) {
+				project.setVisibility(false);
+			}
+		}
+		
+		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
 	private ArrayList<User> allUsers() {
