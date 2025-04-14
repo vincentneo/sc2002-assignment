@@ -54,6 +54,25 @@ public class CSVCell {
 	}
 	
 	/**
+	 * Convenience method to get value as an boolean.
+	 * 
+	 * Note that this method strictly considers "TRUE" and "FALSE" only (Excel style)
+	 * 
+	 * @return value of the CSV cell as an {@code boolean}.
+	 * @throws IllegalArgumentException - if cell content is not either "TRUE" or "FALSE".
+	 */
+	public boolean getBoolValue() {
+		if (value.equals("TRUE")) {
+			return true;
+		}
+		else if (value.equals("FALSE")) {
+			return false;
+		}
+		
+		throw new IllegalArgumentException("Boolean value must only be 'TRUE' or 'FALSE'");
+	}
+	
+	/**
 	 * Convenience method to get value as date.
 	 * @return value of the CSV cell as an {@code LocalDate}.
 	 * @throws java.time.format.DateTimeParseException - if cell content is not of d/M/yy date format.

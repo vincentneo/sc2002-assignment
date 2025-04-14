@@ -76,6 +76,16 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         else {
         	officerNames = new ArrayList<>();
         }
+        
+        if (cells.size() > 13) {
+        	try {
+        		boolean visibility = cells.get(13).getBoolValue();
+        		this.visibility = visibility;
+        	}
+        	catch (Exception e) {
+        		this.visibility = true;
+        	}
+        }
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
 
         if (projectName == null || projectName.isEmpty()) {
@@ -138,6 +148,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         this.managerInCharge = managerInCharge;
         this.totalOfficerSlots = totalOfficerSlots;
         this.officers = officers;
+        
+        this.visibility = true;
         //this.officers = officers != null ? officers : new ArrayList<String>();
     }
     //endregion
@@ -481,8 +493,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			managerName = managerInCharge.getName();
 		}
 		
-		String officerNames = String.format("\"%s\"", String.join(",", getHDBOfficersNames()));
-		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s",
+		String officerNames = CSVEncoder.encodeListOfStrings(getHDBOfficersNames());
+		
+		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s,%s",
 				projectName,
 				neighborhood,
 				roomOneType.toString(),
@@ -495,7 +508,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				formattedClosingDate,
 				managerName,
 				totalOfficerSlots,
-				officerNames
+				officerNames,
+				CSVEncoder.encodeBoolean(visibility)
 				);
 	}
 

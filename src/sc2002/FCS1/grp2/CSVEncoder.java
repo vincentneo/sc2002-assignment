@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Use this class to write CSV files for each supported types (such as the users and projects).
@@ -66,5 +67,14 @@ public class CSVEncoder {
 		}
 		
 		bufferedWriter.close();
+	}
+	
+	public static String encodeBoolean(boolean bool) {
+		if (bool) return "TRUE";
+		return "FALSE";
+	}
+	
+	public static String encodeListOfStrings(List<String> strings) {
+		return String.format("\"%s\"", String.join(",", strings));
 	}
 }
