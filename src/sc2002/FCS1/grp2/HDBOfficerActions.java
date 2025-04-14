@@ -14,11 +14,11 @@ public class HDBOfficerActions {
 	}
 	
 	public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
-		switch (option) {
-		case CREATE_PROJECT:
-			createProject(user);
-			break;
-		}
+//		switch (option) {
+//		case CREATE_PROJECT:
+//			createProject(user);
+//			break;
+//		}
 	}
 
 }

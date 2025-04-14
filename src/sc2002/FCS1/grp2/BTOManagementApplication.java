@@ -27,6 +27,7 @@ public class BTOManagementApplication {
 	
 	private static void setup() {
 		HDBManagerActions.setSystem(system);
+		HDBOfficerActions.setSystem(system);
 		ApplicantActions.setSystem(system);
 	}
 	

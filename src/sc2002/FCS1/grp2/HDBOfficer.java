@@ -3,6 +3,8 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
+import sc2002.FCS1.grp2.HDBManager.Menu;
+
 public class HDBOfficer extends Applicant {
 
 	public HDBOfficer(List<CSVCell> cells) {
@@ -66,8 +68,35 @@ public class HDBOfficer extends Applicant {
 	
     // TODO: Similar to HDBManager implementation, list each scoped feature by creating an enum for it
     @Override
-    ArrayList<String> getMenu() {
-    	return new ArrayList<>();
-    }
+	ArrayList<String> getMenu() {
+		return super.getMenuWithScopedOptions(Menu.allMenuOptions);
+	}
+    
+	/**
+	 * Possible menu options for a HDB Manager role
+	 * 
+	 * Each option listed here are options that only a HDB Manager can interact with. 
+	 */
+	enum Menu implements ScopedOption {
+		VIEW_PROJECTS;
+		
+		
+		public String getOptionName() {
+			switch (this) {
+			case VIEW_PROJECTS: 
+				return "View Projects";
+			default:
+				return null;
+			}
+		}
+		
+		public static Menu[] allMenuOptions = Menu.values();
+		
+		public static Menu fromOrdinal(int o) {
+			if (o >= allMenuOptions.length) return null;
+			return allMenuOptions[o];
+		}
+	}
+
 }
 
