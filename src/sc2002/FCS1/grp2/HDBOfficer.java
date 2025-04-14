@@ -3,17 +3,15 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
-import sc2002.FCS1.grp2.HDBManager.Menu;
-
 public class HDBOfficer extends Applicant {
 
 	public HDBOfficer(List<CSVCell> cells) {
 		super(cells);
 		// TODO Auto-generated constructor stub
 	}
-	public boolean isOfficerForProject(BTOProject project)
-	{
-		return project.getOfficers().contains(getNric());
+	
+	public boolean isOfficerForProject(BTOProject project) {
+		return project.getOfficers().contains(this);
 	}
 
 	public void registerAsOfficer(BTOProject project, HDBManager manager) {

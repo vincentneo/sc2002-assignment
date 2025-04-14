@@ -201,6 +201,10 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 		return ((User) object).getNric().equals(this.getNric());
 	}
 	
+	public boolean nameEquals(User user) {
+		return user.getName().equals(this.getName());
+	}
+	
 	public EnquiriesSystem getEnquiriesSystem() {
 		return enquiriesSystem;
 	}
