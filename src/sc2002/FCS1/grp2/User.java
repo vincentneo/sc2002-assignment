@@ -3,6 +3,7 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import java.lang.String;
 
 /**
@@ -44,12 +45,25 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * User's password.
 	 */
 	private String password;
+
+	private EnquiriesSystem enquiriesSystem;
+	
+	/**
+	 * Options that are common to all user types
+	 */
+	private static String[] commonMenuOptions = {
+			"Change Password",
+	};
+	
+	public static int getCommonMenuOptions() {
+		return commonMenuOptions.length;
+	}
 	
 	/**
 	 * Constructor that is intended for use by (@code CSVParser} class only.
 	 * @param cells Represents a row of a CSV spreadsheet.
 	 */
-	public User(ArrayList<CSVCell> cells) {
+	public User(List<CSVCell> cells) {
 		super(cells);
 		this.name = cells.get(0).getValue();
 		this.nric = cells.get(1).getValue();
@@ -134,9 +148,20 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * @author Vincent Neo
 	 * @return List of tasks that user can do using our BTO system.
 	 */
-	ArrayList<String> getMenu() {
-		ArrayList<String> list = new ArrayList<>();
-		list.add("Change Password");
+	abstract ArrayList<String> getMenu();
+	
+	/**
+	 * This method facilitates the generation of a menu that includes options specific to a certain user type.
+	 * Child classes should call this method when overriding getMenu().
+	 * 
+	 * @param options Scoped options that are only accessible depending on the user type.
+	 * @return List of tasks that user can do using our BTO system.
+	 */
+	ArrayList<String> getMenuWithScopedOptions(ScopedOption[] options) {
+		ArrayList<String> list = new ArrayList<>(Arrays.asList(commonMenuOptions));
+		for (ScopedOption option : options) {
+			list.add(option.getOptionName());
+		}
 		return list;
 	}
 	
@@ -159,6 +184,34 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	public String toString() {
 		return "User [name=" + name + ", nric=" + nric + ", age=" + age + ", maritalStatus=" + maritalStatus
 				+ ", password=" + password + "]";
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		
+		if (!(object instanceof User)) {
+			return false;
+		}
+		
+		return ((User) object).getNric().equals(this.getNric());
+	}
+	
+	public boolean nameEquals(User user) {
+		return user.getName().equals(this.getName());
+	}
+	
+	public EnquiriesSystem getEnquiriesSystem() {
+		return enquiriesSystem;
+	}
+
+	public void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
+		if (enquiriesSystem == null) {
+			this.enquiriesSystem.setDelegate(null);
+		}
+		this.enquiriesSystem = enquiriesSystem;
 	}
 }
 

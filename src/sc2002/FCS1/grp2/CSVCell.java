@@ -1,5 +1,9 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 /**
  * A simple class for representing an individual cell of any specific row and column of a CSV file.
  * 
@@ -48,6 +52,52 @@ public class CSVCell {
 	public int getIntValue() {
 		return Integer.parseInt(value);
 	}
+	
+	/**
+	 * Convenience method to get value as an boolean.
+	 * 
+	 * Note that this method strictly considers "TRUE" and "FALSE" only (Excel style)
+	 * 
+	 * @return value of the CSV cell as an {@code boolean}.
+	 * @throws IllegalArgumentException - if cell content is not either "TRUE" or "FALSE".
+	 */
+	public boolean getBoolValue() {
+		if (value.equals("TRUE")) {
+			return true;
+		}
+		else if (value.equals("FALSE")) {
+			return false;
+		}
+		
+		throw new IllegalArgumentException("Boolean value must only be 'TRUE' or 'FALSE'");
+	}
+	
+	/**
+	 * Convenience method to get value as date.
+	 * @return value of the CSV cell as an {@code LocalDate}.
+	 * @throws java.time.format.DateTimeParseException - if cell content is not of d/M/yy date format.
+	 */
+	public LocalDate getDateValue() {
+		return Utilities.getInstance().parseDate(value);
+	}
+	
+	/**
+	 * Convenience method to get value as date and time.
+	 * @return value of the CSV cell as an {@code LocalDateTime}.
+	 * @throws java.time.format.DateTimeParseException - if cell content is not of correct date time format.
+	 */
+	public LocalDateTime getDateTimeValue() {
+		return Utilities.getInstance().parseDateTime(value);
+	}
+	
+	/**
+	 * Convenience method to get value as a UUID.
+	 * @return value of the CSV cell as an {@code UUID}.
+	 * @throws IllegalArgumentException - if cell content is not UUID compliant.
+	 */
+	public UUID getUUIDValue() {
+		return UUID.fromString(value);
+	}
 
 	/**
 	 * Provides the values of the cell, separated by commas.
@@ -65,5 +115,9 @@ public class CSVCell {
 	 */
 	public boolean hasMultipleValues() {
 		return commaSeperatedValues != null;
+	}
+	
+	public boolean isBlank() {
+		return value.isBlank();
 	}
 }

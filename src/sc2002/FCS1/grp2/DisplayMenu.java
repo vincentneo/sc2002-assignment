@@ -1,0 +1,167 @@
+package sc2002.FCS1.grp2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DisplayMenu {
+	private String title;
+	private List<List<String>> contents;
+	
+	private final String BOX_TOP_LEFT_CORNER = "┌";
+	private final String BOX_TOP_RIGHT_CORNER = "┐";
+	private final String BOX_BOTTOM_LEFT_CORNER = "└";
+	private final String BOX_BOTTOM_RIGHT_CORNER = "┘";
+	private final String LINE_HORIZONTAL = "─";
+	private final String LINE_VERTICAL = "│";
+	private final String BOX_LEADING_DIVIDER = "├";
+	private final String BOX_TRAILING_DIVIDER = "┤";
+	
+	DisplayMenu(Builder builder) {
+		this.title = builder.title;
+		this.contents = builder.contents;
+	}
+	
+	public void display() {
+		System.out.print(asString());
+	}
+	
+	public String asString() {
+		String text = "";
+		String longestContentLine = findLongestLine();
+		int width = longestContentLine.length();
+		
+		if (title != null && title.length() > width) {
+			width = title.length();
+		}
+		
+		if (width < 20) {
+			width = 20;
+		}
+		
+//		width += title.length();
+		
+		if (title != null) {
+			int spacers = width - title.length();
+			int halfSpacer = spacers / 2;
+			
+			String titleLine = String.format("%s%s %s %s%s\n",
+					BOX_TOP_LEFT_CORNER,
+					LINE_HORIZONTAL.repeat(halfSpacer),
+					title,
+					LINE_HORIZONTAL.repeat((spacers % 2 == 0) ? halfSpacer : halfSpacer + 1),
+					BOX_TOP_RIGHT_CORNER
+					);
+			
+			text += titleLine;
+		}
+		else {
+			text += String.format("%s%s%s\n", BOX_TOP_LEFT_CORNER, LINE_HORIZONTAL.repeat(width + 2), BOX_TOP_RIGHT_CORNER);
+		}
+		
+//		if (halfSpacer % 2 == 0) {
+//			width += 1;
+//		}
+//		
+		if (contents != null) {
+			int size = contents.size();
+			for (int i = 0; i < size; i++) {
+				List<String> list = contents.get(i);
+				for (String content : list) {
+					int lineWidth = width + ansiEscapeCodeExtraCharacters(content);
+					String format = "%-" + lineWidth + "s";
+					text += String.format("%s " + format + " %s\n", LINE_VERTICAL, content, LINE_VERTICAL);
+				}
+				if (i < size - 1 && size != 1) {
+					text += String.format("%s%s%s\n", BOX_LEADING_DIVIDER, LINE_HORIZONTAL.repeat(width + 2), BOX_TRAILING_DIVIDER);
+				}
+			}
+
+		}
+		
+		text += String.format("%s%s%s\n", BOX_BOTTOM_LEFT_CORNER, LINE_HORIZONTAL.repeat(width + 2), BOX_BOTTOM_RIGHT_CORNER);
+		
+		return text;
+	}
+	
+	private int ansiEscapeCodeExtraCharacters(String string) {
+		int full = string.length();
+		int withoutANSI = string.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length();
+		int ansi = full - withoutANSI;
+		return ansi;
+	}
+	
+	private String findLongestLine() {
+		String longest = "";
+		
+		for (List<String> list : contents) {
+			for (String line : list) {
+				if (line.length() > longest.length()) {
+					longest = line;
+				}
+			}
+		}
+		
+		return longest;
+	}
+	
+	public static class Builder {
+		private String title;
+		private List<List<String>> contents = new ArrayList<>();
+		
+		private List<String> current;
+		
+		public Builder setTitle(String title) {
+			this.title = title;
+			return this;
+		}
+		
+		
+		public Builder addContents(List<String> contents) {
+			if (contents == null) {
+				return this;
+			}
+			
+			if (this.contents == null) {
+				this.contents = new ArrayList<>();
+			}
+			
+			if (this.current != null) {
+				this.contents.add(current);
+				this.current = null;
+			}
+			
+			this.contents.add(contents);
+			
+			return this;
+		}
+		
+		public Builder addContent(String content) {
+			if (this.current == null) {
+				this.current = new ArrayList<>();
+			}
+			
+			current.add(content);
+			
+			return this;
+		}
+		
+		public Builder addDivider() {
+			if (this.current == null) return this;
+			
+			if (this.current.isEmpty()) return this;
+			
+			this.contents.add(current);
+			this.current = null;
+			
+			return this;
+		}
+		
+		public DisplayMenu build() {
+			if (this.current != null && !this.current.isEmpty()) {
+				contents.add(current);
+			}
+			return new DisplayMenu(this);
+		}
+		
+	}
+}

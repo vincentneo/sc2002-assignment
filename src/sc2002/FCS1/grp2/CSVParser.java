@@ -1,7 +1,10 @@
 package sc2002.FCS1.grp2;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -48,11 +51,17 @@ public class CSVParser {
 				String line = scanner.nextLine();
 				
 				ArrayList<CSVCell> cells = parseLine(line);
-				Decodable object = type.getDeclaredConstructor(ArrayList.class).newInstance(cells);
+				Decodable object = type.getDeclaredConstructor(List.class).newInstance(cells);
 				decodables.add(object);
 			}
 			
 			scanner.close();
+		}
+		catch (FileNotFoundException e) { // while file has not been created yet (i.e. have not prev used enquiries)
+			return decodables;
+		}
+		catch (NoSuchElementException e) { // when file exists but is absolutely empty
+			return decodables;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -91,23 +100,28 @@ public class CSVParser {
 	}
 	
 	ArrayList<Applicant> parseApplicants() {
-		String filePath = path + "ApplicantList.csv";
+		String filePath = path + CSVFileTypes.APPLICANT_LIST.getFileName();
 		return parse(filePath, Applicant.class);
 	}
 	
 	ArrayList<HDBManager> parseManagers() {
-		String filePath = path + "ManagerList.csv";
+		String filePath = path + CSVFileTypes.MANAGER_LIST.getFileName();
 		return parse(filePath, HDBManager.class);
 	}
 	
 	ArrayList<HDBOfficer> parseOfficer() {
-		String filePath = path + "OfficerList.csv";
+		String filePath = path + CSVFileTypes.OFFICER_LIST.getFileName();
 		return parse(filePath, HDBOfficer.class);
 	}
 	
 	ArrayList<BTOProject> parseProjects() {
-		String filePath = path + "ProjectList.csv";
+		String filePath = path + CSVFileTypes.PROJECT_LIST.getFileName();
 		return parse(filePath, BTOProject.class);
+	}
+	
+	ArrayList<Enquiry> parseEnquiries() {
+		String filePath = path + CSVFileTypes.ENQUIRIES_LIST.getFileName();
+		return parse(filePath, Enquiry.class);
 	}
 	
 	ArrayList<User> retrieveAllUsers() {
