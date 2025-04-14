@@ -9,9 +9,9 @@ public class HDBOfficer extends Applicant {
 		super(cells);
 		// TODO Auto-generated constructor stub
 	}
-	public boolean isOfficerForProject(BTOProject project)
-	{
-		return project.getOfficers().contains(getNric());
+	
+	public boolean isOfficerForProject(BTOProject project) {
+		return project.getOfficers().contains(this);
 	}
 
 	public void registerAsOfficer(BTOProject project, HDBManager manager) {
@@ -66,8 +66,34 @@ public class HDBOfficer extends Applicant {
 	
     // TODO: Similar to HDBManager implementation, list each scoped feature by creating an enum for it
     @Override
-    ArrayList<String> getMenu() {
-    	return new ArrayList<>();
-    }
+	ArrayList<String> getMenu() {
+		return super.getMenuWithScopedOptions(Menu.allMenuOptions);
+	}
+    
+	/**
+	 * Possible menu options for a HDB Manager role
+	 * 
+	 * Each option listed here are options that only a HDB Manager can interact with. 
+	 */
+	enum Menu implements ScopedOption {
+		VIEW_PROJECTS;
+		
+		public String getOptionName() {
+			switch (this) {
+			case VIEW_PROJECTS: 
+				return "View Projects";
+			default:
+				return null;
+			}
+		}
+		
+		public static Menu[] allMenuOptions = Menu.values();
+		
+		public static Menu fromOrdinal(int o) {
+			if (o >= allMenuOptions.length) return null;
+			return allMenuOptions[o];
+		}
+	}
+
 }
 

@@ -27,6 +27,7 @@ public class BTOManagementApplication {
 	
 	private static void setup() {
 		HDBManagerActions.setSystem(system);
+		HDBOfficerActions.setSystem(system);
 		ApplicantActions.setSystem(system);
 	}
 	
@@ -107,7 +108,7 @@ public class BTOManagementApplication {
 	
 	private static void handleAction(int index) throws Exception {
 		User user = system.getActiveUser();
-		
+
 		// this index starts at 0, for each of the specific access control index of specific user types.
 		int scopedIndex = index - User.getCommonMenuOptions() - 1;
 		
@@ -123,6 +124,10 @@ public class BTOManagementApplication {
 		// cast user out to respective type
 		if (user instanceof HDBOfficer) {
 			HDBOfficer officer = (HDBOfficer) user;
+			
+			HDBOfficer.Menu selectedOption = HDBOfficer.Menu.fromOrdinal(scopedIndex);
+			if (selectedOption == null) throw new NumberFormatException();
+			HDBOfficerActions.handleAction(selectedOption, officer);
 		}
 		else if (user instanceof HDBManager) {
 			HDBManager manager = (HDBManager) user;
@@ -221,5 +226,13 @@ public class BTOManagementApplication {
 		System.out.println("\n\nWelcome to Build-To-Order (BTO) Management System!");
 		System.out.printf("%s, %s!\n", getGreetings(), user.getName());
 		System.out.printf("You are signed in as a %s.\n", user.getReadableTypeName());
+		
+		
+		if (user.getEnquiriesSystem() == null) {
+			EnquiriesSystem eSystem = new EnquiriesSystem(system, user);
+			
+			user.setEnquiriesSystem(eSystem);
+		}
+		
 	}
 }

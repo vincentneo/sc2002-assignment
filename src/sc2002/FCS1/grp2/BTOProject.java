@@ -76,6 +76,16 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         else {
         	officerNames = new ArrayList<>();
         }
+        
+        if (cells.size() > 13) {
+        	try {
+        		boolean visibility = cells.get(13).getBoolValue();
+        		this.visibility = visibility;
+        	}
+        	catch (Exception e) {
+        		this.visibility = true;
+        	}
+        }
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
 
         if (projectName == null || projectName.isEmpty()) {
@@ -138,6 +148,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         this.managerInCharge = managerInCharge;
         this.totalOfficerSlots = totalOfficerSlots;
         this.officers = officers;
+        
+        this.visibility = true;
         //this.officers = officers != null ? officers : new ArrayList<String>();
     }
     //endregion
@@ -300,18 +312,15 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         return totalOfficerSlots;
     }
 
-    public void setTotalOfficerSlots(int slots) {
+    public void setTotalOfficerSlots(int slots) throws IllegalArgumentException{
         if (slots > MAX_OFFICER_NUM) {
-            System.out.println("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
         }
         else if (slots > officers.size()) {
-            System.out.println("Invalid Input! The number exceeds current number of assigned HBD officers ()" + officers.size() + ").");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number exceeds current number of assigned HBD officers ()" + officers.size() + ").");
         }
         else if (slots < 0) {
-            System.out.println("Invalid Input! The number cannot be below zero.");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number cannot be below zero.");
         }
 
         totalOfficerSlots = slots;
@@ -321,24 +330,29 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         return officers;
     }
 
-    public void addOfficer(HDBOfficer officer) {
+    public void addOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if (officers.size() >= totalOfficerSlots) {
-            System.out.println("Invalid Input! The project is full. Cannot register more officers.");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The project is full. Cannot register more officers.");
+        }
+        else if (officers.contains(officer)) {
+            throw new IllegalArgumentException("Invalid Input! The officer is already registered.");
+        }
+        else if (officer == null) {
+            throw new IllegalArgumentException("Invalid Input! The officer cannot be null.");
         }
 
         officers.add(officer);
     }
 
-    public void removeOfficer(HDBOfficer officer) {
+    public void removeOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if(officers.contains(officer)) {
             officers.remove(officer);
         }
         else if (officers.isEmpty()) {
-           System.out.println("Invalid Input! The project does not have any HBD officers.");
+            throw new IllegalArgumentException("Invalid Input! The project does not have any HBD officers.");
         }
         else {
-            System.out.println("Invalid Input! The project does not have HBD officer " + officer + ".");
+            throw new IllegalArgumentException("Invalid Input! The project does not have HBD officer " + officer + ".");
         }
     }
     //endregion
@@ -481,8 +495,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			managerName = managerInCharge.getName();
 		}
 		
-		String officerNames = String.format("\"%s\"", String.join(",", getHDBOfficersNames()));
-		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s",
+		String officerNames = CSVEncoder.encodeListOfStrings(getHDBOfficersNames());
+		
+		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s,%s",
 				projectName,
 				neighborhood,
 				roomOneType.toString(),
@@ -495,7 +510,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				formattedClosingDate,
 				managerName,
 				totalOfficerSlots,
-				officerNames
+				officerNames,
+				CSVEncoder.encodeBoolean(visibility)
 				);
 	}
 
@@ -503,5 +519,25 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 	public CSVFileTypes sourceFileType() {
 		// TODO Auto-generated method stub
 		return CSVFileTypes.PROJECT_LIST;
+	}
+	
+	static void display(List<BTOProject> projects) {
+		
+		List<String> values = new ArrayList<>();
+		
+		for (BTOProject project : projects) {
+			HDBManager manager = project.getManagerInCharge();
+			String managerName = manager == null ? " " : manager.getName();
+			
+			String formattedOpenDate = Utilities.getInstance().formatUserReadableDate(project.openingDate);
+			String formattedCloseDate = Utilities.getInstance().formatUserReadableDate(project.closingDate);
+			
+			values.add(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+		}
+		new DisplayMenu.Builder()
+			.addContent(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date"))
+			.addContents(values)
+			.build()
+			.display();
 	}
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import sc2002.FCS1.grp2.HDBManager.Menu;
-
 import java.lang.String;
 
 /**
@@ -47,6 +45,8 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 * User's password.
 	 */
 	private String password;
+
+	private EnquiriesSystem enquiriesSystem;
 	
 	/**
 	 * Options that are common to all user types
@@ -184,6 +184,34 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	public String toString() {
 		return "User [name=" + name + ", nric=" + nric + ", age=" + age + ", maritalStatus=" + maritalStatus
 				+ ", password=" + password + "]";
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if (object == this) {
+			return true;
+		}
+		
+		if (!(object instanceof User)) {
+			return false;
+		}
+		
+		return ((User) object).getNric().equals(this.getNric());
+	}
+	
+	public boolean nameEquals(User user) {
+		return user.getName().equals(this.getName());
+	}
+	
+	public EnquiriesSystem getEnquiriesSystem() {
+		return enquiriesSystem;
+	}
+
+	public void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
+		if (enquiriesSystem == null) {
+			this.enquiriesSystem.setDelegate(null);
+		}
+		this.enquiriesSystem = enquiriesSystem;
 	}
 }
 
