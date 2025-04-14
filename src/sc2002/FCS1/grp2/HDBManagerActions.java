@@ -19,8 +19,14 @@ public class HDBManagerActions {
 			break;
 		case EDIT_PROJECT:
 			editProject(user);
+			break;
 		case DELETE_PROJECT:
 			deleteProject(user);
+			break;
+		case FILTER_PROJECT:
+			filterProjects(user);
+			break;
+			
 		}
 	}
 	
@@ -68,8 +74,7 @@ public class HDBManagerActions {
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 
-//		ArrayList<HDBOfficer> officers; //;
-		// TODO: officers
+		
 		
 		BTOProject project = new BTOProject(projectName, neighbourhood,
 				maxRoomOne, maxRoomTwo, priceRoomOne, priceRoomTwo,
@@ -83,15 +88,23 @@ public class HDBManagerActions {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
-		System.out.println(system.getApplicableProjects());
-		System.out.println("Enter Project Name: ");
-		String projectName = scanner.next();
+		
+		ArrayList<BTOProject> project = system.getApplicableProjects();
+		for(int i = 0; i<project.size(); i++) {
+			System.out.println((i+1) + ". " + project.get(i));
+		}
+		
+		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number):");
+		String projectName = project.get(choose-1).getProjectName();
+		
+			
+			
 		ArrayList<BTOProject>  projects = system.getApplicableProjects(); 
 		ArrayList<BTOProject> ProjectsFinder = projects.stream()
-				.filter(p -> p.getProjectName().equals(projectName))
+				.filter(p -> p.getProjectName().equalsIgnoreCase(projectName))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
-		if(projects.isEmpty()) {
+		if(ProjectsFinder.isEmpty()) {
 			System.out.println("Project not found");
 			return;
 		}
@@ -104,7 +117,10 @@ public class HDBManagerActions {
 		BTOProject selectedProject = ProjectsFinder.get(0); //need to figure out how to get the object..
 		
 		System.out.println("What would you like to edit?");
+		System.out.println("Options: ProjectName, Neighbourhood, maxRoomOne, priceRoomOne, maxRoomTwo, priceRoomTwo, openingDate, closingDate, officerSlots");
 		String choice = scanner.next();
+
+	
 		
 		switch(choice) {
 			case "ProjectName":
@@ -158,6 +174,9 @@ public class HDBManagerActions {
 				break;
 			
 			default:
+				System.out.println("Invalid option. Please try again.");
+				break;
+
 				
 		}
 		system.saveChanges(null);
@@ -202,6 +221,68 @@ public class HDBManagerActions {
 	
 	private static void approveApplication(HDBManager manager) {
 		
+	}
+	
+	private static void viewAllProjects(HDBManager manager) {
+		System.out.println("All Project listings:");
+		ArrayList<BTOProject> projects = system.getProjects();
+		for(int i = 0; i<projects.size(); i++) {
+			System.out.println((i+1) + ". " + projects.get(i));
+		}
+	}
+	
+	private static void filterProjects(HDBManager manager) {
+		Scanner scanner = system.getScanner();
+		System.out.println("Filter Project Listings: ");
+		
+		System.out.println("Enter Project Name (or part of it): ");
+		String projectName = scanner.nextLine().trim();
+		
+		System.out.print("Enter Neighborhood (or part of it): ");
+	    String neighborhood = scanner.nextLine().trim();
+	    
+	    System.out.print("Enter Manager Name: ");
+	    String Manager = scanner.nextLine().trim();
+	    
+	    System.out.println("Enter number of Two-Room flats: ");
+	    int num1 = scanner.nextInt();
+	    
+	    //to do
+//	    System.out.println("Enter Two-Room flat price: ");
+//	    int price1 = scanner.nextInt();
+	   
+	    System.out.println("Enter number of Three-Room flats: ");
+	    int num2 = scanner.nextInt();
+	    
+	 // to do
+//	    System.out.println("Enter Three-Room flat price: ");
+//	    int price2 = scanner.nextInt();
+	    
+	    ArrayList<BTOProject> projects = system.getProjects();
+	    if(projects == null) {
+	    	System.out.println("Error, no ongoing projects");
+	    	return;
+	    }
+	   
+	    ArrayList<BTOProject> filteredProjects = projects.stream()
+	    		.filter(p-> projectName.isEmpty() || p.getProjectName().toLowerCase().contains(projectName.toLowerCase()))
+	    		.filter(p-> neighborhood.isEmpty() || p.getNeighborhood().toLowerCase().contains(neighborhood.toLowerCase()))
+	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase()))
+	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
+	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
+	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
+	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
+	    		.collect(Collectors.toCollection(ArrayList::new));
+	    System.out.println("Filtered Projects: ");
+	    if(filteredProjects.isEmpty()) {
+	    	System.out.println("No Projects match the given criteria");
+	    	}
+	    else {
+	    	for (int i = 0; i < filteredProjects.size(); i++) {
+	            System.out.println((i + 1) + ". " + filteredProjects.get(i));
+	        }
+	    }
+	    		
 	}
 	
 	
