@@ -135,18 +135,26 @@ public class Applicant extends User {
 		return "Applicant";
 	}
 	
+	
+	// TODO: Change this
 	/**
-	 * Possible menu options for a HDB Manager role
+	 * Possible menu options for a applicant role
 	 * 
 	 * Each option listed here are options that only a HDB Manager can interact with. 
 	 */
 	enum Menu implements ScopedOption {
-		VIEW_PROJECTS;
+		VIEW_PROJECTS,
+		VIEW_ENQUIRIES,
+		SEND_ENQUIRY;
 		
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
 				return "View Projects";
+			case VIEW_ENQUIRIES:
+				return "View My Enquiries";
+			case SEND_ENQUIRY: 
+				return "Submit New Enquiry";
 			default:
 				return null;
 			}

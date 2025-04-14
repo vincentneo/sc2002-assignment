@@ -1,7 +1,8 @@
 package sc2002.FCS1.grp2;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * A simple class for representing an individual cell of any specific row and column of a CSV file.
@@ -60,6 +61,24 @@ public class CSVCell {
 	public LocalDate getDateValue() {
 		return Utilities.getInstance().parseDate(value);
 	}
+	
+	/**
+	 * Convenience method to get value as date and time.
+	 * @return value of the CSV cell as an {@code LocalDateTime}.
+	 * @throws java.time.format.DateTimeParseException - if cell content is not of correct date time format.
+	 */
+	public LocalDateTime getDateTimeValue() {
+		return Utilities.getInstance().parseDateTime(value);
+	}
+	
+	/**
+	 * Convenience method to get value as a UUID.
+	 * @return value of the CSV cell as an {@code UUID}.
+	 * @throws IllegalArgumentException - if cell content is not UUID compliant.
+	 */
+	public UUID getUUIDValue() {
+		return UUID.fromString(value);
+	}
 
 	/**
 	 * Provides the values of the cell, separated by commas.
@@ -77,5 +96,9 @@ public class CSVCell {
 	 */
 	public boolean hasMultipleValues() {
 		return commaSeperatedValues != null;
+	}
+	
+	public boolean isBlank() {
+		return value.isBlank();
 	}
 }

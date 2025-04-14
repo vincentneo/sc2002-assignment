@@ -1,8 +1,10 @@
 package sc2002.FCS1.grp2;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -54,6 +56,12 @@ public class CSVParser {
 			}
 			
 			scanner.close();
+		}
+		catch (FileNotFoundException e) { // while file has not been created yet (i.e. have not prev used enquiries)
+			return decodables;
+		}
+		catch (NoSuchElementException e) { // when file exists but is absolutely empty
+			return decodables;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -109,6 +117,11 @@ public class CSVParser {
 	ArrayList<BTOProject> parseProjects() {
 		String filePath = path + CSVFileTypes.PROJECT_LIST.getFileName();
 		return parse(filePath, BTOProject.class);
+	}
+	
+	ArrayList<Enquiry> parseEnquiries() {
+		String filePath = path + CSVFileTypes.ENQUIRIES_LIST.getFileName();
+		return parse(filePath, Enquiry.class);
 	}
 	
 	ArrayList<User> retrieveAllUsers() {

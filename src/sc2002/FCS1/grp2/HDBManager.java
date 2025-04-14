@@ -60,8 +60,8 @@ public class HDBManager extends User {
 	 * Each option listed here are options that only a HDB Manager can interact with. 
 	 */
 	enum Menu implements ScopedOption {
-		CREATE_PROJECT, EDIT_PROJECT, DELETE_PROJECT;
-		
+		CREATE_PROJECT, EDIT_PROJECT, DELETE_PROJECT,
+		VIEW_ALL_ENQUIRIES;
 		
 		public String getOptionName() {
 			switch (this) {
@@ -71,6 +71,8 @@ public class HDBManager extends User {
 				return "Edit Project";
 			case DELETE_PROJECT:
 				return "Delete Project";
+			case VIEW_ALL_ENQUIRIES:
+				return "View All Enquiries";
 			default:
 				return null;
 			}
