@@ -67,7 +67,7 @@ public class HDBManagerActions {
 		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
-//		int officerSlots = scanner.nextInt();
+
 //		ArrayList<HDBOfficer> officers; //;
 		// TODO: officers
 		
@@ -93,63 +93,68 @@ public class HDBManagerActions {
 		
 		if(projects.isEmpty()) {
 			System.out.println("Project not found");
+			return;
 		}
 		else {
 		System.out.println("Matching Projects: ");
 		for(BTOProject p: ProjectsFinder) {
 			System.out.println(p);
 			}
-		BTOProject s = ProjectsFinder.get(0); //need to figure out how to get the object...
 		}
+		BTOProject selectedProject = ProjectsFinder.get(0); //need to figure out how to get the object..
+		
 		System.out.println("What would you like to edit?");
 		String choice = scanner.next();
+		
 		switch(choice) {
 			case "ProjectName":
-				System.out.println("What would you like to change Project name to?");
+				System.out.println("What would you like to change Project name to?"); //need unique project name
 				String newName = scanner.next();
-				s.setProjectName(newName);
+				selectedProject.setProjectName(newName);
+				System.out.println("Project name have been updated");
+				System.out.println(selectedProject);
 				break;
 			
 			case "Neighbourhood":
 				System.out.println("What would you like to change Neighbourhood to?");
 				String newNeighbourhood = scanner.next();
-				p.setNeighbourhood(newNeighbourhood);
+				selectedProject.setNeighborhood(newNeighbourhood);
 				break;
 				
 			case "maxRoomOne":
 				System.out.println("What would you like to change maxRoomOne to?");
 				int newMax = scanner.nextInt();
-				p.setmaxRoomOne(newMax);
+				selectedProject.setMaxTwoRoomUnits(newMax);
 				break;
 			case "priceRoomOne":
 				System.out.println("What would you like to change priceRoomOne to?");
 				int newMaxprice = scanner.nextInt();
-				p.setpriceRoomOne(newMaxprice);
+				selectedProject.setTwoRoomPrice(newMaxprice);
 				break;
 			case "maxRoomTwo":
 				System.out.println("What would you like to change maxRoomTwo to?");
 				int newMax2 = scanner.nextInt();
-				p.setmaxRoomTwo(newMax2);
+				selectedProject.setMaxThreeRoomUnits(newMax2);
 				break;
 			case "priceRoomTwo":
 				System.out.println("What would you like to change priceRoomTwo to?");
 				int newMaxprice2 = scanner.nextInt();
-				p.setpriceRoomTwo(newMaxprice2);
+				selectedProject.setThreeRoomPrice(newMaxprice2);
 				break;
 			case "openingDate":
 				System.out.println("What would you like to change openingDate to?");
 				LocalDate newOpening = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
-				p.setopeningDate(newOpening);
+				selectedProject.setOpeningDate(newOpening);
 				break;
 			case "closingDate":
 				System.out.println("What would you like to change closingDate to?");
 				LocalDate newClosing = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
-				p.setclosingDate(newClosing);
+				selectedProject.setClosingDate(newClosing);
 				break;
 			case "officerSlots":
 				System.out.println("What would you like to change officerSlots to?");
 				int newOfficerSlots = scanner.nextInt();
-				p.setofficerSlots(newOfficerSlots);
+				selectedProject.setTotalOfficerSlots(newOfficerSlots);
 				break;
 			
 			default:
@@ -176,7 +181,29 @@ public class HDBManagerActions {
 		System.out.println("Project " + removed.getProjectName() + "has been deleted");
 		
 		
+	}
+	
+	private static void toggleVisibility(HDBManager manager) {
+		Scanner scanner = system.getScanner();
 		
+		System.out.println("All Projects: ");
+		ArrayList<BTOProject> projects = system.getProjects();
+		for(int i = 0; i<projects.size(); i++) {
+			System.out.println((i+1) + ". " + projects.get(i));
+		}
+		
+		System.out.println("Which Project would you like to toggle visibility?");
+		int choice = scanner.nextInt();
 		
 	}
+	private static void generateReport(HDBManager manager) {
+		//filter based on category
+	}
+	
+	private static void approveApplication(HDBManager manager) {
+		
+	}
+	
+	
+	
 }

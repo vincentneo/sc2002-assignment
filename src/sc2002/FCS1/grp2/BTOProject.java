@@ -179,6 +179,28 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
     //region Room Units
     //TODO: Get and set for room units
+    
+    public void setMaxTwoRoomUnits(int twoRoomUnits) throws IllegalArgumentException{
+    	if(twoRoomUnits < 0) {
+    		throw new IllegalArgumentException("Number of 2 room units cannot be negative");
+    	}
+    	this.maxTwoRoomUnits = twoRoomUnits;
+    }
+    
+    public void setMaxThreeRoomUnits(int threeRoomUnits) throws IllegalArgumentException{
+    	if(threeRoomUnits < 0) {
+    		throw new IllegalArgumentException("Number of 3 room units cannot be negative");
+    	}
+    	this.maxThreeRoomUnits = threeRoomUnits;
+    }
+    
+    public int getMaxTwoRoomUnits() {
+    	return maxTwoRoomUnits;
+    }
+    
+    public int getThreeRoomUnits() {
+    	return maxThreeRoomUnits;
+    }
 
     public void setTwoRoomPrice(int twoRoomPrice) throws IllegalArgumentException {
         if (twoRoomPrice < 0) {
