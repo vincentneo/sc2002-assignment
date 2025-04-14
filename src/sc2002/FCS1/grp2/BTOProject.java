@@ -312,18 +312,15 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         return totalOfficerSlots;
     }
 
-    public void setTotalOfficerSlots(int slots) {
+    public void setTotalOfficerSlots(int slots) throws IllegalArgumentException{
         if (slots > MAX_OFFICER_NUM) {
-            System.out.println("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
         }
         else if (slots > officers.size()) {
-            System.out.println("Invalid Input! The number exceeds current number of assigned HBD officers ()" + officers.size() + ").");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number exceeds current number of assigned HBD officers ()" + officers.size() + ").");
         }
         else if (slots < 0) {
-            System.out.println("Invalid Input! The number cannot be below zero.");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The number cannot be below zero.");
         }
 
         totalOfficerSlots = slots;
@@ -333,24 +330,29 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         return officers;
     }
 
-    public void addOfficer(HDBOfficer officer) {
+    public void addOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if (officers.size() >= totalOfficerSlots) {
-            System.out.println("Invalid Input! The project is full. Cannot register more officers.");
-            return;
+            throw new IllegalArgumentException("Invalid Input! The project is full. Cannot register more officers.");
+        }
+        else if (officers.contains(officer)) {
+            throw new IllegalArgumentException("Invalid Input! The officer is already registered.");
+        }
+        else if (officer == null) {
+            throw new IllegalArgumentException("Invalid Input! The officer cannot be null.");
         }
 
         officers.add(officer);
     }
 
-    public void removeOfficer(HDBOfficer officer) {
+    public void removeOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if(officers.contains(officer)) {
             officers.remove(officer);
         }
         else if (officers.isEmpty()) {
-           System.out.println("Invalid Input! The project does not have any HBD officers.");
+            throw new IllegalArgumentException("Invalid Input! The project does not have any HBD officers.");
         }
         else {
-            System.out.println("Invalid Input! The project does not have HBD officer " + officer + ".");
+            throw new IllegalArgumentException("Invalid Input! The project does not have HBD officer " + officer + ".");
         }
     }
     //endregion
