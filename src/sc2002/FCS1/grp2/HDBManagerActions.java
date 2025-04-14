@@ -269,11 +269,11 @@ public class HDBManagerActions {
 	    ArrayList<BTOProject> filteredProjects = projects.stream()
 	    		.filter(p-> projectName.isEmpty() || p.getProjectName().toLowerCase().contains(projectName.toLowerCase()))
 	    		.filter(p-> neighborhood.isEmpty() || p.getNeighborhood().toLowerCase().contains(neighborhood.toLowerCase()))
-	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase()))
-	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
-	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
-	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
-	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
+	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase())) // TODO: @jiahao, getManagerInCharge() (HDBManager object) is not a string! 
+//	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
+//	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
+//	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
+//	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
 	    		.collect(Collectors.toCollection(ArrayList::new));
 	    System.out.println("Filtered Projects: ");
 	    if(filteredProjects.isEmpty()) {
