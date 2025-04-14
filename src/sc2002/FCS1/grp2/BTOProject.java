@@ -504,4 +504,24 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		// TODO Auto-generated method stub
 		return CSVFileTypes.PROJECT_LIST;
 	}
+	
+	static void display(List<BTOProject> projects) {
+		
+		List<String> values = new ArrayList<>();
+		
+		for (BTOProject project : projects) {
+			HDBManager manager = project.getManagerInCharge();
+			String managerName = manager == null ? " " : manager.getName();
+			
+			String formattedOpenDate = Utilities.getInstance().formatUserReadableDate(project.openingDate);
+			String formattedCloseDate = Utilities.getInstance().formatUserReadableDate(project.closingDate);
+			
+			values.add(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+		}
+		new DisplayMenu.Builder()
+			.addContent(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date"))
+			.addContents(values)
+			.build()
+			.display();
+	}
 }

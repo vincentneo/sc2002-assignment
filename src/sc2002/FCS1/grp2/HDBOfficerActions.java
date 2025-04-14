@@ -9,6 +9,12 @@ public class HDBOfficerActions {
 	}
 	
 	public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
+		switch (option) {
+		case VIEW_PROJECTS:
+			 // TODO: filtering, access control etc etc
+			BTOProject.display(system.getProjects());
+			break;
+		}
 //		switch (option) {
 //		case CREATE_PROJECT:
 //			createProject(user);

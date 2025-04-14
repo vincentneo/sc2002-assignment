@@ -65,6 +65,10 @@ public class Utilities {
 		return date.format(dateFormatter);
 	}
 	
+	public String formatUserReadableDate(LocalDate date) {
+		return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+	}
+	
 	private DateTimeFormatter formatterForCSVDateTime() {
 		return DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 	}

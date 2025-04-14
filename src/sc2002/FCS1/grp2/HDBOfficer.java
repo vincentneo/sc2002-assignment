@@ -78,7 +78,6 @@ public class HDBOfficer extends Applicant {
 	enum Menu implements ScopedOption {
 		VIEW_PROJECTS;
 		
-		
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
