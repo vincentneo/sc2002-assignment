@@ -25,6 +25,10 @@ public class EnquiriesSystem {
 		return enquiries;
 	}
 	
+	public boolean isEmpty() {
+		return enquiries.isEmpty();
+	}
+	
 	public void displayEnquiriesMenu() {
 		List<String> contents = new ArrayList<>();
 		

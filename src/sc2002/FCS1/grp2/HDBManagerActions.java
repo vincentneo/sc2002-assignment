@@ -292,6 +292,9 @@ public class HDBManagerActions {
 	private static void viewAllEnquiries(HDBManager manager) throws Exception {
 		EnquiriesSystem eSystem = manager.getEnquiriesSystem();
 		eSystem.displayEnquiriesMenu();
+		
+		if (eSystem.isEmpty()) return;
+		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
