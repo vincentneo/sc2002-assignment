@@ -46,10 +46,28 @@ public class HDBOfficerActions {
 		// Display available projects
 		System.out.println("Available Projects to Join:");
 		ArrayList<BTOProject> projects = system.getProjects();
+		ArrayList<String> headers = new ArrayList<>();
+		ArrayList<String> projectDetails = new ArrayList<>();
+
+		// Adding the header for the table
+		String header = String.format("%-5s │ %-30s │ %-30s", "No.", "Project Name", "Neighborhood");
+		headers.add(header);
+
+		// Add the project rows to the table
 		for (int i = 0; i < projects.size(); i++) {
 			BTOProject project = projects.get(i);
-			System.out.println((i + 1) + ". " + project.getProjectName() + " - " + project.getNeighborhood());
+			String row = String.format("%-5d │ %-30s │ %-30s", i + 1, project.getProjectName(), project.getNeighborhood());
+			projectDetails.add(row);
 		}
+
+		// Build and display the table using DisplayMenu
+		new DisplayMenu.Builder()
+			.setTitle("Available Projects")
+			.addContents(headers)
+			.addDivider()
+			.addContents(projectDetails)
+			.build()
+			.display();
 	
 		// Officer selects a project
 		Scanner scanner = system.getScanner();
