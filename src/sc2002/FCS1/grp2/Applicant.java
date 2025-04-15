@@ -66,6 +66,14 @@ public class Applicant extends User {
 		return appliedProject;
 	}
 
+	public ApplicationStatus getApplicationStatus() {
+		return applicationStatus;
+	}
+
+	public void setApplicationStatus(ApplicationStatus status) {
+        this.applicationStatus = status;
+	}
+
 	public void withdrawApplication() {
 		if (appliedProject == null) {
 			System.out.println("No active application to withdraw.");
