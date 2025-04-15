@@ -29,13 +29,14 @@ public class EnquiriesSystem {
 	public List<Enquiry> getEnquiries() {
 		return enquiries;
 	}
+
 	
-	/**
-	 * If 
-	 * @return
-	 */
 	public boolean isEmpty() {
 		return enquiries.isEmpty();
+	}
+	
+	public int size() {
+		return enquiries.size();
 	}
 	
 	public void displayEnquiriesMenu() {

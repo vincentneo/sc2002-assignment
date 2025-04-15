@@ -320,14 +320,17 @@ public class HDBManagerActions {
 			
 			try {
 				userOption = Integer.parseInt(userInput);
+				if (userOption > eSystem.size() || userOption <= 0) throw new IllegalArgumentException();
 				break;
 			}
 			catch (Exception e) {
+				Utilities.getInstance().printYellow("Invalid option.");
 				continue;
 			}
+			
 		}
 		
-		if (shouldExit || userOption < 0) return;
+		if (shouldExit) return;
 		
 		Enquiry enquiry = eSystem.getEnquiries().get(userOption - 1);
 		int width = 100;
