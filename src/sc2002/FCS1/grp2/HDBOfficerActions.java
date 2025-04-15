@@ -34,7 +34,7 @@ public class HDBOfficerActions {
 
     /**
 	 * Method which checks pre-req before letting HDB Officer submit their name for approval for a project.
-	 * @param HDBOfficer object
+	 * @param user HDB Officer
 	 */ 
     public static void joinProject(HDBOfficer user) {
         // Ensure system is properly initialized
