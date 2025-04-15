@@ -3,13 +3,18 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles all enquiry related processes for a user.
+ * 
+ * It must be constructed only on login, and destroyed on logout.
+ */
 public class EnquiriesSystem {
 	private EnquiriesDelegate delegate;
 	private List<Enquiry> enquiries;
 	
-	EnquiriesSystem(EnquiriesDelegate delegate, User user) {
+	EnquiriesSystem(EnquiriesDelegate delegate) {
 		this.delegate = delegate;
-		this.enquiries = delegate.getApplicableEnquiries(user);
+		this.enquiries = delegate.getApplicableEnquiries();
 	}
 
 	public void setDelegate(EnquiriesDelegate delegate) {
@@ -25,6 +30,10 @@ public class EnquiriesSystem {
 		return enquiries;
 	}
 	
+	/**
+	 * If 
+	 * @return
+	 */
 	public boolean isEmpty() {
 		return enquiries.isEmpty();
 	}

@@ -229,7 +229,7 @@ public class BTOManagementApplication {
 		
 		
 		if (user.getEnquiriesSystem() == null) {
-			EnquiriesSystem eSystem = new EnquiriesSystem(system, user);
+			EnquiriesSystem eSystem = new EnquiriesSystem(system);
 			
 			user.setEnquiriesSystem(eSystem);
 		}

@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface EnquiriesDelegate {
 	public void addEnquiry(Enquiry enquiry) throws Exception;
-	public List<Enquiry> getApplicableEnquiries(User user);
+	public List<Enquiry> getApplicableEnquiries();
 }

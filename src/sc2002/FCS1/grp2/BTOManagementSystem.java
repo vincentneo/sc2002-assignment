@@ -7,6 +7,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 
+/**
+ * The key class that handles all important data.
+ * 
+ * It acts as a single source of truth by design, to facilitate two things:
+ *  - Consistency for persisting data
+ * 	- Ensure proper access control
+ * 
+ * The idea is that this class shall hold the entire pool of data across any persistable objects,
+ * including but not limited to users, projects, and other related objects.
+ * 
+ * Other classes shall take great care by only referencing objects provided by this class.
+ * This ensures that, when an attempt is made to persist data by encoding into CSV files, data remains consistent,
+ * for that, any changes made, shall be made to the same object, and not a copy of the object.
+ * 
+ * Other classes that require the data, should take great care in ensuring that it is retrieved in a manner,
+ * which User classes cannot be passed around to get the data, rather the `activeUser` property of this class, 
+ * shall be the only truth towards the current logged in user, ensuring proper access control.
+ * 
+ * @author Vincent Neo
+ */
 public class BTOManagementSystem implements EnquiriesDelegate {
 	private ArrayList<Applicant> applicants;
 	private ArrayList<HDBManager> managers;
@@ -217,13 +237,15 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 
 	@Override
-	public List<Enquiry> getApplicableEnquiries(User user) {
-		if (user instanceof HDBManager) {
+	public List<Enquiry> getApplicableEnquiries() {
+		if (activeUser instanceof HDBManager) {
 			return enquiries;
 		}
 		
-		if (user instanceof Applicant) {
-			return enquiries.stream().filter(e -> e.isUserInvolved(user)).collect(Collectors.toList());
+		if (activeUser instanceof Applicant) {
+			return enquiries.stream()
+					.filter(e -> e.isUserInvolved(activeUser))
+					.collect(Collectors.toList());
 		}
 		
 		return new ArrayList<>();
