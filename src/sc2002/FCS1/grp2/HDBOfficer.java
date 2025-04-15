@@ -1,19 +1,27 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HDBOfficer extends Applicant {
 
-	public HDBOfficer(List<CSVCell> cells) {
-		super(cells);
-		// TODO Auto-generated constructor stub
+    // Field to store enquiries per project application
+    private Map<BTOProject, Enquiry> applicationEnquiries = new HashMap<>();
+    
+    public HDBOfficer(List<CSVCell> cells) {
+        super(cells);
+    }
+
+    public boolean isOfficerForProject(BTOProject project) {
+        return project.getOfficers().contains(this);
+    }
+
+	public Map<BTOProject, Enquiry> getApplicationEnquiries() {
+		return applicationEnquiries;
 	}
 	
-	public boolean isOfficerForProject(BTOProject project) {
-		return project.getOfficers().contains(this);
-	}
-
 	public void viewProjectDetails(BTOProject project) {
         if (!isOfficerForProject(project)) {
             System.out.println("You are not an officer for this project and cannot view its details.");
