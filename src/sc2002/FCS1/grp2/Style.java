@@ -4,35 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Build text that is coloured and formatted.
+ * Build text that is styled with colour and attributes like bold, italic, etc.
  * 
+ * Why settle for boring white on black, or black on white text? Use colour to express yourself!
  * Example: 
  * <pre>
- * new ANSI.Builder()
-				.text("Bold Text\n")
-				.bold()
-				.text("Italics")
-				.code(ANSI.Code.BACK_YELLOW)
-				.italic()
-				.text("Hello")
-				.add256Colour(50, true)
-				.code(ANSI.Code.TEXT_BLUE)
-				.text(" World")
-				.build()
-				.getText()
+	 new Style.Builder()
+		.text("Bold Text\n")
+		.bold()
+		.text("Italics")
+		.code(Style.Code.BACK_YELLOW)
+		.italic()
+		.text("Hello")
+		.add256Colour(50, true)
+		.code(Style.Code.TEXT_BLUE)
+		.text(" World")
+		.print(); // or .toString() if preferred.
  * </pre>
+ * 
+ * @author Vincent Neo
  */
-public class ANSI {	
-	private String result;
-	
-	ANSI(Builder builder) {
-		this.result = builder.result;
-	}
-	
-	public String getText() {
-		return result;
-	}
-	
+public class Style {	
+
 	public static class Builder {
 		private String result = "";
 		private List<Integer> currentCodes = new ArrayList<>();
@@ -48,6 +41,11 @@ public class ANSI {
 		
 		public Builder italic() {
 			currentCodes.add(Code.ITALIC.getCode());
+			return this;
+		}
+		
+		public Builder strikethrough() {
+			currentCodes.add(Code.STRIKETHROUGH.getCode());
 			return this;
 		}
 		
@@ -77,6 +75,11 @@ public class ANSI {
 			return this;
 		}
 		
+		public Builder newLine() {
+			currentText += "\n";
+			return this;
+		}
+		
 		private void process() {
 			if (currentText == null) { 
 				currentCodes = new ArrayList<>();
@@ -99,12 +102,16 @@ public class ANSI {
 			
 		}
 		
-		public ANSI build() {
+		public String toString() {
 			if (currentText != null && !currentText.isBlank()) {
 				process();
 			}
 			
-			return new ANSI(this);
+			return this.result;
+		}
+		
+		public void print() {
+			System.out.print(this.toString());
 		}
 	}
 	
@@ -112,6 +119,7 @@ public class ANSI {
 		BOLD(1),
 		ITALIC(3),
 		UNDERLINE(4),
+		STRIKETHROUGH(9),
 		TEXT_BLACK(30),
 		BACK_BLACK(40),
 		TEXT_RED(31),
