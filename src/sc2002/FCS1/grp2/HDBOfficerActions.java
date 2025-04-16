@@ -187,6 +187,7 @@ public class HDBOfficerActions {
 					// If the manager approves, add the officer to the project's officers list
 					if (!project.getOfficers().contains(officer)) {
 						project.addOfficer(officer);
+						system.saveChanges(CSVFileTypes.PROJECT_LIST);
 					}
 				} else if (reply.equalsIgnoreCase("reject")) {
 					continue;
