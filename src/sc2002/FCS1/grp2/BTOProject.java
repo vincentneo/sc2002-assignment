@@ -748,7 +748,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 	 * Work In Progress. Expected to be more customisable, depending on the needs.
 	 * 
 	 * @param projects List of projects to be displayed.
-	 * @param displayIndex If true, there will be an additional column on the far left denoting list position index of row.
+	 * @param options Additional columns to display.
 	 */
 	static void display(List<BTOProject> projects, List<TableColumnOption> options) {
 		
