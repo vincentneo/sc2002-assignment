@@ -170,23 +170,19 @@ public class HDBManagerActions {
 					break;
 					
 				case 3:
-					System.out.println("What would you like to change maxRoomOne to?");
-					int newMax = scanner.nextInt();
+					int newMax = superScanner.nextIntUntilCorrect("What would you like to change maxRoomOne to? : ");
 					selectedProject.setTwoRoomUnits(newMax);
 					break;
 				case 4:
-					System.out.println("What would you like to change priceRoomOne to?");
-					int newMaxprice = scanner.nextInt();
+					int newMaxprice = superScanner.nextIntUntilCorrect("What would you like to change priceRoomOne to? : ");
 					selectedProject.setTwoRoomPrice(newMaxprice);
 					break;
 				case 5:
-					System.out.println("What would you like to change maxRoomTwo to?");
-					int newMax2 = scanner.nextInt();
+					int newMax2 = superScanner.nextIntUntilCorrect("What would you like to change maxRoomTwo to? : ");
 					selectedProject.setThreeRoomUnits(newMax2);
 					break;
 				case 6:
-					System.out.println("What would you like to change priceRoomTwo to?");
-					int newMaxprice2 = scanner.nextInt();
+					int newMaxprice2 = superScanner.nextIntUntilCorrect("What would you like to change priceRoomTwo to? : ");
 					selectedProject.setThreeRoomPrice(newMaxprice2);
 					break;
 				case 7:
@@ -200,13 +196,12 @@ public class HDBManagerActions {
 					selectedProject.setClosingDate(newClosing);
 					break;
 				case 9:
-					System.out.println("What would you like to change officerSlots to?");
-					int newOfficerSlots = scanner.nextInt();
+					int newOfficerSlots = superScanner.nextIntUntilCorrect("What would you like to change officerSlots to? : ");
 					selectedProject.setTotalOfficerSlots(newOfficerSlots);
 					break;
 				case 10:
-					System.out.println("Would you like to toggle visibility? (Y/N)");
-					String visibility = scanner.next();
+					System.out.println("Would you like to toggle visibility? (Y/N) : ");
+					String visibility = scanner.nextLine();
 					if(visibility.equalsIgnoreCase("Y")) {
 						selectedProject.toggleVisibility();
 						System.out.println("Visibility has been toggled");
@@ -244,6 +239,8 @@ public class HDBManagerActions {
 		for(int i = 0; i<projects.size(); i++) {
 			System.out.println((i+1) + ". " + projects.get(i));
 		}
+
+
 		System.out.println("Which Project listing would you like to delete?");
 		int choice = scanner.nextInt();
 		BTOProject removed = projects.remove(choice-1);
