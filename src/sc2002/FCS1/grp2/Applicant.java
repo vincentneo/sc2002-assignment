@@ -101,25 +101,6 @@ public class Applicant extends User {
 		enquiries.add(enquiry);
 	}
 
-	// TODO: Fix errors
-//	public List<String> viewEnquiries() {
-//		return enquiries;
-//	}
-//
-//	public void editEnquiry(int index, String newEnquiry) {
-//		if (index < 0 || index >= enquiries.size()) {
-//			throw new IndexOutOfBoundsException("Invalid enquiry index.");
-//		}
-//		enquiries.set(index, newEnquiry);
-//	}
-
-	public void deleteEnquiry(int index) {
-		if (index < 0 || index >= enquiries.size()) {
-			throw new IndexOutOfBoundsException("Invalid enquiry index.");
-		}
-		enquiries.remove(index);
-	}
-
 	@Override
 	boolean canApplyProject() {
 		return appliedProject == null;

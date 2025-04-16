@@ -129,8 +129,21 @@ public class ApplicantActions {
 	
 	private static void enquiryFlow(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
+		SuperScanner sscanner = new SuperScanner(scanner);
 		
 		// TODO: print out projects for user to select first
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		
+		if (projects.isEmpty()) {
+			System.out.println("As you are not eligible to apply a BTO flat at this moment, you cannot enquire about current BTO projects.");
+			return;
+		}
+		
+		BTOProject.display(projects, true);
+		
+		int projectOption = sscanner.nextIntUntilCorrect("Which project would you like to enquire about? Choose a number: ", 1, projects.size());
+		
+		BTOProject project = projects.get(projectOption - 1);
 		
 		System.out.println("Ask any question regarding our project.");
 		System.out.print("Question: ");
@@ -139,7 +152,7 @@ public class ApplicantActions {
 		Message question = new Message(applicant, query);
 		
 		// TODO: Link with a project.
-		Enquiry enquiry = new Enquiry(question, null);
+		Enquiry enquiry = new Enquiry(question, project);
 		
 		applicant.getEnquiriesSystem().addEnquiry(enquiry);
 		

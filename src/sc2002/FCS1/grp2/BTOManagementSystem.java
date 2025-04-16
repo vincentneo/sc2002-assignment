@@ -145,9 +145,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			}
 			case ENQUIRIES_LIST: {
 				encodables.addAll(enquiries);
+				break;
 			}
 			case APPLICATIONS_LIST: {
 				encodables.addAll(applications);
+				break;
 			}
 		}
 		try {
