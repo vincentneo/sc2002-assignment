@@ -91,43 +91,47 @@ public class HDBManagerActions {
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
 		
-		ArrayList<BTOProject> project = system.getApplicableProjects();
-//		for(int i = 0; i<project.size(); i++) {
-//			System.out.println((i+1) + ". " + project.get(i));
-//		}
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		BTOProject.display(projects, true);
 		
-		BTOProject.display(project, true);
+		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number): ", 1, projects.size());
+		BTOProject selectedProject = projects.get(choose-1);
+		
+//		ArrayList<BTOProject> projects = system.getApplicableProjects(); 
+//		ArrayList<BTOProject> ProjectsFinder = projects.stream()
+//				.filter(p -> p.getProjectName().equalsIgnoreCase(projectName))
+//				.collect(Collectors.toCollection(ArrayList::new));
 //		
-		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number):");
-		String projectName = project.get(choose-1).getProjectName();
-		
-			
-			
-		ArrayList<BTOProject>  projects = system.getApplicableProjects(); 
-		ArrayList<BTOProject> ProjectsFinder = projects.stream()
-				.filter(p -> p.getProjectName().equalsIgnoreCase(projectName))
-				.collect(Collectors.toCollection(ArrayList::new));
-		
-		if(ProjectsFinder.isEmpty()) {
-			System.out.println("Project not found");
-			return;
-		}
-		else {
-		System.out.println("Matching Projects: ");
-		for(BTOProject p: ProjectsFinder) {
-			System.out.println(p);
-			}
-		}
-		BTOProject selectedProject = ProjectsFinder.get(0); //need to figure out how to get the object..
-		
-		System.out.println("What would you like to edit?");
-		System.out.println("Options: ProjectName, Neighbourhood, maxRoomOne, priceRoomOne, maxRoomTwo, priceRoomTwo, openingDate, closingDate, officerSlots");
-		String choice = scanner.next();
+//		if(ProjectsFinder.isEmpty()) {
+//			System.out.println("Project not found");
+//			return;
+//		}
+//		else {
+//		System.out.println("Matching Projects: ");
+//		for(BTOProject p: ProjectsFinder) {
+//			System.out.println(p);
+//			}
+//		}
 
-	
+		System.out.println("What would you like to edit?");
+		
+		new DisplayMenu.Builder()
+		.addContent("1. Project Name")
+		.addContent("2. Project Neighbourhood")
+		.addContent(String.format("3. %s Remaining Slots", FlatType.TWO_ROOM))
+		.addContent(String.format("4. %s Price", FlatType.TWO_ROOM))
+		.addContent(String.format("5. %s Remaining Slots", FlatType.THREE_ROOM))
+		.addContent(String.format("6. %s Price", FlatType.THREE_ROOM))
+		.addContent("7. Opening Date")
+		.addContent("8. Closing Date")
+		.addContent("9. Officer Slots")
+		.build()
+		.display();
+		
+		int choice = superScanner.nextIntUntilCorrect("Choose an option: ", 1, 9);
 		
 		switch(choice) {
-			case "ProjectName":
+			case 1:
 				System.out.println("What would you like to change Project name to?"); //need unique project name
 				String newName = scanner.next();
 				selectedProject.setProjectName(newName);
@@ -135,55 +139,55 @@ public class HDBManagerActions {
 				System.out.println(selectedProject);
 				break;
 			
-			case "Neighbourhood":
+			case 2:
 				System.out.println("What would you like to change Neighbourhood to?");
 				String newNeighbourhood = scanner.next();
 				selectedProject.setNeighborhood(newNeighbourhood);
 				break;
 				
-			case "maxRoomOne":
+			case 3:
 				System.out.println("What would you like to change maxRoomOne to?");
 				int newMax = scanner.nextInt();
 				selectedProject.setTwoRoomUnits(newMax);
 				break;
-			case "priceRoomOne":
+			case 4:
 				System.out.println("What would you like to change priceRoomOne to?");
 				int newMaxprice = scanner.nextInt();
 				selectedProject.setTwoRoomPrice(newMaxprice);
 				break;
-			case "maxRoomTwo":
+			case 5:
 				System.out.println("What would you like to change maxRoomTwo to?");
 				int newMax2 = scanner.nextInt();
 				selectedProject.setThreeRoomUnits(newMax2);
 				break;
-			case "priceRoomTwo":
+			case 6:
 				System.out.println("What would you like to change priceRoomTwo to?");
 				int newMaxprice2 = scanner.nextInt();
 				selectedProject.setThreeRoomPrice(newMaxprice2);
 				break;
-			case "openingDate":
+			case 7:
 				System.out.println("What would you like to change openingDate to?");
 				LocalDate newOpening = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 				selectedProject.setOpeningDate(newOpening);
 				break;
-			case "closingDate":
+			case 8:
 				System.out.println("What would you like to change closingDate to?");
 				LocalDate newClosing = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
 				selectedProject.setClosingDate(newClosing);
 				break;
-			case "officerSlots":
+			case 9:
 				System.out.println("What would you like to change officerSlots to?");
 				int newOfficerSlots = scanner.nextInt();
 				selectedProject.setTotalOfficerSlots(newOfficerSlots);
 				break;
 			
 			default:
+				// technically this wont even hit due to nextint min max.
 				System.out.println("Invalid option. Please try again.");
 				break;
-
 				
 		}
-		system.saveChanges(null);
+		system.saveChanges(CSVFileTypes.PROJECT_LIST);
 		}
 	
 	

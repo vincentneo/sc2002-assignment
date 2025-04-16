@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import sc2002.FCS1.grp2.Style.Code;
+
 /**
  * An extension of features for the {@code Scanner} class.
  * 
@@ -28,9 +30,18 @@ public class SuperScanner {
 			return nextInt(prompt);
 		}
 		catch (NumberFormatException e) {
-			Utilities.getInstance().printYellow("Input must be a number. Please try again.");
+			new Style.Builder().text("Input must be a number. Please try again.").code(Code.TEXT_YELLOW).print();
 			return nextIntUntilCorrect(prompt);
 		}
+	}
+	
+	public int nextIntUntilCorrect(String prompt, int min, int max) {
+		int value = nextIntUntilCorrect(prompt);
+		if (value < min || value > max) {
+			new Style.Builder().text("Invalid option. Please try again.").code(Code.TEXT_YELLOW).print();
+			return nextIntUntilCorrect(prompt);
+		}
+		return value;
 	}
 	
 	public LocalDate nextDateUntilCorrect(String prompt) {
@@ -57,13 +68,13 @@ public class SuperScanner {
 	
 	private int nextInt(String prompt) {
 		System.out.print(prompt);
-		String userInput = scanner.next();
+		String userInput = scanner.nextLine();
 		return Integer.parseInt(userInput);
 	}
 	
 	private LocalDate nextDate(String prompt) {
 		System.out.print(prompt);
-		String userInput = scanner.next();
+		String userInput = scanner.nextLine();
 		return Utilities.getInstance().parseDate(userInput);
 	}
 	
