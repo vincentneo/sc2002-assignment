@@ -144,7 +144,7 @@ public class HDBManagerActions {
 			case "maxRoomOne":
 				System.out.println("What would you like to change maxRoomOne to?");
 				int newMax = scanner.nextInt();
-				selectedProject.setMaxTwoRoomUnits(newMax);
+				selectedProject.setTwoRoomUnits(newMax);
 				break;
 			case "priceRoomOne":
 				System.out.println("What would you like to change priceRoomOne to?");
@@ -154,7 +154,7 @@ public class HDBManagerActions {
 			case "maxRoomTwo":
 				System.out.println("What would you like to change maxRoomTwo to?");
 				int newMax2 = scanner.nextInt();
-				selectedProject.setMaxThreeRoomUnits(newMax2);
+				selectedProject.setThreeRoomUnits(newMax2);
 				break;
 			case "priceRoomTwo":
 				System.out.println("What would you like to change priceRoomTwo to?");

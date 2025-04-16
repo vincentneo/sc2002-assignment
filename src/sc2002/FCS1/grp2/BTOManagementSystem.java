@@ -214,6 +214,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		System.out.println(projects);
 	}
 	
+	public void addApplication(Application application) throws Exception {
+		if (!(isActiveUserPermitted(Applicant.class) || isActiveUserPermitted(HDBOfficer.class))) throw new InsufficientAccessRightsException();
+		applications.add(application);
+		saveChanges(CSVFileTypes.APPLICATIONS_LIST);
+	}
+	
 	public Scanner getScanner() {
 		return scanner;
 	}

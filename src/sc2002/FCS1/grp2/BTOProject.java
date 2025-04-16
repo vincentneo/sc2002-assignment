@@ -21,14 +21,16 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     private String neighborhood;
 
     //TODO: Store which floors are assigned to certain users
-    private int maxTwoRoomUnits;
-    private int maxThreeRoomUnits;
-
-    private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
-    private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
-
-    private int twoRoomPrice;
-    private int threeRoomPrice;
+//    private int maxTwoRoomUnits;
+//    private int maxThreeRoomUnits;
+//
+//    private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
+//    private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
+//
+//    private int twoRoomPrice;
+//    private int threeRoomPrice;
+    
+    private EnumMap<FlatType,FlatInfo> flats = new EnumMap<>(FlatType.class);
 
     private ArrayList<Application> applications;
 
@@ -54,12 +56,25 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		projectName = cells.get(0).getValue();
 		neighborhood = cells.get(1).getValue();
 
-		maxTwoRoomUnits = cells.get(3).getIntValue();
-        maxThreeRoomUnits = cells.get(6).getIntValue();
-        // TODO: Retrieve booked rooms
-
-        twoRoomPrice = cells.get(4).getIntValue();
-        threeRoomPrice = cells.get(7).getIntValue();
+//		  maxTwoRoomUnits = cells.get(3).getIntValue();
+//        maxThreeRoomUnits = cells.get(6).getIntValue();
+//        // TODO: Retrieve booked rooms
+//
+//        twoRoomPrice = cells.get(4).getIntValue();
+//        threeRoomPrice = cells.get(7).getIntValue();
+		
+		FlatType type1 = FlatType.fromString(cells.get(2).getValue());
+		int units1 = cells.get(3).getIntValue();
+		int price1 = cells.get(4).getIntValue();
+		FlatInfo info1 = new FlatInfo(type1, units1, price1);
+		
+		FlatType type2 = FlatType.fromString(cells.get(5).getValue());
+		int units2 = cells.get(6).getIntValue();
+		int price2 = cells.get(7).getIntValue();
+		FlatInfo info2 = new FlatInfo(type2, units2, price2);
+		
+		flats.put(type1, info1);
+		flats.put(type2, info2);
 
 		openingDate = cells.get(8).getDateValue();//the parse method throws a DateTimeParseExecption if the string is in wrong format.
         //For throwing exception
@@ -95,12 +110,12 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         else if (neighborhood == null || neighborhood.isEmpty()) {
             throw new IllegalArgumentException("Neighborhood cannot be empty.");
         }
-        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
-            throw new IllegalArgumentException("Number of units cannot be negative.");
-        }
-        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
-            throw new IllegalArgumentException("Number of price cannot be negative.");
-        }
+//        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+//            throw new IllegalArgumentException("Number of units cannot be negative.");
+//        }
+//        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
+//            throw new IllegalArgumentException("Number of price cannot be negative.");
+//        }
         else if (openingDate.isAfter(closingDate)) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
             throw new IllegalArgumentException("Opening date cannot be after closing date.");
         }
@@ -135,10 +150,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
         this.projectName = projectName;
         this.neighborhood = neighborhood;
-        this.maxTwoRoomUnits = maxTwoRoomUnits;
-        this.maxThreeRoomUnits = maxThreeRoomUnits;
-        this.twoRoomPrice = twoRoomPrice;
-        this.threeRoomPrice = threeRoomPrice;
+//        this.maxTwoRoomUnits = maxTwoRoomUnits;
+//        this.maxThreeRoomUnits = maxThreeRoomUnits;
+//        this.twoRoomPrice = twoRoomPrice;
+//        this.threeRoomPrice = threeRoomPrice;
         // TODO: Retrieve booked rooms
         
         this.openingDate = openingDate;
@@ -189,52 +204,66 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         this.neighborhood = neighborhood;
     }
     //endregion 
+    
 
     //region Room Units
     //TODO: Get and set for room units
     
-    public void setMaxTwoRoomUnits(int twoRoomUnits) throws IllegalArgumentException{
+    public List<FlatInfo> getApplicableFlats(Set<FlatType> applicableTypes) {
+    	ArrayList<FlatInfo> applicableFlats = new ArrayList<>();
+    	for (FlatType type : applicableTypes) {
+    		applicableFlats.add(flats.get(type));
+    	}
+    	
+    	return applicableFlats;
+    }
+    
+    public FlatInfo getFlatForType(FlatType type) {
+    	return flats.get(type);
+    }
+    
+    public void setTwoRoomUnits(int twoRoomUnits) throws IllegalArgumentException{
     	if(twoRoomUnits < 0) {
     		throw new IllegalArgumentException("Number of 2 room units cannot be negative");
     	}
-    	this.maxTwoRoomUnits = twoRoomUnits;
+    	this.flats.get(FlatType.TWO_ROOM).setRemainingUnits(twoRoomUnits);
     }
     
-    public void setMaxThreeRoomUnits(int threeRoomUnits) throws IllegalArgumentException{
+    public void setThreeRoomUnits(int threeRoomUnits) throws IllegalArgumentException{
     	if(threeRoomUnits < 0) {
     		throw new IllegalArgumentException("Number of 3 room units cannot be negative");
     	}
-    	this.maxThreeRoomUnits = threeRoomUnits;
+    	this.flats.get(FlatType.THREE_ROOM).setRemainingUnits(threeRoomUnits);
     }
     
-    public int getMaxTwoRoomUnits() {
-    	return maxTwoRoomUnits;
+    public int getTwoRoomUnits() {
+    	return this.flats.get(FlatType.TWO_ROOM).getRemainingUnits();
     }
     
     public int getThreeRoomUnits() {
-    	return maxThreeRoomUnits;
+    	return this.flats.get(FlatType.THREE_ROOM).getRemainingUnits();
     }
 
     public void setTwoRoomPrice(int twoRoomPrice) throws IllegalArgumentException {
         if (twoRoomPrice < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
-        this.twoRoomPrice = twoRoomPrice;
+        this.flats.get(FlatType.TWO_ROOM).setPrice(twoRoomPrice);
     }
 
     public void setThreeRoomPrice(int threeRoomPrice) throws IllegalArgumentException {
         if (threeRoomPrice < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
-        this.threeRoomPrice = threeRoomPrice;
+        this.flats.get(FlatType.THREE_ROOM).setPrice(threeRoomPrice);
     }
 
     public int getTwoRoomPrice() {
-        return twoRoomPrice;
+        return this.flats.get(FlatType.TWO_ROOM).getPrice();
     }
 
     public int getThreeRoomPrice() {
-        return threeRoomPrice;
+        return this.flats.get(FlatType.THREE_ROOM).getPrice();
     }
 
     //endregion
@@ -452,14 +481,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     
     public boolean isEligible(Set<FlatType> flatTypes) {
     	for (FlatType type : flatTypes) {
-    		switch (type) {
-    		case TWO_ROOM:
-    			if (maxTwoRoomUnits > 0) return true;
-    			break;
-    		case THREE_ROOM:
-    			if (maxThreeRoomUnits > 0) return true;
-    			break;
-    		}
+    		if (flats.get(type).getRemainingUnits() > 0) return true;
     	}
     	
     	return false;
@@ -483,10 +505,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         return "BTO Project: " +
                 "Project Name=" + projectName + ", " +
                 "Neighborhood=" + neighborhood + ", " +
-                "Two Room Units=" + maxTwoRoomUnits + ", " +
-                "Two Room Price=" + twoRoomPrice + ", " +
-                "Three Room Units=" + maxThreeRoomUnits + ", " +
-                "Three Room Units=" + threeRoomPrice + ", " +
+                "Two Room Units=" + flats.get(FlatType.TWO_ROOM).getRemainingUnits() + ", " +
+                "Two Room Price=" + flats.get(FlatType.TWO_ROOM).getPrice() + ", " +
+                "Three Room Units=" + flats.get(FlatType.THREE_ROOM).getRemainingUnits() + ", " +
+                "Three Room Price=" + flats.get(FlatType.THREE_ROOM).getPrice() + ", " +
                 "Application Opening Date=" + openingDate + ", " +
                 "Application Closing Date=" + closingDate + ", " +
                 "HBD Manager In Charge=" + managerInCharge + ", " + 
@@ -501,6 +523,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		// TODO: Flat Type should be stored not hardcoded.
 		FlatType roomOneType = FlatType.TWO_ROOM;
 		FlatType roomTwoType = FlatType.THREE_ROOM;
+		
+		FlatInfo roomOne = flats.get(roomOneType);
+		FlatInfo roomTwo = flats.get(roomTwoType);
 		
 		String formattedOpeningDate = Utilities.getInstance().formatDate(openingDate);
 		String formattedClosingDate = Utilities.getInstance().formatDate(closingDate);
@@ -517,11 +542,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				projectName,
 				neighborhood,
 				roomOneType.toString(),
-				maxTwoRoomUnits,
-				twoRoomPrice,
+				roomOne.getRemainingUnits(),
+				roomOne.getPrice(),
 				roomTwoType.toString(),
-				maxThreeRoomUnits,
-				threeRoomPrice,
+				roomTwo.getRemainingUnits(),
+				roomTwo.getPrice(),
 				formattedOpeningDate,
 				formattedClosingDate,
 				managerName,

@@ -1,7 +1,11 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
+import sc2002.FCS1.grp2.Style.Code;
 
 public class ApplicantActions {
 	private static BTOManagementSystem system;
@@ -41,11 +45,82 @@ public class ApplicantActions {
 		if (!applyBTO) {
 			return;
 		}
-//		
-//		new DisplayMenu.Builder()
-//		
-//		
+		
+		DisplayMenu.Builder listingMenu = new DisplayMenu.Builder();
+		
+		listingMenu.addContent(String.format("%3s │ %-15s │ %-15s", "No.", "Project Name", "Neighborhood"));
+		listingMenu.addDivider();
+		
+		for (int i = 0; i < projects.size(); i++) {
+			BTOProject project = projects.get(i);
+			listingMenu.addContent(String.format("%3d │ %-15s │ %-15s", i + 1, project.getProjectName(), project.getNeighborhood()));
+		}
+		
+		listingMenu.addDivider();
+		listingMenu.addContent("To return, type \"back\"");
+		
+		listingMenu.build().display();
+		
 		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
+		
+		while (choice <= 0 || choice > projects.size()) {
+			new Style.Builder()
+					.text(String.format("No such project at position %d.\n", choice))
+					.code(Code.TEXT_YELLOW)
+					.print();
+			
+			choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
+		}
+		
+		BTOProject selectedProject = projects.get(choice - 1);
+		
+		Set<FlatType> types = applicant.getEligibleFlatTypes();
+		
+		DisplayMenu.Builder typeMenu = new DisplayMenu.Builder();
+		typeMenu.addContent(String.format("%3s │ %-15s │ %-10s │ %-16s", "No.", "Type", "Price", "Units Remaining"));
+		typeMenu.addDivider();
+		List<FlatInfo> flats = selectedProject.getApplicableFlats(types);
+		
+		for (int i = 0; i < flats.size(); i++) {
+			FlatInfo flat = flats.get(i);
+			typeMenu.addContent(String.format("%3d │ %-15s │ $%-9s │ %-16d", i+1, flat.getType(), flat.getPrice(), flat.getRemainingUnits()));
+		}
+		
+		typeMenu.build().display();
+		
+		FlatInfo flat;
+		
+		if (types.size() > 1) {
+			int typeIndex = sscanner.nextIntUntilCorrect("Which size are you interested in applying? (Select the number): ");
+			
+			while (typeIndex <= 0 || typeIndex > flats.size()) {
+				new Style.Builder()
+					.text(String.format("No such project at position %d.\n", choice))
+					.code(Code.TEXT_YELLOW)
+					.print();
+		
+				typeIndex = sscanner.nextIntUntilCorrect("Which size are you interested in applying? (Select the number): ");
+			}
+			flat = flats.get(typeIndex - 1);
+			
+			
+		}
+		else {
+			FlatType type = types.stream().findFirst().orElse(null);
+			System.out.printf("You are only eligible for %s flats.\n", type);
+			boolean shouldApply = sscanner.nextBoolUntilCorrect("Would you like to apply? (Y/N): ");
+			
+			if (!shouldApply) return;
+			
+			flat = selectedProject.getFlatForType(type);
+		}
+		
+		Application application = new Application(selectedProject, flat.getType(), applicant);
+		system.addApplication(application);
+		System.out.println("Application successfully submitted");
+		
+		// TODO: investigate why on return of this method will cause "invalid option" in subsequent cycle. Wheres the uncaptured \n coming from?
+		
 	}
 	
 	private static void showEnquiries(Applicant applicant) throws Exception {

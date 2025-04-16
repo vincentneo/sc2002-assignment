@@ -11,10 +11,10 @@ public class Application extends CSVDecodable implements CSVEncodable {
     private String projectName = null;
     private String applicantNRIC = null;
 
-    public Application(BTOProject project, FlatType flatType, ApplicationStatus status, Applicant applicant) {
+    public Application(BTOProject project, FlatType flatType, Applicant applicant) {
         this.project = project;
         this.flatType = flatType;
-        this.status = status;
+        this.status = ApplicationStatus.PENDING;
         this.applicant = applicant;
     }
     
