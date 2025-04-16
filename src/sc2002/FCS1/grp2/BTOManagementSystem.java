@@ -33,6 +33,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	private ArrayList<HDBOfficer> officers;
 	private ArrayList<BTOProject> projects;
 	private ArrayList<Enquiry> enquiries;
+	private ArrayList<Application> applications;
 	
 	private User activeUser = null;
 	
@@ -48,6 +49,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		ArrayList<HDBOfficer> officers = parser.parseOfficer();
 		ArrayList<BTOProject> projects = parser.parseProjects();
 		ArrayList<Enquiry> enquiries = parser.parseEnquiries();
+		ArrayList<Application> applications = parser.parseApplications();
 		
 		for (BTOProject project : projects) {
 			project.retrieveConnectedUsers(officers, managers);
@@ -58,6 +60,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		this.officers = officers;
 		this.projects = projects;
 		this.enquiries = enquiries;
+		this.applications = applications;
 		
 		ArrayList<User> all = allUsers();
 		for (Enquiry enquiry : enquiries) {
@@ -142,6 +145,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			}
 			case ENQUIRIES_LIST: {
 				encodables.addAll(enquiries);
+			}
+			case APPLICATIONS_LIST: {
+				encodables.addAll(applications);
 			}
 		}
 		try {

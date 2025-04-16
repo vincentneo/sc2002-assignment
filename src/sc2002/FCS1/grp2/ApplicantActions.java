@@ -25,8 +25,27 @@ public class ApplicantActions {
 	}
 	
 	private static void viewProjects(Applicant applicant) throws Exception {
+		SuperScanner sscanner = new SuperScanner(system.getScanner());
+		
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		
+		if (projects.isEmpty()) {
+			System.out.println("Unfortunately, there is currently no BTO projects suitable for you to apply.");
+			return;
+		}
+		
 		BTOProject.display(projects, false);
+		
+		boolean applyBTO = sscanner.nextBoolUntilCorrect("Would you like to apply for a BTO? (Y/N): ");
+		
+		if (!applyBTO) {
+			return;
+		}
+//		
+//		new DisplayMenu.Builder()
+//		
+//		
+		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
 	}
 	
 	private static void showEnquiries(Applicant applicant) throws Exception {

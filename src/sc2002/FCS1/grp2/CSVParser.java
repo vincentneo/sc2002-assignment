@@ -124,6 +124,11 @@ public class CSVParser {
 		return parse(filePath, Enquiry.class);
 	}
 	
+	ArrayList<Application> parseApplications() {
+		String filePath = path + CSVFileTypes.APPLICATIONS_LIST.getFileName();
+		return parse(filePath, Application.class);
+	}
+	
 	ArrayList<User> retrieveAllUsers() {
 		ArrayList<User> users = new ArrayList<>();
 		users.addAll(parseApplicants());
