@@ -56,23 +56,23 @@ public class ApplicantActions {
 		if (!applyBTO) {
 			return;
 		}
-
+		
+		new DisplayMenu.Builder()
+		.addContent("1. Filter by")
+		.addContent("2. Back")
+		.build()
+		.display();
+		
+//		int 
+//		applyBTOFlow(applicant, projects, sscanner);
+	}
+	
+	private static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
 		BTOProject.display(projects, listingOptions);
-
-		System.out.println("To return, type \"back\"");
 		
-		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
-		
-		while (choice <= 0 || choice > projects.size()) {
-			new Style.Builder()
-					.text(String.format("No such project at position %d.\n", choice))
-					.code(Code.TEXT_YELLOW)
-					.print();
-			
-			choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
-		}
+		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ", 1, projects.size());
 		
 		BTOProject selectedProject = projects.get(choice - 1);
 		
