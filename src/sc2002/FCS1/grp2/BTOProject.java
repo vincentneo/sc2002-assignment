@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Set;
 
 //TODO: Error handling
@@ -91,6 +92,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         }
         else {
         	officerNames = new ArrayList<>();
+        	String singularOfficer = cells.get(12).getValue();
+        	if (singularOfficer != null) officerNames.add(singularOfficer);
         }
         
         if (cells.size() > 13) {
@@ -572,9 +575,37 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 	 * @param projects List of projects to be displayed.
 	 * @param displayIndex If true, there will be an additional column on the far left denoting list position index of row.
 	 */
-	static void display(List<BTOProject> projects, boolean displayIndex) {
+	static void display(List<BTOProject> projects, List<TableColumnOption> options) {
 		
 		List<String> values = new ArrayList<>();
+		
+		String headerFormat = "";
+		String valueFormat = "";
+		
+		List<String> headerFormatList = new ArrayList<>();
+		List<String> valueFormatList = new ArrayList<>();
+		
+		if (options.contains(TableColumnOption.INDEX_NUMBER)) {
+			headerFormatList.add("%-" + TableColumnOption.INDEX_NUMBER.getHeaderSpacing() + "s");
+			valueFormat += ("%-" + TableColumnOption.INDEX_NUMBER.getValueSpacing() + "s");
+		}
+		
+		// project name
+		headerFormatList.add("%-25s");
+		valueFormatList.add("%-25s");
+		
+		// neighborhood
+		headerFormatList.add("%-25s");
+		valueFormatList.add("%-25s");
+		
+		for (TableColumnOption option : options) {
+			if (option == TableColumnOption.INDEX_NUMBER) continue;
+			headerFormatList.add("%-" + option.getHeaderSpacing() + "s");
+			valueFormatList.add("%-" + option.getValueSpacing() + "s");
+		}
+		
+		headerFormat = String.join(" │ ", headerFormatList);
+		valueFormat += String.join(" │ ", valueFormatList);
 		
 		int index = 0;
 		
@@ -582,31 +613,124 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			HDBManager manager = project.getManagerInCharge();
 			String managerName = manager == null ? " " : manager.getName();
 			
-			String formattedOpenDate = Utilities.getInstance().formatUserReadableDate(project.openingDate);
-			String formattedCloseDate = Utilities.getInstance().formatUserReadableDate(project.closingDate);
+			List<String> row = new ArrayList<>();
 			
-			if (displayIndex) {
-				values.add(String.format("%3d. │ %-25s │ %-25s │ %-12s │ %-15s │ %-15s", index + 1, project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+			if (options.contains(TableColumnOption.INDEX_NUMBER)) {
+				row.add("" + (index + 1) + ".");
 			}
-			else {
-				values.add(String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", project.getProjectName(), project.getNeighborhood(), managerName, formattedOpenDate, formattedCloseDate));
+			
+			row.add(project.getProjectName());
+			row.add(project.getNeighborhood());
+			
+			for (TableColumnOption option : options) {
+				switch (option) {
+				case INDEX_NUMBER:
+					continue;
+				case MANAGER:
+					row.add(project.getManagerInCharge().getName());
+					break;
+				case OFFICERS:
+					String joined = String.join(", ", project.officers.stream().map(o -> o.getName()).toList());
+					row.add(joined);
+					break;
+				case OFFICER_SLOTS:
+					row.add("" + project.totalOfficerSlots);
+					break;
+				case OPENING_DATE:
+					String formattedOpenDate = Utilities.getInstance().formatUserReadableDate(project.openingDate);
+					row.add(formattedOpenDate);
+					break;
+				case CLOSING_DATE:
+					String formattedCloseDate = Utilities.getInstance().formatUserReadableDate(project.closingDate);
+					row.add(formattedCloseDate);
+					break;
+				case ROOM_ONE_PRICE:
+					row.add("$" + project.getTwoRoomPrice());
+					break;
+				case ROOM_ONE_UNITS:
+					row.add("" + project.getTwoRoomUnits());
+					break;
+				case ROOM_TWO_PRICE:
+					row.add("$" + project.getThreeRoomPrice());
+					break;
+				case ROOM_TWO_UNITS:
+					row.add("" + project.getThreeRoomUnits());
+					break;
+				case VISIBILITY:
+					row.add(project.getVisibility() ? "Yes" : "No");
+					break;
+				default:
+					break;
+				}
 			}
 			
 			index++;
+			
+			values.add(String.format(valueFormat, row.toArray()));
 		}
 		String header;
+
+		List<String> headerRow = new ArrayList<>();
 		
-		if (displayIndex) {
-			header = String.format("%3s    %-25s │ %-25s │ %-12s │ %-15s │ %-15s", "No.", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
-		}
-		else {
-			header = String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
+		if (options.contains(TableColumnOption.INDEX_NUMBER)) {
+			headerRow.add(TableColumnOption.INDEX_NUMBER.getTitle());
 		}
 		
+		headerRow.add("Name");
+		headerRow.add("Neighborhood");
+		
+		for (TableColumnOption option : options) {
+			if (option == TableColumnOption.INDEX_NUMBER) continue;
+			headerRow.add(option.getTitle());
+		}
+		
+		header = String.format(headerFormat, headerRow.toArray());
 		new DisplayMenu.Builder()
 			.addContent(header)
 			.addContents(values)
 			.build()
 			.display();
+	}
+	
+	enum TableColumnOption {
+		INDEX_NUMBER(3,6, "No."),
+		MANAGER(12, "Manager"),
+		ROOM_ONE_UNITS(15, "2-Room Units"),
+		ROOM_ONE_PRICE(15, "2-Room Price"),
+		ROOM_TWO_UNITS(15, "3-Room Units"),
+		ROOM_TWO_PRICE(15, "3-Room Price"),
+		OPENING_DATE(15, "Opening Date"),
+		CLOSING_DATE(15, "Closing Date"),
+		OFFICER_SLOTS(16, "Officer Slots"),
+		OFFICERS(30, "Officers"),
+		VISIBILITY(10, "Visibility");
+
+		private int headerSpacing;
+		private int valueSpacing;
+		private String title;
+		
+		private TableColumnOption(int common, String title) {
+			this.headerSpacing = common;
+			this.valueSpacing = common;
+			this.title = title;
+		}
+		
+		private TableColumnOption(int header, int value, String title) {
+			this.headerSpacing = header;
+			this.valueSpacing = value;
+			this.title = title;
+		}
+		
+		public int getHeaderSpacing() {
+			return headerSpacing;
+		}
+
+		public int getValueSpacing() {
+			return valueSpacing;
+		}
+		
+		public String getTitle() {
+			return title;
+		}
 	}
 }
