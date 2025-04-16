@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 
 public class HDBOfficerActions {
@@ -17,6 +16,7 @@ public class HDBOfficerActions {
     }
 
     public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
+		updateApplicationStatus(user);
         switch (option) {
             case VIEW_PROJECTS:
                 // TODO: filtering, access control etc etc
@@ -27,7 +27,6 @@ public class HDBOfficerActions {
         		BTOProject.display(system.getApplicableProjects(), options);
                 break;
             case JOIN_PROJECT:
-				updateApplicationStatus(user);
                 joinProject(user); 
                 break;
             case CHECK_APPLICATION_STATUS:
