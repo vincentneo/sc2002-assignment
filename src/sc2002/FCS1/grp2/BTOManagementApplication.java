@@ -78,7 +78,8 @@ public class BTOManagementApplication {
 			displayMenu();
 			
 			System.out.print("Select Menu Option: ");
-			response = scanner.nextLine();
+			while (!(response = scanner.nextLine()).isEmpty()); // Since the user actions use mixture of nextLine and nextInt, we need to clear the buffer first.
+
 			if (response.equalsIgnoreCase("exit")) {
 				break;
 			}
