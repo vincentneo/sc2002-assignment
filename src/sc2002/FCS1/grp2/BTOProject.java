@@ -478,7 +478,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     /**
      * Set the total number of officer slots available for the project.
      * @param slots The new total number of officer slots available for the project.
-     * @throws IllegalArgumentException if the number of slots is negative or exceeds the maximum number of officers.
+     * @throws IllegalArgumentException if the number of slots is negative, is below the number of current officers, or exceeds the maximum number of officers.
      */
     public void setTotalOfficerSlots(int slots) throws IllegalArgumentException{
         if (slots > MAX_OFFICER_NUM) {
