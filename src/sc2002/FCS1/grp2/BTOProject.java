@@ -387,85 +387,87 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
     //endregion
 
-    //region Applications and allocation of rooms
-    public void submitApplication(Applicant applicant, FlatType flatType) throws IllegalArgumentException {
-        ArrayList<Flat> remaining = remainingRooms.get(flatType);
-
-        if (remaining.isEmpty()) {
-            throw new IllegalArgumentException("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
-        }
-        
-        applications.add(new Application(this, flatType, ApplicationStatus.PENDING, applicant));
-    }
-
-    // The user inputs index to identify which application to approve/reject/book
-    public void approveApplication(int index) throws IllegalArgumentException {
-        if(applications.isEmpty()) {
-            throw new IllegalArgumentException("There is no applications for the project " + projectName + ".");
-        }
-        else if (index - 1 > applications.size() || index - 1 < 0) {
-            throw new IllegalArgumentException("Invalid input! The index out of bound!");
-        }
-        
-        Application appli = applications.get(index - 1);
-        ApplicationStatus status = appli.getStatus();
-        if (status != ApplicationStatus.PENDING) {
-            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
-        }
-        else if (remainingRooms.get(appli.getFlatType()).isEmpty()) {
-            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-            throw new IllegalArgumentException("The selected room type has been already fully booked!");
-        }
-
-        appli.setStatus(ApplicationStatus.SUCCESSFUL);
-        System.out.println("Approval successful.");
-    }
-
-    public void rejectApplication(int index) throws IllegalArgumentException {
-        if(applications.isEmpty()) {
-            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
-        }
-        else if (index - 1 > applications.size() || index - 1 < 0) {
-            throw new IllegalArgumentException("Invalid input! Index out of bound!");
-        }
-        
-        ApplicationStatus status = applications.get(index - 1).getStatus();
-        if (status != ApplicationStatus.PENDING) {
-            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
-        }
-
-        applications.get(index - 1).setStatus(ApplicationStatus.UNSUCCESSFUL);
-        System.out.println("Rejection successful.");
-    }
-
-    public void bookApplication(int index) throws IllegalArgumentException {
-        if(applications.isEmpty()) {
-            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
-        }
-        else if (index - 1 > applications.size() || index - 1 < 0) {
-            throw new IllegalArgumentException("Invalid input! Index out of bound!");
-        }
-        
-        Application appli = applications.get(index - 1);
-
-        ApplicationStatus status = appli.getStatus();
-        ArrayList<Flat> remaining = remainingRooms.get(appli.getFlatType());
-
-        if (status != ApplicationStatus.SUCCESSFUL) {
-            throw new IllegalArgumentException("Invalid input! The application is not successful!");
-        }
-        else if (remaining.isEmpty()) {
-            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-            throw new IllegalArgumentException("The selected room type has been already fully booked!");
-        }
-
-        appli.setStatus(ApplicationStatus.BOOKED);
-        
-        Flat bookedFlat = remaining.removeLast();
-        bookedFlat.setBookedApplicant(appli.getApplicant());
-        bookedRooms.get(appli.getFlatType()).add(bookedFlat);
-        System.out.println("Booking successful.");
-    }
+    
+    // TODO: Think about next steps for how to handle application (probs move to *Action class)
+//    //region Applications and allocation of rooms
+//    public void submitApplication(Applicant applicant, FlatType flatType) throws IllegalArgumentException {
+//        ArrayList<Flat> remaining = remainingRooms.get(flatType);
+//
+//        if (remaining.isEmpty()) {
+//            throw new IllegalArgumentException("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
+//        }
+//        
+//        applications.add(new Application(this, flatType, ApplicationStatus.PENDING, applicant));
+//    }
+//
+//    // The user inputs index to identify which application to approve/reject/book
+//    public void approveApplication(int index) throws IllegalArgumentException {
+//        if(applications.isEmpty()) {
+//            throw new IllegalArgumentException("There is no applications for the project " + projectName + ".");
+//        }
+//        else if (index - 1 > applications.size() || index - 1 < 0) {
+//            throw new IllegalArgumentException("Invalid input! The index out of bound!");
+//        }
+//        
+//        Application appli = applications.get(index - 1);
+//        ApplicationStatus status = appli.getStatus();
+//        if (status != ApplicationStatus.PENDING) {
+//            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
+//        }
+//        else if (remainingRooms.get(appli.getFlatType()).isEmpty()) {
+//            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
+//            throw new IllegalArgumentException("The selected room type has been already fully booked!");
+//        }
+//
+//        appli.setStatus(ApplicationStatus.SUCCESSFUL);
+//        System.out.println("Approval successful.");
+//    }
+//
+//    public void rejectApplication(int index) throws IllegalArgumentException {
+//        if(applications.isEmpty()) {
+//            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
+//        }
+//        else if (index - 1 > applications.size() || index - 1 < 0) {
+//            throw new IllegalArgumentException("Invalid input! Index out of bound!");
+//        }
+//        
+//        ApplicationStatus status = applications.get(index - 1).getStatus();
+//        if (status != ApplicationStatus.PENDING) {
+//            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
+//        }
+//
+//        applications.get(index - 1).setStatus(ApplicationStatus.UNSUCCESSFUL);
+//        System.out.println("Rejection successful.");
+//    }
+//
+//    public void bookApplication(int index) throws IllegalArgumentException {
+//        if(applications.isEmpty()) {
+//            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
+//        }
+//        else if (index - 1 > applications.size() || index - 1 < 0) {
+//            throw new IllegalArgumentException("Invalid input! Index out of bound!");
+//        }
+//        
+//        Application appli = applications.get(index - 1);
+//
+//        ApplicationStatus status = appli.getStatus();
+//        ArrayList<Flat> remaining = remainingRooms.get(appli.getFlatType());
+//
+//        if (status != ApplicationStatus.SUCCESSFUL) {
+//            throw new IllegalArgumentException("Invalid input! The application is not successful!");
+//        }
+//        else if (remaining.isEmpty()) {
+//            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
+//            throw new IllegalArgumentException("The selected room type has been already fully booked!");
+//        }
+//
+//        appli.setStatus(ApplicationStatus.BOOKED);
+//        
+//        Flat bookedFlat = remaining.removeLast();
+//        bookedFlat.setBookedApplicant(appli.getApplicant());
+//        bookedRooms.get(appli.getFlatType()).add(bookedFlat);
+//        System.out.println("Booking successful.");
+//    }
     
     public void printApplications() {
         if (applications.isEmpty()) {
