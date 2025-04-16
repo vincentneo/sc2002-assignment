@@ -96,6 +96,11 @@ public class HDBManagerActions {
 		
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
 
+		if(projects == null || projects.isEmpty()) {
+            System.out.println("No projects to display.");
+            return;
+        }
+
 		List<BTOProject.TableColumnOption> options = new ArrayList<>();
 		options.add(TableColumnOption.INDEX_NUMBER);
 		options.add(TableColumnOption.ROOM_ONE_UNITS);
@@ -107,6 +112,7 @@ public class HDBManagerActions {
 		options.add(TableColumnOption.OFFICERS);
 		options.add(TableColumnOption.OFFICER_SLOTS);
 		options.add(TableColumnOption.VISIBILITY);
+
 		BTOProject.display(projects, options);
 		
 		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number): ", 1, projects.size());

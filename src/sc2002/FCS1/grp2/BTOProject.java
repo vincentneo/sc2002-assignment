@@ -751,7 +751,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 	 * @param options Additional columns to display.
 	 */
 	static void display(List<BTOProject> projects, List<TableColumnOption> options) {
-		
+        if(projects == null || projects.isEmpty()) {
+            System.out.println("No projects to display.");
+            return;
+        }
+        
 		List<String> values = new ArrayList<>();
 		
 		String headerFormat = "";
