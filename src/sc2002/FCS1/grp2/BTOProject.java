@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.EnumMap;
 import java.util.Set;
 
-//TODO: Error handling
 
 /**
  * A class representing BTO Project containing information for the project and has functions to modify the project information and handle users' applications to the project.
@@ -170,7 +169,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
     //endregion
     
-    
+    /**
+     * Retrieve the connected officers and manager as an object for this project by comparing the names the project has.
+     * @param officers List of officer objects
+     * @param managers List of manager objects
+     */
     public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers, ArrayList<HDBManager> managers) {
     	this.officers = officers
 				    		.stream()
@@ -186,20 +189,36 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
 
     //region Project Name
+    /**
+     * Get the project name of the BTO project.
+     * @return the project name of the BTO project.
+     */
     public String getProjectName() {
         return projectName;
     }
 
+    /**
+     * Set the project name of the BTO project.
+     * @param name the new project name of the BTO project.
+     */
     public void setProjectName(String name) {
         projectName = name;
     }
     //endregion
 
     //region Neighborhood
+    /**
+     * Get the neighborhood of the BTO project.
+     * @return the neighborhood of the BTO project.
+     */
     public String getNeighborhood() {
         return neighborhood;
     }
 
+    /**
+     * Set the neighborhood of the BTO project.
+     * @param neighborhood the new neighborhood of the BTO project.
+     */
     public void setNeighborhood(String neighborhood) {
         this.neighborhood = neighborhood;
     }
@@ -209,6 +228,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     //region Room Units
     //TODO: Get and set for room units
     
+    /**
+     * Get the applicable flat information for specific flat types.
+     * @param applicableTypes Set of flat types to get applicable flats for.
+     * @return  List of FlatInfo objects representing the applicable flats for the given flat types.
+     */
     public List<FlatInfo> getApplicableFlats(Set<FlatType> applicableTypes) {
     	ArrayList<FlatInfo> applicableFlats = new ArrayList<>();
     	for (FlatType type : applicableTypes) {
@@ -218,10 +242,20 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     	return applicableFlats;
     }
     
+    /**
+     * Get the flat information for a specific flat type.
+     * @param type The flat type to get information for.
+     * @return The FlatInfo object representing the flat information for the given flat type.
+     */
     public FlatInfo getFlatForType(FlatType type) {
     	return flats.get(type);
     }
     
+    /**
+     * Set the number of two room units available in the project.
+     * @param twoRoomUnits Number of two room units to set.
+     * @throws IllegalArgumentException if the number of two room units is negative.
+     */
     public void setTwoRoomUnits(int twoRoomUnits) throws IllegalArgumentException{
     	if(twoRoomUnits < 0) {
     		throw new IllegalArgumentException("Number of 2 room units cannot be negative");
@@ -229,6 +263,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     	this.flats.get(FlatType.TWO_ROOM).setRemainingUnits(twoRoomUnits);
     }
     
+    /**
+     * Set the number of three room units available in the project.
+     * @param threeRoomUnits Number of three room units to set.
+     * @throws IllegalArgumentException if the number of three room units is negative.
+     */
     public void setThreeRoomUnits(int threeRoomUnits) throws IllegalArgumentException{
     	if(threeRoomUnits < 0) {
     		throw new IllegalArgumentException("Number of 3 room units cannot be negative");
@@ -236,14 +275,27 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     	this.flats.get(FlatType.THREE_ROOM).setRemainingUnits(threeRoomUnits);
     }
     
+    /**
+     * Get the number of two room units available in the project.
+     * @return Number of two room units available in the project.
+     */
     public int getTwoRoomUnits() {
     	return this.flats.get(FlatType.TWO_ROOM).getRemainingUnits();
     }
     
+    /**
+     * Get the number of three room units available in the project.
+     * @return Number of three room units available in the project.
+     */
     public int getThreeRoomUnits() {
     	return this.flats.get(FlatType.THREE_ROOM).getRemainingUnits();
     }
 
+    /**
+     * Set the price of two room units in the project.
+     * @param twoRoomPrice Price of two room units to set.
+     * @throws IllegalArgumentException if the price is negative.
+     */
     public void setTwoRoomPrice(int twoRoomPrice) throws IllegalArgumentException {
         if (twoRoomPrice < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
@@ -251,6 +303,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         this.flats.get(FlatType.TWO_ROOM).setPrice(twoRoomPrice);
     }
 
+    /**
+     * Set the price of three room units in the project.
+     * @param threeRoomPrice Price of three room units to set.
+     * @throws IllegalArgumentException if the price is negative.
+     */
     public void setThreeRoomPrice(int threeRoomPrice) throws IllegalArgumentException {
         if (threeRoomPrice < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
@@ -258,10 +315,18 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         this.flats.get(FlatType.THREE_ROOM).setPrice(threeRoomPrice);
     }
 
+    /**
+     * Get the price of two room units in the project.
+     * @return Price of two room units in the project.
+     */
     public int getTwoRoomPrice() {
         return this.flats.get(FlatType.TWO_ROOM).getPrice();
     }
 
+    /**
+     * Get the price of three room units in the project.
+     * @return Price of three room units in the project.
+     */
     public int getThreeRoomPrice() {
         return this.flats.get(FlatType.THREE_ROOM).getPrice();
     }
@@ -270,26 +335,52 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
     //region Dates
 
+    /**
+     * Get the opening date of the project.
+     * @return The opening date of the project.
+     */
     public LocalDate getOpeningDate() {
         return openingDate;
     }
 
+    /**
+     * Get the closing date of the project.
+     * @return The closing date of the project.
+     */
     public LocalDate getClosingDate() {
         return closingDate;
     }
 
+    /**
+     * Get the opening date as a string.
+     * @return The opening date as a string.
+     */
     public String getStringOpeningDate() {
         return openingDate.toString();
     }
 
+    /**
+     * Get the closing date as a string.
+     * @return The closing date as a string.
+     */
     public String getStringEndDate() {
         return closingDate.toString();
     }
 
+    /**
+     * Set the opening date of the project.
+     * @param date The new opening date of the project.
+     * @throws DateTimeException if the new opening date is after the closing date.
+     */
     public void setOpeningDate(String date) throws DateTimeException {
         setOpeningDate(LocalDate.parse(date));
     }
 
+    /**
+     * Set the opening date of the project.
+     * @param date The new opening date of the project.
+     * @throws DateTimeException if the new opening date is after the closing date.
+     */
     public void setOpeningDate(LocalDate date) throws DateTimeException {
         if(date.compareTo(closingDate) > 0) {
             throw new DateTimeException("The new opening date is greater than the closing date!");
@@ -297,10 +388,20 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         openingDate = date;
     }
 
+    /**
+     * Set the closing date of the project.
+     * @param date The new closing date of the project.
+     * @throws DateTimeException if the new closing date is before the opening date.
+     */
     public void setClosingDate(String date) throws DateTimeException {
         setClosingDate(LocalDate.parse(date));
     }
 
+    /**
+     * Set the closing date of the project.
+     * @param date The new closing date of the project.
+     * @throws DateTimeException if the new closing date is before the opening date.
+     */
     public void setClosingDate(LocalDate date) throws DateTimeException {
         if(date.compareTo(openingDate) < 0) {
             throw new DateTimeException("The new closing date is lesser than the opening date!");
@@ -308,40 +409,74 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         closingDate = date;
     }
 
+    /**
+     * Check if the given date is within the opening and closing dates of the project.
+     * @param date The date to check.
+     * @return true if the date is within the opening and closing dates, false otherwise.
+     */
     public boolean isDateWithin(String date) {
         return isDateWithin(LocalDate.parse(date));
     }
 
+    /**
+     * Check if the given date is within the opening and closing dates of the project.
+     * @param date The date to check.
+     * @return true if the date is within the opening and closing dates, false otherwise.
+     */
     public boolean isDateWithin(LocalDate date) {
         return date.compareTo(closingDate) <= 0 && date.compareTo(openingDate) >= 0;
     }
     //endregion
 
     //region Visibility 
+    /**
+     * Get the visibility of the project.
+     * @return true if the project is visible, false otherwise.
+     */
     public boolean getVisibility() {
         return visibility;
     }
 
+    /**
+     * Toggle the visibility of the project.
+     */
     public void toggleVisibility() {
         visibility = !visibility;
     }
 
+    /**
+     * Set the visibility of the project.
+     * @param visibility The new visibility of the project.
+     */
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
     //endregion
 
     //region Manager In Charge
+    /**
+     * Get the object of the manager in charge of the project.
+     * @return The object of the manager in charge of the project.
+     */
     public HDBManager getManagerInCharge() {
         return managerInCharge;
     }
     //endregion
 
     //region Officers
+    /**
+     * Get the total number of officer slots available for the project.
+     * @return The total number of officer slots available for the project.
+     */
     public int getTotalOfficerSlots() {
         return totalOfficerSlots;
     }
 
+    /**
+     * Set the total number of officer slots available for the project.
+     * @param slots The new total number of officer slots available for the project.
+     * @throws IllegalArgumentException if the number of slots is negative or exceeds the maximum number of officers.
+     */
     public void setTotalOfficerSlots(int slots) throws IllegalArgumentException{
         if (slots > MAX_OFFICER_NUM) {
             throw new IllegalArgumentException("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
@@ -356,10 +491,19 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         totalOfficerSlots = slots;
     }
 
+    /**
+     * Get the list of officers assigned to the project.
+     * @return The list of officers assigned to the project.
+     */
     public List<HDBOfficer> getOfficers() {
         return officers;
     }
 
+    /**
+     * Add an officer to the project.
+     * @param officer The officer to add.
+     * @throws IllegalArgumentException if the officer is null, already registered, or if the project is full.
+     */
     public void addOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if (officers.size() >= totalOfficerSlots) {
             throw new IllegalArgumentException("Invalid Input! The project is full. Cannot register more officers.");
@@ -374,6 +518,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         officers.add(officer);
     }
 
+    /**
+     * Remove an officer from the project.
+     * @param officer The officer to remove.
+     * @throws IllegalArgumentException if the officer is not registered or if the project has no officers.
+     */
     public void removeOfficer(HDBOfficer officer) throws IllegalArgumentException {
         if(officers.contains(officer)) {
             officers.remove(officer);
@@ -469,6 +618,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 //        System.out.println("Booking successful.");
 //    }
     
+
+    /**
+     * Print the list of applications for the project.
+     */
     public void printApplications() {
         if (applications.isEmpty()) {
             System.out.println("There is no applications for project " + projectName + ".");
@@ -481,6 +634,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
     //endregion
     
+    /**
+     * Check if the given flat types are eligible for application.
+     * @param flatTypes Set of flat types to check for eligibility.
+     * @return true if the project has available units for the given flat types, false otherwise.
+     */
     public boolean isEligible(Set<FlatType> flatTypes) {
     	for (FlatType type : flatTypes) {
     		if (flats.get(type).getRemainingUnits() > 0) return true;
@@ -489,6 +647,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     	return false;
     }
     
+    /**
+     * Get the list of officer names assigned to the project.
+     * @return List of officer names assigned to the project.
+     */
     private List<String> getHDBOfficersNames() {
     	return officers
     			.stream()
@@ -496,6 +658,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     			.collect(Collectors.toList());
     }
 
+
+    /**
+     * Get the string representation of the BTO project.
+     * @return The string representation of the BTO project.
+     */
     @Override
 	public String toString() {
         ArrayList<String> officerNames = new ArrayList<String>();
@@ -520,6 +687,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
                 "Visibility=" + visibility + ".";
     }
 
+    /**
+     * Encode the BTO project to a CSV string.
+     * @return The CSV string representation of the BTO project.
+     */
 	@Override
 	public String encode() {
 		// TODO: Flat Type should be stored not hardcoded.
@@ -558,6 +729,10 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				);
 	}
 
+    /**
+     * Get the type of the source file for the BTO project.
+     * @return The type of the source file for the BTO project.
+     */
 	@Override
 	public CSVFileTypes sourceFileType() {
 		// TODO Auto-generated method stub
