@@ -141,10 +141,11 @@ public class HDBManagerActions {
 		.addContent("7. Opening Date")
 		.addContent("8. Closing Date")
 		.addContent("9. Officer Slots")
+		.addContent("10. Visibility")
 		.build()
 		.display();
 		
-		int choice = superScanner.nextIntUntilCorrect("Choose an option: ", 1, 9);
+		int choice = superScanner.nextIntUntilCorrect("Choose an option: ", 1, 10);
 		
 		switch(choice) {
 			case 1:
@@ -196,7 +197,20 @@ public class HDBManagerActions {
 				int newOfficerSlots = scanner.nextInt();
 				selectedProject.setTotalOfficerSlots(newOfficerSlots);
 				break;
-			
+			case 10:
+				System.out.println("Would you like to toggle visibility? (Y/N)");
+				String visibility = scanner.next();
+				if(visibility.equalsIgnoreCase("Y")) {
+					selectedProject.toggleVisibility();
+					System.out.println("Visibility has been toggled");
+				}
+				else if(visibility.equalsIgnoreCase("N")) {
+					System.out.println("Visibility remains unchanged");
+				}
+				else {
+					System.out.println("Invalid input, visibility remains unchanged");
+				}
+				break;
 			default:
 				// technically this wont even hit due to nextint min max.
 				System.out.println("Invalid option. Please try again.");
@@ -226,7 +240,7 @@ public class HDBManagerActions {
 		
 	}
 	
-	private static void toggleVisibility(HDBManager manager) {
+/* 	private static void toggleVisibility(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		
 		System.out.println("All Projects: ");
@@ -245,7 +259,7 @@ public class HDBManagerActions {
 	
 	private static void approveApplication(HDBManager manager) {
 		
-	}
+	} */
 	
 	private static void viewAllProjects(HDBManager manager) {
 		System.out.println("All Project listings:");
