@@ -153,78 +153,85 @@ public class HDBManagerActions {
 		
 		int choice = superScanner.nextIntUntilCorrect("Choose an option: ", 1, 10);
 		
-		switch(choice) {
-			case 1:
-				System.out.println("What would you like to change Project name to?"); //need unique project name
-				String newName = scanner.next();
-				selectedProject.setProjectName(newName);
-				System.out.println("Project name have been updated");
-				System.out.println(selectedProject);
-				break;
-			
-			case 2:
-				System.out.println("What would you like to change Neighbourhood to?");
-				String newNeighbourhood = scanner.next();
-				selectedProject.setNeighborhood(newNeighbourhood);
-				break;
+		try {
+			switch(choice) {
+				case 1:
+					System.out.println("What would you like to change Project name to?"); //need unique project name
+					String newName = scanner.next();
+					selectedProject.setProjectName(newName);
+					System.out.println("Project name have been updated");
+					System.out.println(selectedProject);
+					break;
 				
-			case 3:
-				System.out.println("What would you like to change maxRoomOne to?");
-				int newMax = scanner.nextInt();
-				selectedProject.setTwoRoomUnits(newMax);
-				break;
-			case 4:
-				System.out.println("What would you like to change priceRoomOne to?");
-				int newMaxprice = scanner.nextInt();
-				selectedProject.setTwoRoomPrice(newMaxprice);
-				break;
-			case 5:
-				System.out.println("What would you like to change maxRoomTwo to?");
-				int newMax2 = scanner.nextInt();
-				selectedProject.setThreeRoomUnits(newMax2);
-				break;
-			case 6:
-				System.out.println("What would you like to change priceRoomTwo to?");
-				int newMaxprice2 = scanner.nextInt();
-				selectedProject.setThreeRoomPrice(newMaxprice2);
-				break;
-			case 7:
-				System.out.println("What would you like to change openingDate to?");
-				LocalDate newOpening = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
-				selectedProject.setOpeningDate(newOpening);
-				break;
-			case 8:
-				System.out.println("What would you like to change closingDate to?");
-				LocalDate newClosing = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
-				selectedProject.setClosingDate(newClosing);
-				break;
-			case 9:
-				System.out.println("What would you like to change officerSlots to?");
-				int newOfficerSlots = scanner.nextInt();
-				selectedProject.setTotalOfficerSlots(newOfficerSlots);
-				break;
-			case 10:
-				System.out.println("Would you like to toggle visibility? (Y/N)");
-				String visibility = scanner.next();
-				if(visibility.equalsIgnoreCase("Y")) {
-					selectedProject.toggleVisibility();
-					System.out.println("Visibility has been toggled");
-				}
-				else if(visibility.equalsIgnoreCase("N")) {
-					System.out.println("Visibility remains unchanged");
-				}
-				else {
-					System.out.println("Invalid input, visibility remains unchanged");
-				}
-				break;
-			default:
-				// technically this wont even hit due to nextint min max.
-				System.out.println("Invalid option. Please try again.");
-				break;
-				
+				case 2:
+					System.out.println("What would you like to change Neighbourhood to?");
+					String newNeighbourhood = scanner.next();
+					selectedProject.setNeighborhood(newNeighbourhood);
+					break;
+					
+				case 3:
+					System.out.println("What would you like to change maxRoomOne to?");
+					int newMax = scanner.nextInt();
+					selectedProject.setTwoRoomUnits(newMax);
+					break;
+				case 4:
+					System.out.println("What would you like to change priceRoomOne to?");
+					int newMaxprice = scanner.nextInt();
+					selectedProject.setTwoRoomPrice(newMaxprice);
+					break;
+				case 5:
+					System.out.println("What would you like to change maxRoomTwo to?");
+					int newMax2 = scanner.nextInt();
+					selectedProject.setThreeRoomUnits(newMax2);
+					break;
+				case 6:
+					System.out.println("What would you like to change priceRoomTwo to?");
+					int newMaxprice2 = scanner.nextInt();
+					selectedProject.setThreeRoomPrice(newMaxprice2);
+					break;
+				case 7:
+					System.out.println("What would you like to change openingDate to?");
+					LocalDate newOpening = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
+					selectedProject.setOpeningDate(newOpening);
+					break;
+				case 8:
+					System.out.println("What would you like to change closingDate to?");
+					LocalDate newClosing = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
+					selectedProject.setClosingDate(newClosing);
+					break;
+				case 9:
+					System.out.println("What would you like to change officerSlots to?");
+					int newOfficerSlots = scanner.nextInt();
+					selectedProject.setTotalOfficerSlots(newOfficerSlots);
+					break;
+				case 10:
+					System.out.println("Would you like to toggle visibility? (Y/N)");
+					String visibility = scanner.next();
+					if(visibility.equalsIgnoreCase("Y")) {
+						selectedProject.toggleVisibility();
+						System.out.println("Visibility has been toggled");
+					}
+					else if(visibility.equalsIgnoreCase("N")) {
+						System.out.println("Visibility remains unchanged");
+					}
+					else {
+						System.out.println("Invalid input, visibility remains unchanged");
+					}
+					break;
+				default:
+					// technically this wont even hit due to nextint min max.
+					System.out.println("Invalid option. Please try again.");
+					break;
+			}
 		}
+		catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Please try again.");
+			return;
+		}
+
 		system.saveChanges(CSVFileTypes.PROJECT_LIST);
-		}
+	}
 	
 	
 	private static void deleteProject(HDBManager manager) {
