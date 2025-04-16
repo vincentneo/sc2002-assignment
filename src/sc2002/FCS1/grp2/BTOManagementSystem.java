@@ -171,10 +171,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	public ArrayList<BTOProject> getApplicableProjects() {
 		if (activeUser instanceof HDBManager) {
 			return projects.stream()
-					.filter(p -> p.getManagerInCharge()
-							.getNric()
-							.equals(activeUser.getNric())
+					.filter(p -> p.getManagerInCharge().equals(activeUser)
 							)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		else if (activeUser instanceof HDBOfficer) {
+			return projects.stream()
+					.filter(p -> p.getOfficers().contains(activeUser))
 					.collect(Collectors.toCollection(ArrayList::new));
 		}
 		else if (activeUser instanceof Applicant) {

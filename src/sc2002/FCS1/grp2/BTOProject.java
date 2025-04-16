@@ -597,7 +597,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		String header;
 		
 		if (displayIndex) {
-			header = String.format("%3s.   %-25s │ %-25s │ %-12s │ %-15s │ %-15s", "", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
+			header = String.format("%3s    %-25s │ %-25s │ %-12s │ %-15s │ %-15s", "No.", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");
 		}
 		else {
 			header = String.format("%-25s │ %-25s │ %-12s │ %-15s │ %-15s", "Name", "Neighborhood", "Manager", "Opening Date", "Closing Date");

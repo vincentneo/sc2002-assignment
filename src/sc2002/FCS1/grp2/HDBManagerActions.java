@@ -116,6 +116,7 @@ public class HDBManagerActions {
 		System.out.println("What would you like to edit?");
 		
 		new DisplayMenu.Builder()
+		.setTitle("Options")
 		.addContent("1. Project Name")
 		.addContent("2. Project Neighbourhood")
 		.addContent(String.format("3. %s Remaining Slots", FlatType.TWO_ROOM))
