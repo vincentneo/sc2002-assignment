@@ -2,8 +2,11 @@ package sc2002.FCS1.grp2;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 
 public class HDBManagerActions {
 	private static BTOManagementSystem system;
@@ -92,7 +95,19 @@ public class HDBManagerActions {
 		
 		
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
-		BTOProject.display(projects, true);
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_ONE_PRICE);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_PRICE);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+		options.add(TableColumnOption.OFFICERS);
+		options.add(TableColumnOption.OFFICER_SLOTS);
+		options.add(TableColumnOption.VISIBILITY);
+		BTOProject.display(projects, options);
 		
 		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number): ", 1, projects.size());
 		BTOProject selectedProject = projects.get(choose-1);

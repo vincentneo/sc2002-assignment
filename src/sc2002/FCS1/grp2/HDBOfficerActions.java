@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
+
 public class HDBOfficerActions {
 
     private static BTOManagementSystem system;
@@ -18,7 +20,11 @@ public class HDBOfficerActions {
         switch (option) {
             case VIEW_PROJECTS:
                 // TODO: filtering, access control etc etc
-                BTOProject.display(system.getProjects(), false);
+        		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+        		options.add(TableColumnOption.MANAGER);
+        		options.add(TableColumnOption.OPENING_DATE);
+        		options.add(TableColumnOption.CLOSING_DATE);
+        		BTOProject.display(system.getApplicableProjects(), options);
                 break;
             case JOIN_PROJECT:
 				updateApplicationStatus(user);

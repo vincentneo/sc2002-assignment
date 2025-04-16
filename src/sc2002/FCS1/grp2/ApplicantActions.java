@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
 public class ApplicantActions {
@@ -37,29 +38,23 @@ public class ApplicantActions {
 			System.out.println("Unfortunately, there is currently no BTO projects suitable for you to apply.");
 			return;
 		}
-		
-		BTOProject.display(projects, false);
+
+		List<BTOProject.TableColumnOption> viewingOptions = new ArrayList<>();
+		viewingOptions.add(TableColumnOption.OPENING_DATE);
+		viewingOptions.add(TableColumnOption.CLOSING_DATE);
+		BTOProject.display(projects, viewingOptions);
 		
 		boolean applyBTO = sscanner.nextBoolUntilCorrect("Would you like to apply for a BTO? (Y/N): ");
 		
 		if (!applyBTO) {
 			return;
 		}
-		
-		DisplayMenu.Builder listingMenu = new DisplayMenu.Builder();
-		
-		listingMenu.addContent(String.format("%3s │ %-15s │ %-15s", "No.", "Project Name", "Neighborhood"));
-		listingMenu.addDivider();
-		
-		for (int i = 0; i < projects.size(); i++) {
-			BTOProject project = projects.get(i);
-			listingMenu.addContent(String.format("%3d │ %-15s │ %-15s", i + 1, project.getProjectName(), project.getNeighborhood()));
-		}
-		
-		listingMenu.addDivider();
-		listingMenu.addContent("To return, type \"back\"");
-		
-		listingMenu.build().display();
+
+		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
+		listingOptions.add(TableColumnOption.INDEX_NUMBER);
+		BTOProject.display(projects, listingOptions);
+
+		System.out.println("To return, type \"back\"");
 		
 		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
 		
@@ -139,7 +134,10 @@ public class ApplicantActions {
 			return;
 		}
 		
-		BTOProject.display(projects, true);
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		BTOProject.display(projects, options);
 		
 		int projectOption = sscanner.nextIntUntilCorrect("Which project would you like to enquire about? Choose a number: ", 1, projects.size());
 		
