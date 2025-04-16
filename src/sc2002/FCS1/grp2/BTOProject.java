@@ -484,8 +484,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         if (slots > MAX_OFFICER_NUM) {
             throw new IllegalArgumentException("Invalid Input! The number exceeds maximum officer slots (" + MAX_OFFICER_NUM + ").");
         }
-        else if (slots > officers.size()) {
-            throw new IllegalArgumentException("Invalid Input! The number exceeds current number of assigned HBD officers ()" + officers.size() + ").");
+        else if (slots < officers.size()) {
+            throw new IllegalArgumentException("Invalid Input! The number is below the current number of assigned HBD officers (" + officers.size() + ").");
         }
         else if (slots < 0) {
             throw new IllegalArgumentException("Invalid Input! The number cannot be below zero.");
