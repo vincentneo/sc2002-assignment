@@ -25,7 +25,8 @@ public class HDBOfficerActions {
         		options.add(TableColumnOption.MANAGER);
         		options.add(TableColumnOption.OPENING_DATE);
         		options.add(TableColumnOption.CLOSING_DATE);
-        		BTOProject.display(system.getApplicableProjects(), options);
+				
+        		BTOProject.display(system.filterProjects(system.getApplicableProjects()), options);
                 break;
             case JOIN_PROJECT:
                 joinProject(user); 

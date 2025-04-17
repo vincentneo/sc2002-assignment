@@ -203,14 +203,14 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * @param filteredProjects The list of projects to be filtered.
 	 * @return The filtered list of projects.
 	 */
-	public ArrayList<BTOProject> getProjectsFilteredBy (ArrayList<BTOProject> filteredProjects) {
+	public ArrayList<BTOProject> filterProjects (ArrayList<BTOProject> filteredProjects) {
 		ListingFilter filter = activeUser.getListingFilter();
 		
 		switch (filter) {
             case DEFAULT: // Alphabetical order by project name
-                filteredProjects = filteredProjects.stream()
-                        .sorted(Comparator.comparing(BTOProject::getProjectName))
-                        .collect(Collectors.toCollection(ArrayList::new));
+				filteredProjects = filteredProjects.stream()
+						.sorted(Comparator.comparing(p -> p.getProjectName().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
                 break;
             case TWO_ROOM:
                 filteredProjects = filteredProjects.stream()

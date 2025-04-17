@@ -39,6 +39,13 @@ public class ApplicantActions {
 			return;
 		}
 
+		projects = system.filterProjects(projects);
+
+		if (projects.isEmpty()) {
+			System.out.println("Unfortunately, there is currently no BTO projects suitable for your filter citeria.");
+			return;
+		}
+
 		List<BTOProject.TableColumnOption> viewingOptions = new ArrayList<>();
 		viewingOptions.add(TableColumnOption.OPENING_DATE);
 		viewingOptions.add(TableColumnOption.CLOSING_DATE);
@@ -133,7 +140,13 @@ public class ApplicantActions {
 			System.out.println("As you are not eligible to apply a BTO flat at this moment, you cannot enquire about current BTO projects.");
 			return;
 		}
-		
+
+		projects = system.filterProjects(projects);
+
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
+		}
 
 		List<BTOProject.TableColumnOption> options = new ArrayList<>();
 		options.add(TableColumnOption.INDEX_NUMBER);
