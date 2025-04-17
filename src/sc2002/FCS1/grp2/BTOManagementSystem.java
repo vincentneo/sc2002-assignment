@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import java.time.LocalDate;
 
 /**
@@ -329,8 +330,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 //		project.retrieveConnectedUsers(officers);
 		System.out.println("\nProject added successfully : ");
-		System.out.println(projects);
-
+		System.out.println(project.toString());
 	}
 
 	public void deleteProject(BTOProject project) throws Exception {

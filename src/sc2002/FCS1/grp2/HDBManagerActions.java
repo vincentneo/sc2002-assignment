@@ -45,31 +45,47 @@ public class HDBManagerActions {
 		}
 	}
 	
-	private static boolean checkProjectCreationEligibility() {
-		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
+	private static boolean checkProjectCreationEligibility(LocalDate openingDate, LocalDate closingDate) {
+		// ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
 		
-		LocalDate today = LocalDate.now();
-		long count = applicableProjects.stream()
-				.filter(p -> {
-					if (today.isEqual(p.getOpeningDate())) {
-						return true;
-					}
+		// LocalDate today = LocalDate.now();
+		// long count = applicableProjects.stream()
+		// 		.filter(p -> {
+		// 			if (today.isEqual(p.getOpeningDate())) {
+		// 				return true;
+		// 			}
 					
-					if (today.isEqual(p.getClosingDate())) {
-						return true;
-					}
+		// 			if (today.isEqual(p.getClosingDate())) {
+		// 				return true;
+		// 			}
 						
-					return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
-					})
-				.count();
-		return count < 1;
+		// 			return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
+		// 			})
+		// 		.count();
+		// return count < 1;
+
+		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
+
+		for(BTOProject project : applicableProjects) {
+			if (project.isDateWithin(closingDate) || project.isDateWithin(openingDate)) {
+				System.out.println("The new project's dates overlap with an existing project.");
+				System.out.println("Existing Project: " + project.getProjectName() + " (" + project.getOpeningDate() + " - " + project.getClosingDate() + ")");
+				return false; // Dates overlap with an existing project
+			}
+		}
+
+		return true;
 	}
 	
 	private static void createProject(HDBManager manager) throws Exception {
-		if (!checkProjectCreationEligibility()) {
-			System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
-			return;
-		}
+		// Managers are able to create projects if the dates of the project are not within the range of any other projects they are in charge regardless of current time.
+		
+		// if (!checkProjectCreationEligibility()) {
+		// 	System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
+		// 	return;
+		// } 
+
+	
 		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -86,6 +102,11 @@ public class HDBManagerActions {
 		
 		LocalDate openingDate = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
+
+		if (!checkProjectCreationEligibility(openingDate, closingDate)) {
+			System.out.println("You can only have one active project on hand on within an application period. Hence you are not allowed to create a new project at that time.");
+			return;
+		}
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 
