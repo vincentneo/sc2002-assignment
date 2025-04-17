@@ -86,14 +86,20 @@ public class HDBManagerActions {
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 
-		
-		
-		BTOProject project = new BTOProject(projectName, neighbourhood,
+		BTOProject newProject;
+		try {
+			newProject = new BTOProject(projectName, neighbourhood,
 				maxTwoRoom, maxThreeRoom, priceTwoRoom, priceThreeRoom,
 				openingDate, closingDate, manager, officerSlots);
-		system.addProject(project);
+		}
+		catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Please try again.");
+			return;
+		}
+
+		system.addProject(newProject);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
-		
 	}
 	
 	private static void editProject(HDBManager manager) {
