@@ -152,7 +152,7 @@ public class HDBOfficerActions {
 		}
 		
 		try {
-			selectedProject.addOfficerToPendingList(user);
+			selectedProject.addCurrentUserToPendingList();
 		}
 		catch (Exception e) {
 			new Style.Builder()
