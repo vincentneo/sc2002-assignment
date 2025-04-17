@@ -1,6 +1,7 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -194,6 +195,91 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 		
 		return new ArrayList<>();
+	}
+
+	/**
+	 * Get the projects that are filtered by the active user's filter.
+	 * 
+	 * @param filteredProjects The list of projects to be filtered.
+	 * @return The filtered list of projects.
+	 */
+	public ArrayList<BTOProject> getProjectsFilteredBy (ArrayList<BTOProject> filteredProjects) {
+		ListingFilter filter = activeUser.getListingFilter();
+		
+		switch (filter) {
+            case DEFAULT: // Alphabetical order by project name
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getProjectName))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case TWO_ROOM:
+                filteredProjects = filteredProjects.stream()
+                        .filter(p -> p.getTwoRoomUnits() > 0)
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case THREE_ROOM:   
+                filteredProjects = filteredProjects.stream()
+                        .filter(p -> p.getThreeRoomUnits() > 0)
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case TWO_ROOM_PRICE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getTwoRoomPrice).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case TWO_ROOM_PRICE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getTwoRoomPrice))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case THREE_ROOM_PRICE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getThreeRoomPrice).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case THREE_ROOM_PRICE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getThreeRoomPrice))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case OPENING_DATE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getOpeningDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case OPENING_DATE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getOpeningDate).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case CLOSING_DATE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getClosingDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case CLOSING_DATE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getClosingDate).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case NAME: // Search based on keyword in filter
+                String nameKeyword = filter.getKeyword().trim();
+                filteredProjects = filteredProjects.stream()
+                        .filter(p -> p.getProjectName().toLowerCase().contains(nameKeyword.toLowerCase()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case NEIGHBORHOOD: // Search based on keyword in filter
+                String neighborhoodKeyword = filter.getKeyword().trim();
+                filteredProjects = filteredProjects.stream()
+                        .filter(p -> p.getNeighborhood().toLowerCase().contains(neighborhoodKeyword.toLowerCase()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case null:
+                // No filtering applied, keep the original list
+                break;
+        }
+
+		return filteredProjects;
 	}
 	
 	/**
