@@ -237,21 +237,45 @@ public class HDBManagerActions {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
-		System.out.println("All Project listings: ");
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+
+		if(projects == null || projects.isEmpty()) {
+            System.out.println("No projects to display.");
+            return;
+        }
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+
+		BTOProject.display(projects, options);
 		
-		ArrayList<BTOProject> projects = system.getProjects();
-		for(int i = 0; i<projects.size(); i++) {
-			System.out.println((i+1) + ". " + projects.get(i));
+		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to delete? (enter the corresponding number): ", 1, projects.size());
+		BTOProject selectedProject = projects.get(choose-1);
+
+		System.out.println("Would you delete project " + selectedProject.getProjectName() + "? (Y/N) : ");
+		String visibility = scanner.nextLine();
+		if(visibility.equalsIgnoreCase("Y")) {
+			try {
+				system.deleteProject(selectedProject);
+			}
+			catch (Exception e) {
+				System.out.println("Error: " + e.getMessage());
+				System.out.println("Please try again.");
+				return;
+			}
+
+			System.out.println("Project " + selectedProject.getProjectName() + " has been deleted");
 		}
-
-
-		System.out.println("Which Project listing would you like to delete?");
-		int choice = scanner.nextInt();
-		BTOProject removed = projects.remove(choice-1);
-		system.saveChanges(null);
-		System.out.println("Project " + removed.getProjectName() + "has been deleted");
-		
-		
+		else if(visibility.equalsIgnoreCase("N")) {
+			System.out.println("Project remains undeleted");
+		}
+		else {
+			System.out.println("Invalid input, project remains undeleted");
+		}	
 	}
 	
 /* 	private static void toggleVisibility(HDBManager manager) {

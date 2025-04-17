@@ -218,6 +218,15 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 //		project.retrieveConnectedUsers(officers);
 		System.out.println(projects);
 	}
+
+	public void deleteProject(BTOProject project) throws Exception {
+		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
+		if (project.getManagerInCharge() != activeUser) throw new InsufficientAccessRightsException();
+		if (projects.contains(project) == false) throw new Exception("Project not found in system.");
+		
+		projects.remove(project);
+		saveChanges(CSVFileTypes.PROJECT_LIST);
+	}
 	
 	public void addApplication(Application application) throws Exception {
 		if (!(isActiveUserPermitted(Applicant.class) || isActiveUserPermitted(HDBOfficer.class))) throw new InsufficientAccessRightsException();
