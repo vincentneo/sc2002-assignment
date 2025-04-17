@@ -221,6 +221,7 @@ public class BTOManagementApplication {
 			if (remainingTries == 0) {
 				System.out.println("Too many failed login attempts. Please try again later.");
 				login();
+				return;
 			}
 			System.out.println("Invalid password.");
 			System.out.print("Password: ");
