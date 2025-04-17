@@ -204,23 +204,14 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * @return The filtered list of projects.
 	 */
 	public ArrayList<BTOProject> filterProjects (ArrayList<BTOProject> filteredProjects) {
+		ListingSort sort = activeUser.getListingSort();
 		ListingFilter filter = activeUser.getListingFilter();
 		
-		switch (filter) {
+		switch (sort) {
             case DEFAULT: // Alphabetical order by project name
 				filteredProjects = filteredProjects.stream()
 						.sorted(Comparator.comparing(p -> p.getProjectName().toLowerCase()))
 						.collect(Collectors.toCollection(ArrayList::new));
-                break;
-            case TWO_ROOM:
-                filteredProjects = filteredProjects.stream()
-                        .filter(p -> p.getTwoRoomUnits() > 0)
-                        .collect(Collectors.toCollection(ArrayList::new));
-                break;
-            case THREE_ROOM:   
-                filteredProjects = filteredProjects.stream()
-                        .filter(p -> p.getThreeRoomUnits() > 0)
-                        .collect(Collectors.toCollection(ArrayList::new));
                 break;
             case TWO_ROOM_PRICE_DESCENDING:
                 filteredProjects = filteredProjects.stream()
@@ -262,22 +253,39 @@ public class BTOManagementSystem implements EnquiriesDelegate {
                         .sorted(Comparator.comparing(BTOProject::getClosingDate).reversed())
                         .collect(Collectors.toCollection(ArrayList::new));
                 break;
-            case NAME: // Search based on keyword in filter
-                String nameKeyword = filter.getKeyword().trim();
-                filteredProjects = filteredProjects.stream()
-                        .filter(p -> p.getProjectName().toLowerCase().contains(nameKeyword.toLowerCase()))
-                        .collect(Collectors.toCollection(ArrayList::new));
-                break;
-            case NEIGHBORHOOD: // Search based on keyword in filter
-                String neighborhoodKeyword = filter.getKeyword().trim();
-                filteredProjects = filteredProjects.stream()
-                        .filter(p -> p.getNeighborhood().toLowerCase().contains(neighborhoodKeyword.toLowerCase()))
-                        .collect(Collectors.toCollection(ArrayList::new));
-                break;
             case null:
-                // No filtering applied, keep the original list
+                // No sort applied, keep the original list
                 break;
         }
+
+		switch(filter) {
+			case DEFAULT:
+				// No filter applied, keep the original list
+				break;
+			case TWO_ROOM:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getTwoRoomUnits() > 0)
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case THREE_ROOM:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getThreeRoomUnits() > 0)
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case NAME:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getProjectName().toLowerCase().contains(filter.getKeyword().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case NEIGHBORHOOD:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getNeighborhood().toLowerCase().contains(filter.getKeyword().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case null:
+				// No filter applied, keep the original list
+				break;
+		}
 
 		return filteredProjects;
 	}

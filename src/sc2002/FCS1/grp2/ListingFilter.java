@@ -1,71 +1,56 @@
 package sc2002.FCS1.grp2;
-
 /**
- * This class is used to filter the listings based on certain criteria.
+ * Enum representing different filetrs for listing.
+ * Each enum value corresponds to a specific filter.
  */
 public enum ListingFilter {
-    DEFAULT, // Alphabetical order
-    TWO_ROOM,
-    THREE_ROOM,
-    TWO_ROOM_PRICE_DESCENDING,
-    TWO_ROOM_PRICE_ASCENDING,
-    THREE_ROOM_PRICE_DESCENDING,
-    THREE_ROOM_PRICE_ASCENDING,
-    OPENING_DATE_ASCENDING,
-    OPENING_DATE_DESCENDING,
-    CLOSING_DATE_ASCENDING,
-    CLOSING_DATE_DESCENDING,
-    NAME,
-    NEIGHBORHOOD;
-
-    // Add more filters as needed
-
+    DEFAULT, // No filter
+    TWO_ROOM, // Filter with at least 1 2-room unit
+    THREE_ROOM, // Filter with at least 1 3-room unit
+    NAME, // Filter with keywords in the name of the project
+    NEIGHBORHOOD; // Filter with keywords in the neighborhood of the project
+    
     /**
-     * The keyword used for filtering.
-     * This is used to filter the listings based on the keyword.
-     * Eg): SEARCH BY NAME, SEARCH BY NEIGHBORHOOD
+     * The keyword associated with this enum value.
      */
     private String keyword;
 
     /**
-     * Default constructor for the ListingFilter enum.
-     * This constructor is used to create a default filter with no keyword.
+     * Default constructor for ListingFilter.
+     * Initializes the keyword to null.
      */
-    private ListingFilter() {
+    ListingFilter() {
         this.keyword = null;
     }
 
     /**
-     * Constructor for the ListingFilter enum with a keyword.
-     * This constructor is used to create a filter with a specific keyword.
-     *
-     * @param keyword The keyword used for filtering.
+     * Constructor for ListingFilter with a specific keyword.
+     * @param keyword the keyword associated with this enum value
      */
-    private ListingFilter(String keyword) {
+    ListingFilter(String keyword) {
         this.keyword = keyword;
-    }
+    } 
+
 
     /**
-     * Gets the keyword used for filtering.
-     *
-     * @return The keyword used for filtering.
+     * Returns the keyword associated with this enum value.
+     * @return the keyword
      */
     public String getKeyword() {
         return keyword;
     }
 
     /**
-     * Sets the keyword used for filtering.
-     *
-     * @param keyword The keyword used for filtering.
+     * Converts a string to a ListingFilter enum value.
+     * @param value
+     * @return
      */
     public static ListingFilter fromString(String value) {
-        for (ListingFilter filter : ListingFilter.values()) {
-            if (filter.name().equalsIgnoreCase(value)) {
-                return filter;
+        for (ListingFilter keyword : ListingFilter.values()) {
+            if (keyword.name().equalsIgnoreCase(value)) {
+                return keyword;
             }
         }
         return null;
     }
-
 }
