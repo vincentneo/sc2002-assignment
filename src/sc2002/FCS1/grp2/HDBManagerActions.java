@@ -18,6 +18,9 @@ public class HDBManagerActions {
 	
 	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {
+		case VIEW_ALL_PROJECTS:
+			viewAllProjects(user);
+			break;
 		case CREATE_PROJECT:
 			createProject(user);
 			break;
@@ -300,11 +303,26 @@ public class HDBManagerActions {
 	} */
 	
 	private static void viewAllProjects(HDBManager manager) {
-		System.out.println("All Project listings:");
 		ArrayList<BTOProject> projects = system.getProjects();
-		for(int i = 0; i<projects.size(); i++) {
-			System.out.println((i+1) + ". " + projects.get(i));
-		}
+
+		if(projects == null || projects.isEmpty()) {
+            System.out.println("No projects to display.");
+            return;
+        }
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_ONE_PRICE);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_PRICE);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+		options.add(TableColumnOption.OFFICERS);
+		options.add(TableColumnOption.OFFICER_SLOTS);
+		options.add(TableColumnOption.VISIBILITY);
+
+		BTOProject.display(projects, options);
 	}
 	
 	private static void filterProjects(HDBManager manager) {
