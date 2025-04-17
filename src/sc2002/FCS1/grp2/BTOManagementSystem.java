@@ -224,6 +224,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		applications.add(application);
 		saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
+	public ArrayList<Application> getApplications() {
+		return applications;
+	}
 	
 	public Scanner getScanner() {
 		return scanner;

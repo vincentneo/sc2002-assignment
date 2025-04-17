@@ -27,6 +27,8 @@ public class HDBManagerActions {
 		case DELETE_PROJECT:
 			deleteProject(user);
 			break;
+		case VIEW_ALL_PROJECTS:
+			viewAllProjects(user);
 		case FILTER_PROJECT:
 			filterProjects(user);
 			break;
@@ -254,26 +256,54 @@ public class HDBManagerActions {
 		
 	}
 	
-/* 	private static void toggleVisibility(HDBManager manager) {
-		Scanner scanner = system.getScanner();
-		
-		System.out.println("All Projects: ");
-		ArrayList<BTOProject> projects = system.getProjects();
-		for(int i = 0; i<projects.size(); i++) {
-			System.out.println((i+1) + ". " + projects.get(i));
-		}
-		
-		System.out.println("Which Project would you like to toggle visibility?");
-		int choice = scanner.nextInt();
-		
-	}
-	private static void generateReport(HDBManager manager) {
+
+/*	private static void generateReport(HDBManager manager) {
 		//filter based on category
+	}*/
+	
+	private static void approveRejectApplication(HDBManager manager) {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+		
+		ArrayList<Application> applications = system.getApplications();
+		 
+		for (int i = 0; i < applications.size(); i++) {
+	            System.out.println((i + 1) + ". " + applications.get(i));
+		}
+		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject?");
+		
+		Application selectedApplication = applications.get(choice - 1);
+		boolean choose = superScanner.nextBoolUntilCorrect("Would you like to approve or reject this application? (input Y if approve, N if reject");
+		
+		if (choose == true) {
+			selectedApplication.setStatus(ApplicationStatus.SUCCESSFUL);
+		}
+		else {
+			selectedApplication.setStatus(ApplicationStatus.UNSUCCESSFUL);
+		}
 	}
 	
-	private static void approveApplication(HDBManager manager) {
+	//to do
 		
-	} */
+		private static void approveRejectWithdrawalApplication(HDBManager manager) {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+		
+		ArrayList<application> withdrawalApplications = system.getwithdrawalApplications();
+		
+		for (int i = 0; i < withdrawalApplications.size(); i++) {
+            System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
+		}
+		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
+		
+		
+		
+	}
+	
+	
+		
+		
+		
 	
 	private static void viewAllProjects(HDBManager manager) {
 		System.out.println("All Project listings:");
