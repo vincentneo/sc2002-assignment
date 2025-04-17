@@ -29,6 +29,10 @@ public class HDBManagerActions {
 			break;
 		case VIEW_ALL_PROJECTS:
 			viewAllProjects(user);
+			break;
+		case APPROVE_OR_REJECT_APPLICATIONS:
+			approveRejectApplication(user);
+			break;
 		case FILTER_PROJECT:
 			filterProjects(user);
 			break;
@@ -266,6 +270,11 @@ public class HDBManagerActions {
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
 		ArrayList<Application> applications = system.getApplications();
+		
+		if(applications.isEmpty()) {
+			System.out.println("No Application needed for approval");
+			return;
+		}
 		 
 		for (int i = 0; i < applications.size(); i++) {
 	            System.out.println((i + 1) + ". " + applications.get(i));
