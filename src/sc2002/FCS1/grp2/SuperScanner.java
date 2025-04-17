@@ -20,6 +20,10 @@ public class SuperScanner {
 		this.scanner = scanner;
 	}
 	
+	public Scanner getScanner() {
+		return scanner;
+	}
+	
 	/**
 	 * Get input from user until input is a number.
 	 * @param prompt The prompt to be shown to the user.
