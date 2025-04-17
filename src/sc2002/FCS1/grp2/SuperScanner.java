@@ -30,7 +30,7 @@ public class SuperScanner {
 			return nextInt(prompt);
 		}
 		catch (NumberFormatException e) {
-			new Style.Builder().text("Input must be a number. Please try again.").code(Code.TEXT_YELLOW).print();
+			new Style.Builder().text("Input must be a number. Please try again.\n").code(Code.TEXT_YELLOW).print();
 			return nextIntUntilCorrect(prompt);
 		}
 	}
@@ -38,7 +38,7 @@ public class SuperScanner {
 	public int nextIntUntilCorrect(String prompt, int min, int max) {
 		int value = nextIntUntilCorrect(prompt);
 		if (value < min || value > max) {
-			new Style.Builder().text("Invalid option. Please try again.").code(Code.TEXT_YELLOW).print();
+			new Style.Builder().text("Invalid option. Please try again.\n").code(Code.TEXT_YELLOW).print();
 			return nextIntUntilCorrect(prompt);
 		}
 		return value;

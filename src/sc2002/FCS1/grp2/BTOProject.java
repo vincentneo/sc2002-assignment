@@ -45,6 +45,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     private List<HDBOfficer> officers;
 
     private boolean visibility;
+    
+    private List<String> pendingOfficerNames;
+    private List<HDBOfficer> pendingOfficers;
 
     static private int MAX_OFFICER_NUM = 10;
 
@@ -85,17 +88,12 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         managerName = cells.get(10).getValue();
         totalOfficerSlots = cells.get(11).getIntValue();
         
-        String[] officerCell = cells.get(12).getValues();
-        if (officerCell != null) {
-        	officerNames = Arrays.asList(officerCell);
-        }
-        else {
-        	officerNames = new ArrayList<>();
-        	String singularOfficer = cells.get(12).getValue();
-        	if (singularOfficer != null) officerNames.add(singularOfficer);
-        }
+        String[] officerCell = cells.get(12).getValuesOrValue();
+        officerNames = Arrays.asList(officerCell);
         
-        if (cells.size() > 13) {
+        int colSize = cells.size();
+        
+        if (colSize > 13) {
         	try {
         		boolean visibility = cells.get(13).getBoolValue();
         		this.visibility = visibility;
@@ -104,6 +102,14 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         		this.visibility = true;
         	}
         }
+        
+        if (colSize > 14) {
+        	this.pendingOfficerNames = Arrays.asList(cells.get(14).getValuesOrValue());
+        }
+        else {
+        	this.pendingOfficerNames = new ArrayList<>();
+        }
+        
         //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
 
         if (projectName == null || projectName.isEmpty()) {
@@ -169,6 +175,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         
         this.visibility = true;
         //this.officers = officers != null ? officers : new ArrayList<String>();
+        
+        this.pendingOfficers = new ArrayList<>();
     }
     //endregion
     
@@ -178,11 +186,24 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
      * @param managers List of manager objects
      */
     public void retrieveConnectedUsers(ArrayList<HDBOfficer> officers, ArrayList<HDBManager> managers) {
-    	this.officers = officers
-				    		.stream()
-				    		.filter(o -> officerNames.contains(o.getName()))
-				    		.collect(Collectors.toList());
-    	this.officerNames = null;
+    	
+    	if (officerNames != null) {
+	    	this.officers = officers
+					    		.stream()
+					    		.filter(o -> officerNames.contains(o.getName()))
+					    		.collect(Collectors.toList());
+	    	this.officerNames = null;
+    	}
+    	
+    	if (pendingOfficerNames != null) {
+	    	this.pendingOfficers = officers
+		    		.stream()
+		    		.filter(o -> pendingOfficerNames.contains(o.getName()))
+		    		.collect(Collectors.toList());
+	    	this.pendingOfficerNames = null;
+    	}
+    	
+    	
     	this.managerInCharge = managers
     			.stream()
     			.filter(m -> m.getName().equals(managerName))
@@ -538,6 +559,28 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         }
     }
     //endregion
+    
+    public void addOfficerToPendingList(HDBOfficer officer) throws Exception {
+    	pendingOfficers.add(officer);
+    }
+    
+    public void removeOfficerFromPendingList(HDBOfficer officer) throws Exception {
+    	if (pendingOfficers.contains(officer)) pendingOfficers.remove(officer);
+    }
+    
+//    public void approveOfficer(HDBOfficer officer) throws Exception {
+//    	if (pendingOfficers.contains(officer)) {
+//    		pendingOfficers.remove(officer);
+//    		addOfficer(officer);
+//    	}
+//    	else {
+//    		throw new IllegalArgumentException("Officer " + officer.getName() + " not found in project's pending list.");
+//    	}
+//    }
+    
+    public List<HDBOfficer> getPendingOfficers() {
+    	return pendingOfficers;
+    }
 
     
     // TODO: Think about next steps for how to handle application (probs move to *Action class)
@@ -661,6 +704,16 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     			.collect(Collectors.toList());
     }
 
+    /**
+     * Get the list of pending approval officer's names to the project.
+     * @return List of pending approval officer's names assigned to the project.
+     */
+    private List<String> getPendingOfficersNames() {
+    	return pendingOfficers
+    			.stream()
+    			.map(o -> o.getName())
+    			.collect(Collectors.toList());
+    }
 
     /**
      * Get the string representation of the BTO project.
@@ -714,7 +767,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		
 		String officerNames = CSVEncoder.encodeListOfStrings(getHDBOfficersNames());
 		
-		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s,%s",
+		return String.format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s,%s,%d,%s,%s,%s",
 				projectName,
 				neighborhood,
 				roomOneType.toString(),
@@ -728,8 +781,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				managerName,
 				totalOfficerSlots,
 				officerNames,
-				CSVEncoder.encodeBoolean(visibility)
-				);
+				CSVEncoder.encodeBoolean(visibility),
+				CSVEncoder.encodeListOfStrings(getPendingOfficersNames())			
+		);
 	}
 
     /**
@@ -744,8 +798,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 	
 	/**
 	 * Use this to draw a table of projects.
-	 * 
-	 * Work In Progress. Expected to be more customisable, depending on the needs.
 	 * 
 	 * @param projects List of projects to be displayed.
 	 * @param options Additional columns to display.
@@ -808,10 +860,11 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				case MANAGER:
 					row.add(project.getManagerInCharge().getName());
 					break;
-				case OFFICERS:
+				case OFFICERS: {
 					String joined = String.join(", ", project.officers.stream().map(o -> o.getName()).toList());
 					row.add(joined);
 					break;
+				}
 				case OFFICER_SLOTS:
 					row.add("" + project.totalOfficerSlots);
 					break;
@@ -838,6 +891,9 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 				case VISIBILITY:
 					row.add(project.getVisibility() ? "Yes" : "No");
 					break;
+				case PENDING_OFFICERS: {
+					row.add("" + project.getPendingOfficersNames().size());
+				}
 				default:
 					break;
 				}
@@ -882,7 +938,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		CLOSING_DATE(15, "Closing Date"),
 		OFFICER_SLOTS(16, "Officer Slots"),
 		OFFICERS(30, "Officers"),
-		VISIBILITY(10, "Visibility");
+		VISIBILITY(10, "Visibility"),
+		PENDING_OFFICERS(30, "Pending Officers");
 
 		private int headerSpacing;
 		private int valueSpacing;

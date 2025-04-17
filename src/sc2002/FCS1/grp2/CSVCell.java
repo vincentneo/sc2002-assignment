@@ -108,6 +108,22 @@ public class CSVCell {
 		return commaSeperatedValues;
 	}
 	
+	/** 
+	 * Provides multiple values of cell where possible, else, the single string value.
+	 * 
+	 * As this method does not check the contents of cell if singular, it is up to your responsibility to ensure value are correct.
+	 * @return values of {@link #getValues()} or {@link #getValue()}
+	 */
+	public String[] getValuesOrValue() {
+		if (hasMultipleValues()) return getValues();
+		
+		String value = getValue();
+		
+		if (value.isBlank()) return new String[] {};
+		
+		return new String[] { value };
+	}
+	
 	/**
 	 * Provides a way to tell if there are multiple values retrievable in this cell.
 	 * @return {@code true} if >1 values can be retrieved,

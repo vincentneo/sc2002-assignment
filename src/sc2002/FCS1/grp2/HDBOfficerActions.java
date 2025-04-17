@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
+import sc2002.FCS1.grp2.Style.Code;
 
 public class HDBOfficerActions {
 
@@ -131,10 +132,11 @@ public class HDBOfficerActions {
 			LocalDate selectedProjectCloseDate = selectedProject.getClosingDate();
 	
 			// Check if the dates overlap: If selected project overlaps with any other project the officer is handling
-			if ((selectedProjectOpenDate.isBefore(currentProjectCloseDate) && selectedProjectCloseDate.isAfter(currentProjectOpenDate))) {
-				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
-				return;
-			}
+			// TODO: not working properly
+//			if ((selectedProjectOpenDate.isBefore(currentProjectCloseDate) && selectedProjectCloseDate.isAfter(currentProjectOpenDate))) {
+//				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
+//				return;
+//			}
 		}
 	
 		// Create an enquiry for manager's approval
@@ -143,26 +145,39 @@ public class HDBOfficerActions {
 			System.out.println("You cannot be registered as an officer for this project as the logged-in user is not the manager of the project.");
 			return;
 		}
-	
-		// Create an enquiry asking the manager for approval
-		Message question = new Message(user, "Requesting approval to join as officer for project " + selectedProject.getProjectName());
-		Enquiry enquiry = new Enquiry(question, selectedProject);
-	
-		// Add the enquiry to the system
+		
 		try {
-			system.getActiveUser().getEnquiriesSystem().addEnquiry(enquiry);
-		} catch (Exception e) {
-			System.out.println("Error adding enquiry: " + e.getMessage());
-			return;
+			selectedProject.addOfficerToPendingList(user);
+		}
+		catch (Exception e) {
+			new Style.Builder()
+			.text(e.getMessage())
+			.code(Code.TEXT_RED)
+			.bold()
+			.print();
 		}
 		
-		// Store the enquiry in the officer's map for later reference
-		user.getApplicationEnquiries().put(selectedProject, enquiry);
+		system.saveChanges(CSVFileTypes.PROJECT_LIST);
 	
-		// Mark the officer's status as PENDING for this project
-		user.setApplicationStatus(ApplicationStatus.PENDING);
-	
-		System.out.println("Enquiry sent to manager for approval.");
+//		// Create an enquiry asking the manager for approval
+//		Message question = new Message(user, "Requesting approval to join as officer for project " + selectedProject.getProjectName());
+//		Enquiry enquiry = new Enquiry(question, selectedProject);
+//	
+//		// Add the enquiry to the system
+//		try {
+//			system.getActiveUser().getEnquiriesSystem().addEnquiry(enquiry);
+//		} catch (Exception e) {
+//			System.out.println("Error adding enquiry: " + e.getMessage());
+//			return;
+//		}
+//		
+//		// Store the enquiry in the officer's map for later reference
+//		user.getApplicationEnquiries().put(selectedProject, enquiry);
+//	
+//		// Mark the officer's status as PENDING for this project
+//		user.setApplicationStatus(ApplicationStatus.PENDING);
+//	
+//		System.out.println("Enquiry sent to manager for approval.");
 		System.out.println("Your application status is now PENDING. Please wait for manager's response...");
 	}	
 

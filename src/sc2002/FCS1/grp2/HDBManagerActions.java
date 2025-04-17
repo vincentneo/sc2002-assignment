@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
+import sc2002.FCS1.grp2.Style.Code;
 
 public class HDBManagerActions {
 	private static BTOManagementSystem system;
@@ -28,6 +29,9 @@ public class HDBManagerActions {
 			break;
 		case FILTER_PROJECT:
 			filterProjects(user);
+			break;
+		case VIEW_PENDING_OFFICER_REQUESTS:
+			viewPendingOfficerRequests(user);
 			break;
 		case VIEW_ALL_ENQUIRIES:
 			viewAllEnquiries(user);
@@ -331,6 +335,69 @@ public class HDBManagerActions {
 	        }
 	    }
 	    		
+	}
+	
+	private static void viewPendingOfficerRequests(HDBManager manager) throws Exception {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+		
+		List<BTOProject> projects = system.getApplicableProjects().stream()
+				.filter(p -> p.getPendingOfficers().size() > 0)
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		if (projects.isEmpty()) {
+			new Style.Builder()
+			.text("There are no project join requests applicable for your approval right now.")
+			.newLine()
+			.code(Code.TEXT_YELLOW)
+			.print();
+			return;
+		}
+		
+		List<TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.OFFICER_SLOTS);
+		options.add(TableColumnOption.OFFICERS);
+		options.add(TableColumnOption.PENDING_OFFICERS);
+		BTOProject.display(projects, options);
+		
+		int option = superScanner.nextIntUntilCorrect("Which project's pending officers would you like to review? (0 to exit): ", 0, projects.size());
+		
+		if (option == 0) return;
+		
+		BTOProject project = projects.get(option - 1);
+		
+		List<HDBOfficer> settledPendingOfficers = new ArrayList<>();
+		
+		for (HDBOfficer officer : project.getPendingOfficers()) {
+			new DisplayMenu.Builder()
+			.setTitle("Officer Request")
+			.addContent(new Style.Builder().text("Information").bold().toString())
+			.addContent("Name: " + officer.getName())
+			.addContent("Age: " + officer.getAge())
+			.addContent("NRIC: " + officer.getNric())
+			.addDivider()
+			.addContent("Remaining Slots: " + (project.getTotalOfficerSlots() - project.getOfficers().size()))
+			.build()
+			.display();
+			
+			String decisionPrompt = String.format("Would like to approve this officer's request to join project <%s>? (Y/N): ", project.getProjectName());
+			boolean decision = superScanner.nextBoolUntilCorrect(decisionPrompt);
+			
+			if (decision) {
+				project.addOfficer(officer);
+				settledPendingOfficers.add(officer);
+			}
+			else {
+				settledPendingOfficers.add(officer);
+			}
+		}
+		
+		for (HDBOfficer officer : settledPendingOfficers) {
+			project.removeOfficerFromPendingList(officer);
+		}
+		
+		system.saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
 	private static void viewAllEnquiries(HDBManager manager) throws Exception {
