@@ -133,7 +133,21 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
 
     //Construct with values
-    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, LocalDate openingDate, LocalDate closingDate, HDBManager managerInCharge, int totalOfficerSlots, ArrayList<HDBOfficer> officers)
+    /**
+     * Constructor for BTOProject class when manager creates a new BTOProject.
+     * @param projectName Name of the project.
+     * @param neighborhood Neighborhood of the project.
+     * @param maxTwoRoomUnits Maximum number of two room units in the project.
+     * @param maxThreeRoomUnits Maximum number of three room units in the project.
+     * @param twoRoomPrice Price of two room units in the project.
+     * @param threeRoomPrice Price of three room units in the project.
+     * @param openingDate Opening date of the project.
+     * @param closingDate Closing date of the project.
+     * @param managerInCharge Manager in charge of the project.
+     * @param totalOfficerSlots Total number of officer slots available for the project.
+     * @throws Exception if any of the input values are invalid
+     */
+    public BTOProject (String projectName, String neighborhood, int maxTwoRoomUnits, int maxThreeRoomUnits, int twoRoomPrice, int threeRoomPrice, LocalDate openingDate, LocalDate closingDate, HDBManager managerInCharge, int totalOfficerSlots)
     throws Exception
     {
     	
@@ -158,25 +172,29 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 
         this.projectName = projectName;
         this.neighborhood = neighborhood;
-//        this.maxTwoRoomUnits = maxTwoRoomUnits;
-//        this.maxThreeRoomUnits = maxThreeRoomUnits;
-//        this.twoRoomPrice = twoRoomPrice;
-//        this.threeRoomPrice = threeRoomPrice;
-        // TODO: Retrieve booked rooms
         
+        FlatType type1 = FlatType.TWO_ROOM;
+		FlatInfo info1 = new FlatInfo(type1, maxTwoRoomUnits, twoRoomPrice);
+		
+		FlatType type2 = FlatType.THREE_ROOM;
+		FlatInfo info2 = new FlatInfo(type2, maxThreeRoomUnits, threeRoomPrice);
+		
+		flats.put(type1, info1);
+		flats.put(type2, info2);
+
+
         this.openingDate = openingDate;
         this.closingDate = closingDate;
 
-
-        //TODO: Get objects for managers and officers
         this.managerInCharge = managerInCharge;
         this.totalOfficerSlots = totalOfficerSlots;
-        this.officers = officers;
+        this.officers = new ArrayList<>();
+        this.officerNames = new ArrayList<>();
         
         this.visibility = true;
-        //this.officers = officers != null ? officers : new ArrayList<String>();
         
         this.pendingOfficers = new ArrayList<>();
+        this.pendingOfficerNames = new ArrayList<>();
     }
     //endregion
     

@@ -72,14 +72,14 @@ public class HDBManagerActions {
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
 		System.out.print("Enter Project Name: ");
-		String projectName = scanner.next();
+		String projectName = scanner.nextLine();
 		System.out.print("Enter Neighbourhood: ");
-		String neighbourhood = scanner.next();
-		int maxRoomOne = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 1 units: ");
-		int priceRoomOne = superScanner.nextIntUntilCorrect("Enter price of Type 1 unit: $");
+		String neighbourhood = scanner.nextLine();
+		int maxTwoRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 2-Room units: ");
+		int priceTwoRoom = superScanner.nextIntUntilCorrect("Enter price of 2-Room unit: $");
 		
-		int maxRoomTwo = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 2 units: ");
-		int priceRoomTwo = superScanner.nextIntUntilCorrect("Enter price of Type 2 unit: $");
+		int maxThreeRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 3-Room units: ");
+		int priceThreeRoom = superScanner.nextIntUntilCorrect("Enter price of 3-Room unit: $");
 		
 		LocalDate openingDate = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
@@ -89,8 +89,8 @@ public class HDBManagerActions {
 		
 		
 		BTOProject project = new BTOProject(projectName, neighbourhood,
-				maxRoomOne, maxRoomTwo, priceRoomOne, priceRoomTwo,
-				openingDate, closingDate, manager, officerSlots, new ArrayList<>());
+				maxTwoRoom, maxThreeRoom, priceTwoRoom, priceThreeRoom,
+				openingDate, closingDate, manager, officerSlots);
 		system.addProject(project);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 		
