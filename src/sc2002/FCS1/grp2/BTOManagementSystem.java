@@ -220,6 +220,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 						.sorted(Comparator.comparing(p -> p.getProjectName().toLowerCase()))
 						.collect(Collectors.toCollection(ArrayList::new));
                 break;
+			case REVERSE_DEFAULT: // Reverse alphabetical order by project name
+				filteredProjects = filteredProjects.stream()
+						.sorted(Comparator.comparing((BTOProject p) -> p.getProjectName().toLowerCase()).reversed())
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
             case TWO_ROOM_PRICE_DESCENDING:
                 filteredProjects = filteredProjects.stream()
                         .sorted(Comparator.comparing(BTOProject::getTwoRoomPrice).reversed())

@@ -5,6 +5,7 @@ package sc2002.FCS1.grp2;
  */
 public enum ListingSort {
     DEFAULT, // Alphabetical order
+    REVERSE_DEFAULT, // Reverse alphabetical order
     TWO_ROOM_PRICE_DESCENDING,
     TWO_ROOM_PRICE_ASCENDING,
     THREE_ROOM_PRICE_DESCENDING,

@@ -65,6 +65,8 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 */
 	private static String[] commonMenuOptions = {
 			"Change Password",
+			"Sort BTO Project Listing",
+			"Filter BTO Project Listing",
 	};
 	
 	public static int getCommonMenuOptions() {

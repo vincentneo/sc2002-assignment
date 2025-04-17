@@ -1,6 +1,6 @@
 package sc2002.FCS1.grp2;
 /**
- * Enum representing different filetrs for listing.
+ * Enum representing different filters for listing.
  * Each enum value corresponds to a specific filter.
  */
 public enum ListingFilter {
@@ -30,6 +30,14 @@ public enum ListingFilter {
     ListingFilter(String keyword) {
         this.keyword = keyword;
     } 
+
+    /**
+     * Sets the keyword for this enum value.
+     * @param keyword the keyword to set
+     */
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
 
     /**
