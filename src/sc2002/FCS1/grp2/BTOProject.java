@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -50,8 +51,25 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     private List<HDBOfficer> pendingOfficers;
 
     static private int MAX_OFFICER_NUM = 10;
+    
+    /**
+     * Values should be transient do not persist.
+     */
+    private Set<FlatType> excludedFlatTypes = new HashSet<>();
 
-    //region Consturctors
+    public Set<FlatType> getExcludedFlatTypes() {
+		return excludedFlatTypes;
+	}
+
+	public void setExcludedFlatType(FlatType type) {
+		this.excludedFlatTypes.add(type);
+	}
+	
+	public void resetExcludedFlatTypes() {
+		this.excludedFlatTypes.clear();
+	}
+
+	//region Consturctors
     //Construct with a string parsed from a csv file.
     public BTOProject (List<CSVCell> cells) throws Exception {
     	super(cells);
@@ -228,6 +246,16 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     			.findFirst()
     			.orElse(null);
     	this.managerName = null;
+    }
+    
+    public boolean containsUnitsThatFitsPriceRange(int min, int max) {
+    	for (FlatType type : flats.keySet()) {
+    		FlatInfo flat = flats.get(type);
+    		int price = flat.getPrice();
+    		
+    		if (price >= min && price <= max) return true;
+    	}
+    	return false;
     }
 
     //region Project Name
