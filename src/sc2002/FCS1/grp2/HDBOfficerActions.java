@@ -137,10 +137,10 @@ public class HDBOfficerActions {
 //				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
 //				return;
 //			}
-			if (datesOverlap(currentProjectOpenDate, currentProjectCloseDate, selectedProjectOpenDate, selectedProjectCloseDate)) {
-				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
-				return;
-			}
+//			if (datesOverlap(currentProjectOpenDate, currentProjectCloseDate, selectedProjectOpenDate, selectedProjectCloseDate)) {
+//				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
+//				return;
+//			}
 		}
 	
 		// Create an enquiry for manager's approval
@@ -151,7 +151,7 @@ public class HDBOfficerActions {
 		}
 		
 		try {
-			selectedProject.addOfficerToPendingList(user);
+			selectedProject.addCurrentUserToPendingList();
 		}
 		catch (Exception e) {
 			new Style.Builder()

@@ -578,11 +578,15 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     }
     //endregion
     
-    public void addOfficerToPendingList(HDBOfficer officer) throws Exception {
+    public void addCurrentUserToPendingList() throws Exception {
+    	BTOManagementSystem system = BTOManagementSystem.common();
+    	HDBOfficer officer = system.getActiveUserForPermittedTask(HDBOfficer.class);
     	pendingOfficers.add(officer);
     }
     
     public void removeOfficerFromPendingList(HDBOfficer officer) throws Exception {
+    	BTOManagementSystem system = BTOManagementSystem.common();
+		if (!system.isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
     	if (pendingOfficers.contains(officer)) pendingOfficers.remove(officer);
     }
     

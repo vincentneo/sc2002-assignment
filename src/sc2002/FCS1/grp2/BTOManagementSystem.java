@@ -28,6 +28,9 @@ import java.time.LocalDate;
  * @author Vincent Neo
  */
 public class BTOManagementSystem implements EnquiriesDelegate {
+	
+	private static BTOManagementSystem commonInstance = new BTOManagementSystem();
+	
 	private ArrayList<Applicant> applicants;
 	private ArrayList<HDBManager> managers;
 	private ArrayList<HDBOfficer> officers;
@@ -39,7 +42,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	
 	private Scanner scanner;
 	
-	public BTOManagementSystem() {
+	private BTOManagementSystem() {
 		this.scanner = new Scanner(System.in);
 		
 		CSVParser parser = new CSVParser();
@@ -68,6 +71,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 		
 		automatedChecks();
+	}
+	
+	public static BTOManagementSystem common() {
+		return commonInstance;
 	}
 	
 	/**
@@ -207,6 +214,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (activeUser == null) return false;
 		
 		return expectedType.isInstance(activeUser);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <U extends User> U getActiveUserForPermittedTask(Class<U> expectedType) throws InsufficientAccessRightsException {
+		if (isActiveUserPermitted(expectedType)) return (U) activeUser;
+		else throw new InsufficientAccessRightsException();
 	}
 
 	public void addProject(BTOProject project) throws Exception {
