@@ -45,6 +45,14 @@ public class HDBManagerActions {
 		}
 	}
 	
+
+	/**
+	 * Check if the project creation is eligible based on the opening and closing dates.
+	 * The project can only be created if there are no other projects that are on the same period (inclusive).
+	 * @param openingDate Opening date of the new project.
+	 * @param closingDate Closing date of the new project.
+	 * @return true if the project can be created, false otherwise.
+	 */
 	private static boolean checkProjectCreationEligibility(LocalDate openingDate, LocalDate closingDate) {
 		// ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
 		
@@ -77,6 +85,12 @@ public class HDBManagerActions {
 		return true;
 	}
 	
+
+	/**
+	 * Create a new project and add it to the system.
+	 * @param manager The manager creating the project.
+	 * @throws Exception If there is an error during project creation or adding the new project to the system.
+	 */
 	private static void createProject(HDBManager manager) throws Exception {
 		// Managers are able to create projects if the dates of the project are not within the range of any other projects they are in charge regardless of current time.
 		
@@ -126,6 +140,11 @@ public class HDBManagerActions {
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 	}
 	
+
+	/**
+	 * Edit an existing project.
+	 * @param manager The manager editing the project.
+	 */
 	private static void editProject(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -272,6 +291,10 @@ public class HDBManagerActions {
 	}
 	
 	
+	/**
+	 * Delete a project from the system.
+	 * @param manager The manager deleting the project.
+	 */
 	private static void deleteProject(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -344,6 +367,10 @@ public class HDBManagerActions {
 		
 	} */
 	
+	/**
+	 * View all projects in the system.
+	 * @param manager The manager viewing the projects.
+	 */
 	private static void viewAllProjects(HDBManager manager) {
 		ArrayList<BTOProject> projects = system.getProjects();
 
@@ -373,6 +400,10 @@ public class HDBManagerActions {
 		BTOProject.display(projects, options);
 	}
 	
+	/**
+	 * View all projects created by the manager.
+	 * @param manager The manager viewing the projects.
+	 */
 	private static void viewCreatedProjects(HDBManager manager) {
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
 		if(projects == null || projects.isEmpty()) {
