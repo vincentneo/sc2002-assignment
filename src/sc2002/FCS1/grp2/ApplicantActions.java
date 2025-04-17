@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
@@ -46,33 +47,102 @@ public class ApplicantActions {
 			return;
 		}
 
+
+		
+		repeatableMenuFlow(applicant, projects, sscanner);
+	}
+	
+	private static void repeatableMenuFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> viewingOptions = new ArrayList<>();
-		viewingOptions.add(TableColumnOption.OPENING_DATE);
 		viewingOptions.add(TableColumnOption.CLOSING_DATE);
+		viewingOptions.add(TableColumnOption.ROOM_ONE_PRICE);
+		viewingOptions.add(TableColumnOption.ROOM_ONE_UNITS);
+		viewingOptions.add(TableColumnOption.ROOM_TWO_PRICE);
+		viewingOptions.add(TableColumnOption.ROOM_TWO_UNITS);
 		BTOProject.display(projects, viewingOptions);
 		
-		boolean applyBTO = sscanner.nextBoolUntilCorrect("Would you like to apply for a BTO? (Y/N): ");
+		new DisplayMenu.Builder()
+			.setTitle("Options")
+			.addContent("1. Search by")
+			.addContent("2. Apply for BTO")
+			.addContent("3. Back to Main Menu")
+			.build()
+			.display();
 		
-		if (!applyBTO) {
-			return;
+		int option = sscanner.nextIntUntilCorrect("Choose an option: ", 1, 3);
+		
+		if (option == 3) return;
+		
+		if (option == 2) {
+			applyBTOFlow(applicant, projects, sscanner);
 		}
-
+		
+		searchFlow(applicant, projects, sscanner);
+	}
+	
+	private static void searchFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
+		new DisplayMenu.Builder()
+		.setTitle("Search By?")
+		.addContent("1. Project Name")
+		.addContent("2. Neighbourhood")
+		.addContent("3. Units Available for Flat Type")
+		.addContent("4. Price Range")
+		.addContent("5. Back to Projects Menu")
+		.build()
+		.display();
+		
+		int option = sscanner.nextIntUntilCorrect("Choose an option: ", 1, 5);
+		
+		if (option != 5) {
+			if (option == 3) {
+				int userInputFlatType = sscanner.nextIntUntilCorrect("Which flat type do you wish to see? (2/3, don't key '-Room'): ", 2, 3);
+				FlatType flatType = FlatType.fromInt(userInputFlatType);
+				projects = projects.stream()
+						.filter(project -> {
+							return project.getFlatForType(flatType).getRemainingUnits() > 0;
+						})
+						.collect(Collectors.toCollection(ArrayList::new));
+			}
+			
+			switch (option) {
+			case 1,2: {
+				System.out.print("Filter for: ");
+				String filterCondition = sscanner.getScanner().nextLine().toLowerCase();
+				projects = projects.stream()
+						.filter(project -> {
+							if (option == 1) return project.getProjectName().toLowerCase().contains(filterCondition);
+							else if (option == 2) return project.getNeighborhood().toLowerCase().contains(filterCondition);
+							else return false;
+						})
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			}
+			case 4: {
+				int min = sscanner.nextIntUntilCorrect("Minimum Price: $", 0, Integer.MAX_VALUE);
+				int max = sscanner.nextIntUntilCorrect("Maximum Price: $", min+1, Integer.MAX_VALUE);
+				
+				projects = projects.stream()
+						.filter(project -> {
+							return project.containsUnitsThatFitsPriceRange(min, max);
+						})
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			}
+			default:
+				break;
+			}
+		}
+		
+		repeatableMenuFlow(applicant, projects, sscanner);
+	}
+	
+	
+	private static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
 		BTOProject.display(projects, listingOptions);
-
-		System.out.println("To return, type \"back\"");
 		
-		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
-		
-		while (choice <= 0 || choice > projects.size()) {
-			new Style.Builder()
-					.text(String.format("No such project at position %d.\n", choice))
-					.code(Code.TEXT_YELLOW)
-					.print();
-			
-			choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ");
-		}
+		int choice = sscanner.nextIntUntilCorrect("Select the number representing the project that you are interested in: ", 1, projects.size());
 		
 		BTOProject selectedProject = projects.get(choice - 1);
 		

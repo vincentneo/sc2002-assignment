@@ -2,11 +2,7 @@ package sc2002.FCS1.grp2;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Scanner;
-
-import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 
 public class BTOManagementApplication {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
