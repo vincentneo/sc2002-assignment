@@ -156,12 +156,6 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	}
 	
 	/**
-	 * For checking on whether a user should be allowed to apply for a project, based on eligibility criteria.
-	 * @return if user's eligibility criteria matches, returns {@code true}, otherwise {@code false}.
-	 */
-	abstract boolean canApplyProject();
-	
-	/**
 	 * User-readable name for the type of user.
 	 * @return the type of the user, such as "Applicant".
 	 */
