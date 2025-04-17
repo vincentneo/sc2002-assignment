@@ -47,6 +47,12 @@ public class ApplicantActions {
 			return;
 		}
 
+
+		
+		repeatableMenuFlow(applicant, projects, sscanner);
+	}
+	
+	private static void repeatableMenuFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> viewingOptions = new ArrayList<>();
 		viewingOptions.add(TableColumnOption.CLOSING_DATE);
 		viewingOptions.add(TableColumnOption.ROOM_ONE_PRICE);
@@ -57,7 +63,7 @@ public class ApplicantActions {
 		
 		new DisplayMenu.Builder()
 			.setTitle("Options")
-			.addContent("1. Filter by")
+			.addContent("1. Search by")
 			.addContent("2. Apply for BTO")
 			.addContent("3. Back to Main Menu")
 			.build()
@@ -71,12 +77,12 @@ public class ApplicantActions {
 			applyBTOFlow(applicant, projects, sscanner);
 		}
 		
-		filterFlow(applicant, projects, sscanner);
+		searchFlow(applicant, projects, sscanner);
 	}
 	
-	private static void filterFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
+	private static void searchFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		new DisplayMenu.Builder()
-		.setTitle("Filter By?")
+		.setTitle("Search By?")
 		.addContent("1. Project Name")
 		.addContent("2. Neighbourhood")
 		.addContent("3. Units Available for Flat Type")
