@@ -178,7 +178,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	public ArrayList<BTOProject> getProjects() {
 		return projects;
 	}
-	
+	/**
+	 * Retrieve projects applicable for the current user.
+	 * 
+	 * @return For applicants, it will return projects with public visibility, subject to eligibility criteria;
+	 * 		   For officers, it will return projects that the officer is involved in;
+	 *         For managers, it will return projects whereby the manager is in charge of.
+	 */
 	public ArrayList<BTOProject> getApplicableProjects() {
 		if (activeUser instanceof HDBManager) {
 			return projects.stream()
@@ -192,17 +198,31 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 					.collect(Collectors.toCollection(ArrayList::new));
 		}
 		else if (activeUser instanceof Applicant) {
-			Applicant ap = (Applicant) activeUser;
-			Set<FlatType> types = ap.getEligibleFlatTypes();
-			
-			return projects.stream()
-					.filter(p -> { 
-						return p.getVisibility() && p.isEligible(types);
-					})
-					.collect(Collectors.toCollection(ArrayList::new));
+			return getVisibleProjects();
 		}
 		
 		return new ArrayList<>();
+	}
+	
+	private ArrayList<BTOProject> getVisibleProjects() {
+		Applicant ap = (Applicant) activeUser;
+		Set<FlatType> types = ap.getEligibleFlatTypes();
+		
+		return projects.stream()
+				.filter(p -> { 
+					boolean condition = p.getVisibility() && p.isEligible(types);
+					if (ap instanceof HDBOfficer) {
+						condition = condition && !p.getOfficers().contains(ap);
+					}
+					return condition;
+				})
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	public ArrayList<BTOProject> getApplicableProjectsAsApplicant() throws Exception {
+		if (!isActiveUserPermitted(HDBOfficer.class)) throw new InsufficientAccessRightsException();
+		
+		return getVisibleProjects();
 	}
 
 	/**
