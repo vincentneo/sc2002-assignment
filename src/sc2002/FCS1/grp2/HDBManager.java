@@ -5,36 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HDBManager extends User {
-
-	Scanner scanner = new Scanner(System.in);
 	public HDBManager(List<CSVCell> cells) {
 		super(cells);
 	}
-
-	
-//	public void createHDBProject() {
-//		
-//
-//
-//	}
-	
-//	public void editHDBProject(String ProjectName) {
-//		
-//			
-//			
-//		}
-//		
-//		
-//	
-//	public void deleteHDBProject(String ProjectName) {
-//		
-//	}
-//	
-//	public void editVisibility() {
-//		
-//	}
-//	
-	//to do view projects created by others
 	
 	boolean canApplyProject() {
 		return false;
@@ -60,7 +33,6 @@ public class HDBManager extends User {
 	 * Each option listed here are options that only a HDB Manager can interact with. 
 	 */
 	enum Menu implements ScopedOption {
-
 		CREATE_PROJECT,
 		EDIT_PROJECT,
 		DELETE_PROJECT,
