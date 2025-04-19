@@ -32,9 +32,10 @@ public class HDBOfficerActions {
     }
 	
 	private static void checkProjectApplicationStatus(HDBOfficer officer) throws Exception {
-		List<TableColumnOption> displayOption = new ArrayList<>();
-		displayOption.add(TableColumnOption.OPENING_DATE);
-		displayOption.add(TableColumnOption.CLOSING_DATE);
+		List<TableColumnOption> displayOptions = new ArrayList<>();
+		displayOptions.add(TableColumnOption.MANAGER);
+		displayOptions.add(TableColumnOption.OPENING_DATE);
+		displayOptions.add(TableColumnOption.CLOSING_DATE);
 		
 		ArrayList<BTOProject> projects = system.getProjects();
 		
@@ -51,7 +52,7 @@ public class HDBOfficerActions {
 			System.out.println("You have no approved projects right now.");
 		}
 		else {
-			BTOProject.display(approved, displayOption);
+			BTOProject.display(approved, displayOptions);
 		}
 		
 		
@@ -68,7 +69,7 @@ public class HDBOfficerActions {
 			System.out.println("You have no projects that require manager approval right now.");
 		}
 		else {
-			BTOProject.display(pending, displayOption);
+			BTOProject.display(pending, displayOptions);
 		}
 		
 		System.out.println("");
