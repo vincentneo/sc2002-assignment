@@ -27,7 +27,41 @@ public class ApplicantActions {
 		case SEND_ENQUIRY:
 			enquiryFlow(user);
 			break;
+		case VIEW_APPLICATIONS:
+			viewApplication(user);
+			break;
 		}
+		/*
+		 * TODO: move them else where
+		 *            menu.add("View Applied Project");
+           menu.add("Withdraw Application");
+           if(applicationStatus == ApplicationStatus.SUCCESSFUL && !hasBookedFlat) {
+               menu.add("Book Flat");
+           }
+		 */
+	}
+	
+	private static void viewApplication(Applicant applicant) throws Exception {
+		ArrayList<Application> applications = system.getApplications();
+		
+		if (applications.isEmpty()) {
+			System.out.println("You have no BTO applications.");
+			return;
+		}
+		
+		var builder = new DisplayMenu.Builder()
+		.setTitle("Applications")
+		.addContent(String.format("%-5s │ %-20s │ %-20s", "No.", "Project", "Status"))
+		.addDivider();
+		
+		for (int i = 0; i < applications.size(); i++) {
+			var application = applications.get(i);
+			var name = application.getProject().getProjectName();
+			var status = application.getStatus();
+			builder.addContent(String.format("%-5s │ %-20s │ %-20s", (i+1) + ".", name, status.toString()));
+		}
+		
+		builder.build().display();
 	}
 	
 	private static void viewProjects(Applicant applicant) throws Exception {
@@ -75,6 +109,7 @@ public class ApplicantActions {
 		
 		if (option == 2) {
 			applyBTOFlow(applicant, projects, sscanner);
+			return;
 		}
 		
 		searchFlow(applicant, projects, sscanner);
@@ -137,7 +172,7 @@ public class ApplicantActions {
 	}
 	
 	
-	private static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
+	public static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
 		BTOProject.display(projects, listingOptions);

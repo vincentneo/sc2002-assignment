@@ -44,6 +44,11 @@ public class Style {
 			return this;
 		}
 		
+		public Builder underline() {
+			currentCodes.add(Code.UNDERLINE.getCode());
+			return this;
+		}
+		
 		public Builder strikethrough() {
 			currentCodes.add(Code.STRIKETHROUGH.getCode());
 			return this;

@@ -106,6 +106,21 @@ public class HDBManagerActions {
 		
 		System.out.print("Enter Project Name: ");
 		String projectName = scanner.nextLine();
+		
+		while (system.doesProjectExist(projectName, null)) {
+			new Style.Builder().text("The project name ")
+			.code(Code.TEXT_RED)
+			.text(projectName)
+			.code(Code.UNDERLINE)
+			.bold()
+			.text(" is not acceptable as a project of the same or similar name already exists.\n")
+			.code(Code.TEXT_RED)
+			.print();
+			
+			System.out.print("Enter Project Name: ");
+			projectName = scanner.nextLine();
+		}
+		
 		System.out.print("Enter Neighbourhood: ");
 		String neighbourhood = scanner.nextLine();
 		int maxTwoRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 2-Room units: ");
@@ -218,42 +233,62 @@ public class HDBManagerActions {
 		try {
 			switch(choice) {
 				case 1:
-					System.out.println("What would you like to change Project name to?"); //need unique project name
-					String newName = scanner.next();
+					new Style.Builder()
+						.text("What would you like to change project name to? (current: ")
+						.text(selectedProject.getProjectName())
+						.underline()
+						.bold()
+						.text("): ")
+						.print();
+					
+					String newName = scanner.nextLine();
+					while (system.doesProjectExist(newName, selectedProject)) {
+						new Style.Builder().text("The project name ")
+							.code(Code.TEXT_RED)
+							.text(selectedProject.getProjectName())
+							.code(Code.UNDERLINE)
+							.bold()
+							.text(" is not acceptable as a project of the same or similar name already exists.\n")
+							.code(Code.TEXT_RED)
+							.print();
+						
+						System.out.print("Type another name: ");
+						newName = scanner.nextLine();
+					}
+					
 					selectedProject.setProjectName(newName);
-					System.out.println("Project name have been updated");
-					System.out.println(selectedProject);
+					System.out.println("Project name have been updated.");
 					break;
 				
 				case 2:
-					System.out.println("What would you like to change Neighbourhood to?");
-					String newNeighbourhood = scanner.next();
+					System.out.println("What would you like to change neighbourhood to?");
+					String newNeighbourhood = scanner.nextLine();
 					selectedProject.setNeighborhood(newNeighbourhood);
 					break;
 					
 				case 3:
-					int newMax = superScanner.nextIntUntilCorrect("What would you like to change maxRoomOne to? : ");
+					int newMax = superScanner.nextIntUntilCorrect("What would you like to change available units for 2-Room flats to?: ");
 					selectedProject.setTwoRoomUnits(newMax);
 					break;
 				case 4:
-					int newMaxprice = superScanner.nextIntUntilCorrect("What would you like to change priceRoomOne to? : ");
+					int newMaxprice = superScanner.nextIntUntilCorrect("What would you like to change price for 2-Room flat to?: $");
 					selectedProject.setTwoRoomPrice(newMaxprice);
 					break;
 				case 5:
-					int newMax2 = superScanner.nextIntUntilCorrect("What would you like to change maxRoomTwo to? : ");
+					int newMax2 = superScanner.nextIntUntilCorrect("What would you like to available units for 3-Room flats to?: ");
 					selectedProject.setThreeRoomUnits(newMax2);
 					break;
 				case 6:
-					int newMaxprice2 = superScanner.nextIntUntilCorrect("What would you like to change priceRoomTwo to? : ");
+					int newMaxprice2 = superScanner.nextIntUntilCorrect("What would you like to change price for 3-Room flat to?: $");
 					selectedProject.setThreeRoomPrice(newMaxprice2);
 					break;
 				case 7:
-					System.out.println("What would you like to change openingDate to?");
+					System.out.println("What would you like to change the opening date to?");
 					LocalDate newOpening = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 					selectedProject.setOpeningDate(newOpening);
 					break;
 				case 8:
-					System.out.println("What would you like to change closingDate to?");
+					System.out.println("What would you like to change the closing date to?");
 					LocalDate newClosing = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
 					selectedProject.setClosingDate(newClosing);
 					break;
@@ -262,7 +297,7 @@ public class HDBManagerActions {
 					selectedProject.setTotalOfficerSlots(newOfficerSlots);
 					break;
 				case 10:
-					System.out.println("Would you like to toggle visibility? (Y/N) : ");
+					System.out.println("Would you like to toggle visibility? (Y/N): ");
 					String visibility = scanner.nextLine();
 					if(visibility.equalsIgnoreCase("Y")) {
 						selectedProject.toggleVisibility();

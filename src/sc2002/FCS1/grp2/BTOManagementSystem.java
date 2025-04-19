@@ -100,14 +100,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
-	private ArrayList<User> allUsers() {
-		ArrayList<User> users = new ArrayList<>();
-		users.addAll(applicants);
-		users.addAll(managers);
-		users.addAll(officers);
-		return users;
-	}
-	
 	public User findUserByNRIC(String nric) {
 		for (User user : allUsers()) {
 			if (user.getNric().equalsIgnoreCase(nric)) {
@@ -171,6 +163,15 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 	}
 	
+	//region Getters & Setters
+	private ArrayList<User> allUsers() {
+		ArrayList<User> users = new ArrayList<>();
+		users.addAll(applicants);
+		users.addAll(managers);
+		users.addAll(officers);
+		return users;
+	}
+	
 	public User getActiveUser() {
 		return activeUser;
 	}
@@ -224,6 +225,36 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		return getVisibleProjects();
 	}
+	
+	/**
+	 * Use this scanner to get user input.
+	 * @return {@code Scanner} object.
+	 */
+	public Scanner getScanner() {
+		return scanner;
+	}
+
+	@Override
+	public List<Enquiry> getApplicableEnquiries() {
+		if (activeUser instanceof HDBManager) {
+			return enquiries;
+		}
+		
+		if (activeUser instanceof Applicant) {
+			return enquiries.stream()
+					.filter(e -> e.isUserInvolved(activeUser))
+					.collect(Collectors.toList());
+		}
+		
+		return new ArrayList<>();
+	}
+	
+	@Override
+	public void addEnquiry(Enquiry enquiry) throws Exception {
+		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
+		this.enquiries.add(enquiry);
+		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+	}
 
 	/**
 	 * Get the projects that are filtered by the active user's filter.
@@ -231,7 +262,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * @param filteredProjects The list of projects to be filtered.
 	 * @return The filtered list of projects.
 	 */
-	public ArrayList<BTOProject> filterProjects (ArrayList<BTOProject> filteredProjects) {
+	public ArrayList<BTOProject> filterProjects(ArrayList<BTOProject> filteredProjects) {
 		ListingSort sort = activeUser.getListingSort();
 		ListingFilter filter = activeUser.getListingFilter();
 		
@@ -323,6 +354,8 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return filteredProjects;
 	}
 	
+	
+	//region Access Control
 	/**
 	 * Decide if the current active user should be permitted to do a certain task, based on access rights by type of user.
 	 * 
@@ -341,7 +374,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (isActiveUserPermitted(expectedType)) return (U) activeUser;
 		else throw new InsufficientAccessRightsException();
 	}
-
+	//endregion
+	
+	
 	public void addProject(BTOProject project) throws Exception {
 		// always check if logged-in user is permitted for activity, else return;
 		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
@@ -367,16 +402,50 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		applications.add(application);
 		saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
+	
 	public ArrayList<Application> getApplications() throws Exception {
-		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
-		return applications.stream()
-				.filter(a -> a.getProject().getManagerInCharge() == activeUser)
-				.collect(Collectors.toCollection(ArrayList::new));
+		if (!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(Applicant.class))) throw new InsufficientAccessRightsException();
+		
+		if (activeUser instanceof HDBManager) {
+			return applications.stream()
+					.filter(a -> a.getProject().getManagerInCharge() == activeUser)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		
+		if (activeUser instanceof Applicant) {
+			return applications.stream()
+					.filter(a -> a.getApplicant() == activeUser)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		
+		return null;
 	}
 	
-	public Scanner getScanner() {
-		return scanner;
+	/**
+	 * Checks if there is already a project with a similar name.
+	 * 
+	 * Names must not be the same, regardless of caoitalisation or spaces.
+	 * For example, if a project of name: "Woodlands UrbanVille" exists, a new project name of
+	 * "wOoDLanDs URBANVille" or "woodlandsurbanville" will not be allowed.
+	 * @param name Name of new project to be checked against.
+	 * @param excludedProject Pass a {@code BTOProject} if this project should not be checked against. Pass in {@code null} if otherwise.
+	 * @return true if such a project name already exists, false if such a name is considered new by system.
+	 */
+	public boolean doesProjectExist(String name, BTOProject excludedProject) {
+		for (BTOProject project : projects) {
+			if (excludedProject != null && project == excludedProject) continue;
+			String regex = "\\s+";
+			String projectNameWithoutSpaces = project.getProjectName().replaceAll(regex, "");
+			String comparableName = name.replaceAll(regex, "");
+			if (projectNameWithoutSpaces.equalsIgnoreCase(comparableName)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
+	
+	
 	
 	/**
 	 * call when finished
@@ -393,28 +462,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			user.print();
 		}
 		
-	}
-
-	@Override
-	public void addEnquiry(Enquiry enquiry) throws Exception {
-		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
-		this.enquiries.add(enquiry);
-		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
-	}
-
-	@Override
-	public List<Enquiry> getApplicableEnquiries() {
-		if (activeUser instanceof HDBManager) {
-			return enquiries;
-		}
-		
-		if (activeUser instanceof Applicant) {
-			return enquiries.stream()
-					.filter(e -> e.isUserInvolved(activeUser))
-					.collect(Collectors.toList());
-		}
-		
-		return new ArrayList<>();
 	}
 	
 }
