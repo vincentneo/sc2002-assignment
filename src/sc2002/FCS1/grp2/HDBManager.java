@@ -85,12 +85,6 @@ public class HDBManager extends User {
 				return "Delete Project";
 			case APPROVE_OR_REJECT_APPLICATIONS:
 				return "Approve/Reject Applications";
-			case FILTER_PROJECT:
-				return "Filter Project";
-
-			// case FILTER_PROJECT:
-			// 	return "Filter Project";
-
 			case VIEW_PENDING_OFFICER_REQUESTS:
 				return "View Pending Project Join Requests";
 			case VIEW_ALL_ENQUIRIES:

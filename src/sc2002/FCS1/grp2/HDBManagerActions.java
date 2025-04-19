@@ -462,59 +462,7 @@ public class HDBManagerActions {
 	}
 
 
-// 	private static void filterProjects(HDBManager manager) {
-// 		Scanner scanner = system.getScanner();
-// 		System.out.println("Filter Project Listings: ");
-		
-// 		System.out.println("Enter Project Name (or part of it): ");
-// 		String projectName = scanner.nextLine().trim();
-		
-// 		System.out.print("Enter Neighborhood (or part of it): ");
-// 	    String neighborhood = scanner.nextLine().trim();
-	    
-// 	    System.out.print("Enter Manager Name: ");
-// 	    String Manager = scanner.nextLine().trim();
-	    
-// 	    System.out.println("Enter number of Two-Room flats: ");
-// 	    int num1 = scanner.nextInt();
-	    
-// 	    //to do
-// //	    System.out.println("Enter Two-Room flat price: ");
-// //	    int price1 = scanner.nextInt();
-	   
-// 	    System.out.println("Enter number of Three-Room flats: ");
-// 	    int num2 = scanner.nextInt();
-	    
-// 	 // to do
-// //	    System.out.println("Enter Three-Room flat price: ");
-// //	    int price2 = scanner.nextInt();
-	    
-// 	    ArrayList<BTOProject> projects = system.getProjects();
-// 	    if(projects == null) {
-// 	    	System.out.println("Error, no ongoing projects");
-// 	    	return;
-// 	    }
-	   
-// 	    ArrayList<BTOProject> filteredProjects = projects.stream()
-// 	    		.filter(p-> projectName.isEmpty() || p.getProjectName().toLowerCase().contains(projectName.toLowerCase()))
-// 	    		.filter(p-> neighborhood.isEmpty() || p.getNeighborhood().toLowerCase().contains(neighborhood.toLowerCase()))
-// //	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase())) // TODO: @jiahao, getManagerInCharge() (HDBManager object) is not a string! 
-// //	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
-// //	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
-// //	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
-// //	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
-// 	    		.collect(Collectors.toCollection(ArrayList::new));
-// 	    System.out.println("Filtered Projects: ");
-// 	    if(filteredProjects.isEmpty()) {
-// 	    	System.out.println("No Projects match the given criteria");
-// 	    	}
-// 	    else {
-// 	    	for (int i = 0; i < filteredProjects.size(); i++) {
-// 	            System.out.println((i + 1) + ". " + filteredProjects.get(i));
-// 	        }
-// 	    }
-	    		
-// 	}
+	
 	
 	private static void viewPendingOfficerRequests(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
