@@ -18,6 +18,12 @@ public class HDBManagerActions {
 	
 	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {
+		case VIEW_ALL_PROJECTS:
+			viewAllProjects(user);
+			break;
+		case VIEW_CREATED_PROJECTS:
+			viewCreatedProjects(user);
+			break;
 		case CREATE_PROJECT:
 			createProject(user);
 			break;
@@ -27,6 +33,7 @@ public class HDBManagerActions {
 		case DELETE_PROJECT:
 			deleteProject(user);
 			break;
+
 		case VIEW_ALL_PROJECTS:
 			viewAllProjects(user);
 			break;
@@ -36,6 +43,11 @@ public class HDBManagerActions {
 		case FILTER_PROJECT:
 			filterProjects(user);
 			break;
+
+		// case FILTER_PROJECT:
+		// 	filterProjects(user);
+		// 	break;
+
 		case VIEW_PENDING_OFFICER_REQUESTS:
 			viewPendingOfficerRequests(user);
 			break;
@@ -75,28 +87,34 @@ public class HDBManagerActions {
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
 		System.out.print("Enter Project Name: ");
-		String projectName = scanner.next();
+		String projectName = scanner.nextLine();
 		System.out.print("Enter Neighbourhood: ");
-		String neighbourhood = scanner.next();
-		int maxRoomOne = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 1 units: ");
-		int priceRoomOne = superScanner.nextIntUntilCorrect("Enter price of Type 1 unit: $");
+		String neighbourhood = scanner.nextLine();
+		int maxTwoRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 2-Room units: ");
+		int priceTwoRoom = superScanner.nextIntUntilCorrect("Enter price of 2-Room unit: $");
 		
-		int maxRoomTwo = superScanner.nextIntUntilCorrect("Enter maxmium number of Type 2 units: ");
-		int priceRoomTwo = superScanner.nextIntUntilCorrect("Enter price of Type 2 unit: $");
+		int maxThreeRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 3-Room units: ");
+		int priceThreeRoom = superScanner.nextIntUntilCorrect("Enter price of 3-Room unit: $");
 		
 		LocalDate openingDate = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 
-		
-		
-		BTOProject project = new BTOProject(projectName, neighbourhood,
-				maxRoomOne, maxRoomTwo, priceRoomOne, priceRoomTwo,
-				openingDate, closingDate, manager, officerSlots, new ArrayList<>());
-		system.addProject(project);
+		BTOProject newProject;
+		try {
+			newProject = new BTOProject(projectName, neighbourhood,
+				maxTwoRoom, maxThreeRoom, priceTwoRoom, priceThreeRoom,
+				openingDate, closingDate, manager, officerSlots);
+		}
+		catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Please try again.");
+			return;
+		}
+
+		system.addProject(newProject);
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
-		
 	}
 	
 	private static void editProject(HDBManager manager) {
@@ -107,9 +125,15 @@ public class HDBManagerActions {
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
 
 		if(projects == null || projects.isEmpty()) {
-            System.out.println("No projects to display.");
+            System.out.println("You don't have any projects to in charge.");
             return;
         }
+
+		projects = system.filterProjects(projects);
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
+		}
 
 		List<BTOProject.TableColumnOption> options = new ArrayList<>();
 		options.add(TableColumnOption.INDEX_NUMBER);
@@ -243,21 +267,51 @@ public class HDBManagerActions {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
-		System.out.println("All Project listings: ");
-		
-		ArrayList<BTOProject> projects = system.getProjects();
-		for(int i = 0; i<projects.size(); i++) {
-			System.out.println((i+1) + ". " + projects.get(i));
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+
+		if(projects == null || projects.isEmpty()) {
+            System.out.println("You don't have any projects to in charge.");
+            return;
+        }
+
+		projects = system.filterProjects(projects);
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
 		}
 
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
 
-		System.out.println("Which Project listing would you like to delete?");
-		int choice = scanner.nextInt();
-		BTOProject removed = projects.remove(choice-1);
-		system.saveChanges(null);
-		System.out.println("Project " + removed.getProjectName() + "has been deleted");
+		BTOProject.display(projects, options);
 		
-		
+		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to delete? (enter the corresponding number): ", 1, projects.size());
+		BTOProject selectedProject = projects.get(choose-1);
+
+		System.out.println("Would you delete project " + selectedProject.getProjectName() + "? (Y/N) : ");
+		String visibility = scanner.nextLine();
+		if(visibility.equalsIgnoreCase("Y")) {
+			try {
+				system.deleteProject(selectedProject);
+			}
+			catch (Exception e) {
+				System.out.println("Error: " + e.getMessage());
+				System.out.println("Please try again.");
+				return;
+			}
+
+			System.out.println("Project " + selectedProject.getProjectName() + " has been deleted");
+		}
+		else if(visibility.equalsIgnoreCase("N")) {
+			System.out.println("Project remains undeleted");
+		}
+		else {
+			System.out.println("Invalid input, project remains undeleted");
+		}	
 	}
 	
 
@@ -315,66 +369,116 @@ public class HDBManagerActions {
 		
 	
 	private static void viewAllProjects(HDBManager manager) {
-		System.out.println("All Project listings:");
 		ArrayList<BTOProject> projects = system.getProjects();
-		for(int i = 0; i<projects.size(); i++) {
-			System.out.println((i+1) + ". " + projects.get(i));
+
+		if(projects == null || projects.isEmpty()) {
+            System.out.println("No projects to display.");
+            return;
+        }
+
+		projects = system.filterProjects(projects);
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
 		}
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_ONE_PRICE);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_PRICE);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+		options.add(TableColumnOption.OFFICERS);
+		options.add(TableColumnOption.OFFICER_SLOTS);
+		options.add(TableColumnOption.VISIBILITY);
+
+		BTOProject.display(projects, options);
 	}
 	
-	private static void filterProjects(HDBManager manager) {
-		Scanner scanner = system.getScanner();
-		System.out.println("Filter Project Listings: ");
-		
-		System.out.println("Enter Project Name (or part of it): ");
-		String projectName = scanner.nextLine().trim();
-		
-		System.out.print("Enter Neighborhood (or part of it): ");
-	    String neighborhood = scanner.nextLine().trim();
-	    
-	    System.out.print("Enter Manager Name: ");
-	    String Manager = scanner.nextLine().trim();
-	    
-	    System.out.println("Enter number of Two-Room flats: ");
-	    int num1 = scanner.nextInt();
-	    
-	    //to do
-//	    System.out.println("Enter Two-Room flat price: ");
-//	    int price1 = scanner.nextInt();
-	   
-	    System.out.println("Enter number of Three-Room flats: ");
-	    int num2 = scanner.nextInt();
-	    
-	 // to do
-//	    System.out.println("Enter Three-Room flat price: ");
-//	    int price2 = scanner.nextInt();
-	    
-	    ArrayList<BTOProject> projects = system.getProjects();
-	    if(projects == null) {
-	    	System.out.println("Error, no ongoing projects");
-	    	return;
-	    }
-	   
-	    ArrayList<BTOProject> filteredProjects = projects.stream()
-	    		.filter(p-> projectName.isEmpty() || p.getProjectName().toLowerCase().contains(projectName.toLowerCase()))
-	    		.filter(p-> neighborhood.isEmpty() || p.getNeighborhood().toLowerCase().contains(neighborhood.toLowerCase()))
-//	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase())) // TODO: @jiahao, getManagerInCharge() (HDBManager object) is not a string! 
-//	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
-//	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
-//	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
-//	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
-	    		.collect(Collectors.toCollection(ArrayList::new));
-	    System.out.println("Filtered Projects: ");
-	    if(filteredProjects.isEmpty()) {
-	    	System.out.println("No Projects match the given criteria");
-	    	}
-	    else {
-	    	for (int i = 0; i < filteredProjects.size(); i++) {
-	            System.out.println((i + 1) + ". " + filteredProjects.get(i));
-	        }
-	    }
-	    		
+	private static void viewCreatedProjects(HDBManager manager) {
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		if(projects == null || projects.isEmpty()) {
+			System.out.println("No projects to display.");
+			return;
+		}
+
+		projects = system.filterProjects(projects);
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
+		}
+
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.INDEX_NUMBER);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_ONE_PRICE);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_PRICE);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+		options.add(TableColumnOption.OFFICERS);
+		options.add(TableColumnOption.OFFICER_SLOTS);
+		options.add(TableColumnOption.VISIBILITY);
+
+		BTOProject.display(projects, options);
 	}
+
+
+// 	private static void filterProjects(HDBManager manager) {
+// 		Scanner scanner = system.getScanner();
+// 		System.out.println("Filter Project Listings: ");
+		
+// 		System.out.println("Enter Project Name (or part of it): ");
+// 		String projectName = scanner.nextLine().trim();
+		
+// 		System.out.print("Enter Neighborhood (or part of it): ");
+// 	    String neighborhood = scanner.nextLine().trim();
+	    
+// 	    System.out.print("Enter Manager Name: ");
+// 	    String Manager = scanner.nextLine().trim();
+	    
+// 	    System.out.println("Enter number of Two-Room flats: ");
+// 	    int num1 = scanner.nextInt();
+	    
+// 	    //to do
+// //	    System.out.println("Enter Two-Room flat price: ");
+// //	    int price1 = scanner.nextInt();
+	   
+// 	    System.out.println("Enter number of Three-Room flats: ");
+// 	    int num2 = scanner.nextInt();
+	    
+// 	 // to do
+// //	    System.out.println("Enter Three-Room flat price: ");
+// //	    int price2 = scanner.nextInt();
+	    
+// 	    ArrayList<BTOProject> projects = system.getProjects();
+// 	    if(projects == null) {
+// 	    	System.out.println("Error, no ongoing projects");
+// 	    	return;
+// 	    }
+	   
+// 	    ArrayList<BTOProject> filteredProjects = projects.stream()
+// 	    		.filter(p-> projectName.isEmpty() || p.getProjectName().toLowerCase().contains(projectName.toLowerCase()))
+// 	    		.filter(p-> neighborhood.isEmpty() || p.getNeighborhood().toLowerCase().contains(neighborhood.toLowerCase()))
+// //	    		.filter(p -> Manager.isEmpty() || p.getManagerInCharge().toLowerCase().contains(Manager.toLowerCase())) // TODO: @jiahao, getManagerInCharge() (HDBManager object) is not a string! 
+// //	    		.filter(p -> num1.isEmpty() || p.getMaxTwoRoomUnits.equals(num1))
+// //	    		.filter (p-> price1.isEmpty() || p.getTwoRoomPrice.equals(price1))
+// //	    		.filter(p -> num2.isEmpty() || p.getMaxThreeRoomUnits.equals(num2))
+// //	    		.filter (p-> price2.isEmpty() || p.getThreeRoomPrice.equals(price2))
+// 	    		.collect(Collectors.toCollection(ArrayList::new));
+// 	    System.out.println("Filtered Projects: ");
+// 	    if(filteredProjects.isEmpty()) {
+// 	    	System.out.println("No Projects match the given criteria");
+// 	    	}
+// 	    else {
+// 	    	for (int i = 0; i < filteredProjects.size(); i++) {
+// 	            System.out.println((i + 1) + ". " + filteredProjects.get(i));
+// 	        }
+// 	    }
+	    		
+// 	}
 	
 	private static void viewPendingOfficerRequests(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();

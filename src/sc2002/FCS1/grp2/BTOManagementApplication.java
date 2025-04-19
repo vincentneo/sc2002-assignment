@@ -2,14 +2,10 @@ package sc2002.FCS1.grp2;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Scanner;
 
-import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
-
 public class BTOManagementApplication {
-	private static BTOManagementSystem system = new BTOManagementSystem();
+	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	public static void main(String[] args) {
 
@@ -61,7 +57,10 @@ public class BTOManagementApplication {
 		ArrayList<String> additionalDetails = new ArrayList<>();
 		additionalDetails.add("To exit, type \"exit\"");
 		additionalDetails.add("To logout, type \"logout\"");
-		
+		additionalDetails.add("You are logged in as " + system.getActiveUser().getName() + " (" + system.getActiveUser().getReadableTypeName() + ")");
+		additionalDetails.add("You are currently sorting project listing by " + system.getActiveUser().getListingSort().name() + ".");
+		additionalDetails.add("You are currently filtering project listing by " + system.getActiveUser().getListingFilter().name() + ".");
+
 		new DisplayMenu.Builder()
 				.setTitle("Menu")
 				.addContents(menuContents)
@@ -121,10 +120,20 @@ public class BTOManagementApplication {
 			throw new IllegalArgumentException();
 		}
 		
+		// common menu option
 		if (index == 1) {
 			changePassword();
 			return;
+		} 
+		else if (index == 2) {
+			changeListingSort();
+			return;
 		}
+		else if (index == 3) {
+			changeListingFilter();
+			return;
+		}
+
 		
 		// cast user out to respective type
 		if (user instanceof HDBOfficer) {
@@ -181,6 +190,117 @@ public class BTOManagementApplication {
 			System.out.println("Current password is incorrect. Please try again later.");
 		}
 	}
+
+	private static void changeListingSort() {
+		User user = system.getActiveUser();
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
+		new DisplayMenu.Builder()
+		.setTitle("Options")
+		.addContent("1. Default: Alphabetical order")
+		.addContent("2. Reverse Default: Reverse alphabetical order")
+		.addContent("3. Two Room Price Descending")
+		.addContent("4. Two Room Price Ascending")
+		.addContent("5. Three Room Price Descending")
+		.addContent("6. Three Room Price Ascending")
+		.addContent("7. Opening Date Ascending")
+		.addContent("8. Opening Date Descending")
+		.addContent("9. Closing Date Ascending")
+		.addContent("10. Closing Date Descending")
+		.build()
+		.display();
+
+		int choose = superScanner.nextIntUntilCorrect("Select Option: ", 1, 10);
+		
+		ListingSort selectedOption = ListingSort.DEFAULT;
+
+		switch (choose) {
+			case 1:
+				selectedOption = ListingSort.DEFAULT;
+				break;
+			case 2:
+				selectedOption = ListingSort.REVERSE_DEFAULT;
+				break;
+			case 3:
+				selectedOption = ListingSort.TWO_ROOM_PRICE_DESCENDING;
+				break;
+			case 4:
+				selectedOption = ListingSort.TWO_ROOM_PRICE_ASCENDING;
+				break;
+			case 5:
+				selectedOption = ListingSort.THREE_ROOM_PRICE_DESCENDING;
+				break;
+			case 6:
+				selectedOption = ListingSort.THREE_ROOM_PRICE_ASCENDING;
+				break;
+			case 7:
+				selectedOption = ListingSort.OPENING_DATE_ASCENDING;
+				break;
+			case 8:
+				selectedOption = ListingSort.OPENING_DATE_DESCENDING;
+				break;
+			case 9:
+				selectedOption = ListingSort.CLOSING_DATE_ASCENDING;
+				break;
+			case 10:
+				selectedOption = ListingSort.CLOSING_DATE_DESCENDING;
+				break;
+			default:
+				break;
+		}
+
+		user.setListingSort(selectedOption);
+		System.out.println("Your listing sort has been updated.");
+	}
+
+	private static void changeListingFilter() {
+		User user = system.getActiveUser();
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
+		new DisplayMenu.Builder()
+		.setTitle("Options")
+		.addContent("1. Default: No filter")
+		.addContent("2. At least 1 available two room")
+		.addContent("3. At least 1 available three room")
+		.addContent("4. Filter by project name")
+		.addContent("5. Filter by project neighbourhood")
+		.build()
+		.display();
+
+		int choose = superScanner.nextIntUntilCorrect("Select Option: ", 1, 5);
+		
+		ListingFilter selectedOption = ListingFilter.DEFAULT;
+
+		switch (choose) {
+			case 1:
+				selectedOption = ListingFilter.DEFAULT;
+				break;
+			case 2:
+				selectedOption = ListingFilter.TWO_ROOM;
+				break;
+			case 3:
+				selectedOption = ListingFilter.THREE_ROOM;
+			case 4:
+				System.out.print("Enter keyword: ");
+				String nameKeyword = scanner.nextLine();
+				selectedOption = ListingFilter.NAME;
+				selectedOption.setKeyword(nameKeyword);
+				break;
+			case 5:
+				System.out.print("Enter keyword: ");
+				String neighbourhoodKeyword = scanner.nextLine();
+				selectedOption = ListingFilter.NEIGHBORHOOD;
+				selectedOption.setKeyword(neighbourhoodKeyword);
+				break;
+			default:
+				break;
+		}
+
+		user.setListingFilter(selectedOption);
+		System.out.println("Your listing filter has been updated.");
+	}
 	
 	private static String getGreetings() {
 		LocalTime time = LocalTime.now();
@@ -221,6 +341,7 @@ public class BTOManagementApplication {
 			if (remainingTries == 0) {
 				System.out.println("Too many failed login attempts. Please try again later.");
 				login();
+				return;
 			}
 			System.out.println("Invalid password.");
 			System.out.print("Password: ");

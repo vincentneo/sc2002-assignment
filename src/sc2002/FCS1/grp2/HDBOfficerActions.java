@@ -25,7 +25,8 @@ public class HDBOfficerActions {
         		options.add(TableColumnOption.MANAGER);
         		options.add(TableColumnOption.OPENING_DATE);
         		options.add(TableColumnOption.CLOSING_DATE);
-        		BTOProject.display(system.getApplicableProjects(), options);
+				
+        		BTOProject.display(system.filterProjects(system.getApplicableProjects()), options);
                 break;
             case JOIN_PROJECT:
                 joinProject(user); 
@@ -137,6 +138,10 @@ public class HDBOfficerActions {
 //				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
 //				return;
 //			}
+			if (datesOverlap(currentProjectOpenDate, currentProjectCloseDate, selectedProjectOpenDate, selectedProjectCloseDate)) {
+				System.out.println("You cannot apply for this project as its application period overlaps with another project you are handling.");
+				return;
+			}
 		}
 	
 		// Create an enquiry for manager's approval
@@ -147,7 +152,7 @@ public class HDBOfficerActions {
 		}
 		
 		try {
-			selectedProject.addOfficerToPendingList(user);
+			selectedProject.addCurrentUserToPendingList();
 		}
 		catch (Exception e) {
 			new Style.Builder()
@@ -179,7 +184,19 @@ public class HDBOfficerActions {
 //	
 //		System.out.println("Enquiry sent to manager for approval.");
 		System.out.println("Your application status is now PENDING. Please wait for manager's response...");
-	}	
+	}
+	/**
+	 * helper function to check with date overlaps
+	 * @param start1 start date of project officer is handling
+	 * @param end1 end date of project officer is handling
+	 * @param start2 start date of project officer is applying for
+	 * @param end2 end date of project officer is applying for
+	 * @return true if the two projects overlap, false otherwise
+	 */
+	private static boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+		// Check if project 1's dates overlap with project 2's dates
+		return (start1.isBefore(end2) && end1.isAfter(start2));
+	}
 
     /**
      * Update the officer's application status based on the manager's reply.

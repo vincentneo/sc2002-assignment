@@ -48,4 +48,15 @@ public enum FlatType {
 		
 		return null;
 	}
+	
+	public static FlatType fromInt(int number) {
+		switch (number) {
+		case 2:
+			return TWO_ROOM;
+		case 3:
+			return THREE_ROOM;
+		default:
+			return null;
+		}
+	}
 }

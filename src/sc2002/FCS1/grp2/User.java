@@ -46,6 +46,18 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 */
 	private String password;
 
+	/**
+	 * User's listing sort type.
+	 * This is used to sort the listings based on the user's preference.
+	 */
+	private ListingSort listingSort;
+
+	/**
+	 * User's listing filter type.
+	 * This is used to filter the listings based on the user's preference.
+	 */
+	private ListingFilter listingFilter;
+
 	private EnquiriesSystem enquiriesSystem;
 	
 	/**
@@ -53,6 +65,8 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 */
 	private static String[] commonMenuOptions = {
 			"Change Password",
+			"Sort BTO Project Listing",
+			"Filter BTO Project Listing",
 	};
 	
 	public static int getCommonMenuOptions() {
@@ -70,6 +84,8 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 		this.age = cells.get(2).getIntValue();
 		this.maritalStatus = MaritalStatus.fromString(cells.get(3).getValue());
 		this.password = cells.get(4).getValue();
+		this.listingSort = ListingSort.DEFAULT;
+		this.listingFilter = ListingFilter.DEFAULT;
 	}
 	
 	/**
@@ -103,7 +119,23 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	MaritalStatus getMaritalStatus() {
 		return maritalStatus;
 	}
-	
+
+	/**
+	 * Getter method for retrieving listing sort of a user.
+	 * @return Listing sort of the user associated in this object.
+	 */
+	public ListingSort getListingSort() {
+		return listingSort;
+	}
+
+	/**
+	 * Getter method for retrieving listing filter of a user.
+	 * @return Listing filter of the user associated in this object.
+	 */	
+	public ListingFilter getListingFilter() {
+		return listingFilter;
+	}
+
 	/**
 	 * Check if a user-provided password is correct for user.
 	 * 
@@ -127,6 +159,28 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 */
 	void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * For setting a new listing filter.
+	 * 
+	 * This method is intended to be used for users to set a new listing filter.
+	 * 
+	 * @param listingFilter - The new listing filter to be saved.
+	 */
+	public void setListingSort(ListingSort listingFilter) {
+		this.listingSort = listingFilter;
+	}
+
+	/**
+	 * For setting a new listing filter.
+	 * 
+	 * This method is intended to be used for users to set a new listing filter.
+	 * 
+	 * @param listingFilter - The new listing filter to be saved.
+	 */
+	public void setListingFilter(ListingFilter listingFilter) {
+		this.listingFilter = listingFilter;
 	}
 	
 	/**

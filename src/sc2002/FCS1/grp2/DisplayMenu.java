@@ -3,6 +3,9 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Draw menus and tables enclosed in rectangles using this class.
+ */
 public class DisplayMenu {
 	private String title;
 	private List<List<String>> contents;
@@ -21,10 +24,17 @@ public class DisplayMenu {
 		this.contents = builder.contents;
 	}
 	
+	/**
+	 * Call this to directly print the built and configured menu on console.
+	 */
 	public void display() {
 		System.out.print(asString());
 	}
 	
+	/**
+	 * Call this to get the built menu as a {@code String} for further processing if needed.
+	 * @return the entire encoded menu.
+	 */
 	public String asString() {
 		String text = "";
 		String longestContentLine = findLongestLine();
@@ -83,6 +93,14 @@ public class DisplayMenu {
 		return text;
 	}
 	
+	/**
+	 * To prevent miscalculations due to ANSI escape codes.
+	 * 
+	 * ANSI escape codes appended by {@code Style} class may cause reserve spacing to be reduced, causing weird layout changes.
+	 * This aims to find out these escape codes and provide how much these length these codes used.
+	 * @param string The row of string
+	 * @return calculation of how much are ANSI escape code characters.
+	 */
 	private int ansiEscapeCodeExtraCharacters(String string) {
 		int full = string.length();
 		int withoutANSI = string.replaceAll("(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]", "").length();
@@ -90,6 +108,10 @@ public class DisplayMenu {
 		return ansi;
 	}
 	
+	/**
+	 * Find the longest line (string) in the menu.
+	 * @return the longest string found.
+	 */
 	private String findLongestLine() {
 		String longest = "";
 		

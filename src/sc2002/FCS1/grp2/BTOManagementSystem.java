@@ -1,6 +1,7 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -28,6 +29,9 @@ import java.time.LocalDate;
  * @author Vincent Neo
  */
 public class BTOManagementSystem implements EnquiriesDelegate {
+	
+	private static BTOManagementSystem commonInstance = new BTOManagementSystem();
+	
 	private ArrayList<Applicant> applicants;
 	private ArrayList<HDBManager> managers;
 	private ArrayList<HDBOfficer> officers;
@@ -39,7 +43,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	
 	private Scanner scanner;
 	
-	public BTOManagementSystem() {
+	private BTOManagementSystem() {
 		this.scanner = new Scanner(System.in);
 		
 		CSVParser parser = new CSVParser();
@@ -68,6 +72,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 		
 		automatedChecks();
+	}
+	
+	public static BTOManagementSystem common() {
+		return commonInstance;
 	}
 	
 	/**
@@ -195,6 +203,104 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		return new ArrayList<>();
 	}
+
+	/**
+	 * Get the projects that are filtered by the active user's filter.
+	 * 
+	 * @param filteredProjects The list of projects to be filtered.
+	 * @return The filtered list of projects.
+	 */
+	public ArrayList<BTOProject> filterProjects (ArrayList<BTOProject> filteredProjects) {
+		ListingSort sort = activeUser.getListingSort();
+		ListingFilter filter = activeUser.getListingFilter();
+		
+		switch (sort) {
+            case DEFAULT: // Alphabetical order by project name
+				filteredProjects = filteredProjects.stream()
+						.sorted(Comparator.comparing(p -> p.getProjectName().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
+                break;
+			case REVERSE_DEFAULT: // Reverse alphabetical order by project name
+				filteredProjects = filteredProjects.stream()
+						.sorted(Comparator.comparing((BTOProject p) -> p.getProjectName().toLowerCase()).reversed())
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+            case TWO_ROOM_PRICE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getTwoRoomPrice).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case TWO_ROOM_PRICE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getTwoRoomPrice))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case THREE_ROOM_PRICE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getThreeRoomPrice).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case THREE_ROOM_PRICE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getThreeRoomPrice))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case OPENING_DATE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getOpeningDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case OPENING_DATE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getOpeningDate).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case CLOSING_DATE_ASCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getClosingDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case CLOSING_DATE_DESCENDING:
+                filteredProjects = filteredProjects.stream()
+                        .sorted(Comparator.comparing(BTOProject::getClosingDate).reversed())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                break;
+            case null:
+                // No sort applied, keep the original list
+                break;
+        }
+
+		switch(filter) {
+			case DEFAULT:
+				// No filter applied, keep the original list
+				break;
+			case TWO_ROOM:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getTwoRoomUnits() > 0)
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case THREE_ROOM:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getThreeRoomUnits() > 0)
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case NAME:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getProjectName().toLowerCase().contains(filter.getKeyword().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case NEIGHBORHOOD:
+				filteredProjects = filteredProjects.stream()
+						.filter(p -> p.getNeighborhood().toLowerCase().contains(filter.getKeyword().toLowerCase()))
+						.collect(Collectors.toCollection(ArrayList::new));
+				break;
+			case null:
+				// No filter applied, keep the original list
+				break;
+		}
+
+		return filteredProjects;
+	}
 	
 	/**
 	 * Decide if the current active user should be permitted to do a certain task, based on access rights by type of user.
@@ -208,6 +314,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		return expectedType.isInstance(activeUser);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <U extends User> U getActiveUserForPermittedTask(Class<U> expectedType) throws InsufficientAccessRightsException {
+		if (isActiveUserPermitted(expectedType)) return (U) activeUser;
+		else throw new InsufficientAccessRightsException();
+	}
 
 	public void addProject(BTOProject project) throws Exception {
 		// always check if logged-in user is permitted for activity, else return;
@@ -216,7 +328,18 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		projects.add(project);
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 //		project.retrieveConnectedUsers(officers);
+		System.out.println("\nProject added successfully : ");
 		System.out.println(projects);
+
+	}
+
+	public void deleteProject(BTOProject project) throws Exception {
+		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
+		if (project.getManagerInCharge() != activeUser) throw new InsufficientAccessRightsException();
+		if (projects.contains(project) == false) throw new Exception("Project not found in system.");
+
+		projects.remove(project);
+		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
 	public void addApplication(Application application) throws Exception {
