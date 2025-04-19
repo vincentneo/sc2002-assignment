@@ -4,11 +4,11 @@ import java.util.*;
 
 public class Applicant extends User {
 
-	private BTOProject appliedProject;
-	private boolean hasBookedFlat;
-	private Set<String> enquiries = new HashSet<>();
-	private ApplicationStatus applicationStatus;
-	private Set<BTOProject> previouslyAppliedProjects = new HashSet<>();
+//	private BTOProject appliedProject;
+//	private boolean hasBookedFlat;
+//	private Set<String> enquiries = new HashSet<>();
+//	private ApplicationStatus applicationStatus;
+//	private Set<BTOProject> previouslyAppliedProjects = new HashSet<>();
 
 	public Applicant(List<CSVCell> cells) {
 		super(cells);
@@ -203,17 +203,17 @@ public class Applicant extends User {
 
    @Override
    ArrayList<String> getMenu() {
-       ArrayList<String> menu = super.getMenuWithScopedOptions(Menu.allMenuOptions);
+       return super.getMenuWithScopedOptions(Menu.allMenuOptions);
        
-       // Add dynamic options based on application state
-       if(appliedProject != null) {
-           menu.add("View Applied Project");
-           menu.add("Withdraw Application");
-           if(applicationStatus == ApplicationStatus.SUCCESSFUL && !hasBookedFlat) {
-               menu.add("Book Flat");
-           }
-       }
-       return menu;
+//       // Add dynamic options based on application state
+//       if(appliedProject != null) {
+//           menu.add("View Applied Project");
+//           menu.add("Withdraw Application");
+//           if(applicationStatus == ApplicationStatus.SUCCESSFUL && !hasBookedFlat) {
+//               menu.add("Book Flat");
+//           }
+//       }
+//       return menu;
    }
 
    @Override
@@ -233,7 +233,7 @@ public class Applicant extends User {
     */
    enum Menu implements ScopedOption {
        VIEW_PROJECTS("View All Projects"),
-       VIEW_APPLICABLE_PROJECTS("View Applicable Projects"),
+//       VIEW_APPLICABLE_PROJECTS("View Applicable Projects"),
        APPLY_PROJECT("Apply for Project"),
        VIEW_ENQUIRIES("View My Enquiries"),
        SEND_ENQUIRY("Send Enquiry");

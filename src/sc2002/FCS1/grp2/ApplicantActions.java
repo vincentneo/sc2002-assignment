@@ -28,6 +28,15 @@ public class ApplicantActions {
 			enquiryFlow(user);
 			break;
 		}
+		
+		/*
+		 * TODO: move them else where
+		 *            menu.add("View Applied Project");
+           menu.add("Withdraw Application");
+           if(applicationStatus == ApplicationStatus.SUCCESSFUL && !hasBookedFlat) {
+               menu.add("Book Flat");
+           }
+		 */
 	}
 	
 	private static void viewProjects(Applicant applicant) throws Exception {
