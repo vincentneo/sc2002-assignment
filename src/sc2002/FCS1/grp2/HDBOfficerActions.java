@@ -3,10 +3,8 @@ package sc2002.FCS1.grp2;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
@@ -22,6 +20,9 @@ public class HDBOfficerActions {
             case JOIN_PROJECT:
                 joinProject(user); 
                 break;
+            case CHECK_PENDING_PROJECT:
+            	checkProjectApplicationStatus(user);
+            	break;
 //            case CHECK_APPLICATION_STATUS:
 //                displayOfficerApplications(user);
 //                break;
@@ -29,6 +30,49 @@ public class HDBOfficerActions {
                 System.out.println("Option not implemented.");
         }
     }
+	
+	private static void checkProjectApplicationStatus(HDBOfficer officer) throws Exception {
+		List<TableColumnOption> displayOption = new ArrayList<>();
+		displayOption.add(TableColumnOption.OPENING_DATE);
+		displayOption.add(TableColumnOption.CLOSING_DATE);
+		
+		ArrayList<BTOProject> projects = system.getProjects();
+		
+		new Style.Builder()
+			.text("Approved Projects:")
+			.bold().newLine()
+			.print();
+		
+		ArrayList<BTOProject> approved = projects.stream()
+				.filter(p -> p.getOfficers().contains(officer))
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		if (approved.isEmpty()) {
+			System.out.println("You have no approved projects right now.");
+		}
+		else {
+			BTOProject.display(approved, displayOption);
+		}
+		
+		
+		new Style.Builder()
+		.text("Pending Projects:")
+		.bold().newLine()
+		.print();
+		
+		ArrayList<BTOProject> pending = projects.stream()
+				.filter(p -> p.getPendingOfficers().contains(officer))
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		if (pending.isEmpty()) {
+			System.out.println("You have no projects that require manager approval right now.");
+		}
+		else {
+			BTOProject.display(pending, displayOption);
+		}
+		
+		System.out.println("");
+	}
     
     private static void viewProjects(HDBOfficer officer) throws Exception {
     	var sscanner = new SuperScanner(system.getScanner());
@@ -73,7 +117,7 @@ public class HDBOfficerActions {
 	 * Method which checks pre-req before letting HDB Officer submit their name for approval for a project.
 	 * @param user HDB Officer
 	 */ 
-    public static void joinProject(HDBOfficer user) {
+    public static void joinProject(HDBOfficer user) throws Exception {
 		// Ensure system is properly initialized
 		if (system == null) {
 			System.out.println("Error: BTOManagementSystem is not initialized.");

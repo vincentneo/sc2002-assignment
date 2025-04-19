@@ -176,9 +176,18 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return activeUser;
 	}
 	
-	public ArrayList<BTOProject> getProjects() {
+	/**
+	 * Retrieve all projects of the system.
+	 * 
+	 * Great care must be exercised when using this getter. Do not use unless necessary.
+	 * 
+	 * @return all projects, regardless of visibility, applicability, intended for front-end filtering.
+	 */
+	public ArrayList<BTOProject> getProjects() throws Exception {
+		if (!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(HDBOfficer.class))) throw new InsufficientAccessRightsException();
 		return projects;
 	}
+	
 	/**
 	 * Retrieve projects applicable for the current user.
 	 * 

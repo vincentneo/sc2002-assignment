@@ -431,7 +431,7 @@ public class HDBManagerActions {
 	 * View all projects in the system.
 	 * @param manager The manager viewing the projects.
 	 */
-	private static void viewAllProjects(HDBManager manager) {
+	private static void viewAllProjects(HDBManager manager) throws Exception {
 		ArrayList<BTOProject> projects = system.getProjects();
 
 		if(projects == null || projects.isEmpty()) {

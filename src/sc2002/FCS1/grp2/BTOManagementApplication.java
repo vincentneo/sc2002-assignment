@@ -4,17 +4,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import sc2002.FCS1.grp2.Style.Code;
-
 public class BTOManagementApplication {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	public static void main(String[] args) {
 		// TODO: Delete once finish debugging
 		system.debugPrintAllUsers();
-		System.out.print("Proj 1 officers: ");
-		System.out.println(system.getProjects().getFirst().getOfficers());
-
+		
 		login();
 		
 		startResponseLoop();
