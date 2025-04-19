@@ -226,6 +226,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return getVisibleProjects();
 	}
 	
+	/**
+	 * Use this scanner to get user input.
+	 * @return {@code Scanner} object.
+	 */
 	public Scanner getScanner() {
 		return scanner;
 	}
@@ -412,10 +416,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * For example, if a project of name: "Woodlands UrbanVille" exists, a new project name of
 	 * "wOoDLanDs URBANVille" or "woodlandsurbanville" will not be allowed.
 	 * @param name Name of new project to be checked against.
+	 * @param excludedProject Pass a {@code BTOProject} if this project should not be checked against. Pass in {@code null} if otherwise.
 	 * @return true if such a project name already exists, false if such a name is considered new by system.
 	 */
-	public boolean doesProjectExist(String name) {
+	public boolean doesProjectExist(String name, BTOProject excludedProject) {
 		for (BTOProject project : projects) {
+			if (excludedProject != null && project == excludedProject) continue;
 			String regex = "\\s+";
 			String projectNameWithoutSpaces = project.getProjectName().replaceAll(regex, "");
 			String comparableName = name.replaceAll(regex, "");
@@ -426,6 +432,8 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		return false;
 	}
+	
+	
 	
 	/**
 	 * call when finished
