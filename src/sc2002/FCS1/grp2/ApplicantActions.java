@@ -27,8 +27,10 @@ public class ApplicantActions {
 		case SEND_ENQUIRY:
 			enquiryFlow(user);
 			break;
+		case VIEW_APPLICATIONS:
+			viewApplication(user);
+			break;
 		}
-		
 		/*
 		 * TODO: move them else where
 		 *            menu.add("View Applied Project");
@@ -37,6 +39,29 @@ public class ApplicantActions {
                menu.add("Book Flat");
            }
 		 */
+	}
+	
+	private static void viewApplication(Applicant applicant) throws Exception {
+		ArrayList<Application> applications = system.getApplications();
+		
+		if (applications.isEmpty()) {
+			System.out.println("You have no BTO applications.");
+			return;
+		}
+		
+		var builder = new DisplayMenu.Builder()
+		.setTitle("Applications")
+		.addContent(String.format("%-5s │ %-20s │ %-20s", "No.", "Project", "Status"))
+		.addDivider();
+		
+		for (int i = 0; i < applications.size(); i++) {
+			var application = applications.get(i);
+			var name = application.getProject().getProjectName();
+			var status = application.getStatus();
+			builder.addContent(String.format("%-5s │ %-20s │ %-20s", (i+1) + ".", name, status.toString()));
+		}
+		
+		builder.build().display();
 	}
 	
 	private static void viewProjects(Applicant applicant) throws Exception {
@@ -84,6 +109,7 @@ public class ApplicantActions {
 		
 		if (option == 2) {
 			applyBTOFlow(applicant, projects, sscanner);
+			return;5
 		}
 		
 		searchFlow(applicant, projects, sscanner);

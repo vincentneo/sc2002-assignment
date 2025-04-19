@@ -402,11 +402,23 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		applications.add(application);
 		saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
+	
 	public ArrayList<Application> getApplications() throws Exception {
-		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
-		return applications.stream()
-				.filter(a -> a.getProject().getManagerInCharge() == activeUser)
-				.collect(Collectors.toCollection(ArrayList::new));
+		if (!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(Applicant.class))) throw new InsufficientAccessRightsException();
+		
+		if (activeUser instanceof HDBManager) {
+			return applications.stream()
+					.filter(a -> a.getProject().getManagerInCharge() == activeUser)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		
+		if (activeUser instanceof Applicant) {
+			return applications.stream()
+					.filter(a -> a.getApplicant() == activeUser)
+					.collect(Collectors.toCollection(ArrayList::new));
+		}
+		
+		return null;
 	}
 	
 	/**

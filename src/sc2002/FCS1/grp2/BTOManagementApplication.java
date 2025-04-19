@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import sc2002.FCS1.grp2.Style.Code;
+
 public class BTOManagementApplication {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
@@ -103,7 +105,18 @@ public class BTOManagementApplication {
 			System.out.println("Invalid option.");
 		}
 		catch (InsufficientAccessRightsException e) {
-			
+			new Style.Builder()
+			.text("You have attempted to use a functionality that you have ")
+			.bold()
+			.add256Colour(196, false)
+			.text("NO ACCESS RIGHTS")
+			.add256Colour(196, true)
+			.bold()
+			.text(" to!")
+			.bold()
+			.add256Colour(196, false)
+			.newLine()
+			.print();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

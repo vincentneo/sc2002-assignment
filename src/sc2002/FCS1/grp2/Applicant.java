@@ -236,6 +236,7 @@ public class Applicant extends User {
 //       VIEW_APPLICABLE_PROJECTS("View Applicable Projects"),
        APPLY_PROJECT("Apply for Project"),
        VIEW_ENQUIRIES("View My Enquiries"),
+       VIEW_APPLICATIONS("View My Applications"),
        SEND_ENQUIRY("Send Enquiry");
        
        private final String optionName;
