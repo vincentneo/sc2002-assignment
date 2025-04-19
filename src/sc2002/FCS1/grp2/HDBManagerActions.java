@@ -351,7 +351,7 @@ public class HDBManagerActions {
 		//filter based on category
 	}*/
 	
-	private static void approveRejectApplication(HDBManager manager) {
+	private static void approveRejectApplication(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
@@ -380,25 +380,21 @@ public class HDBManagerActions {
 	
 	//to do
 		
-		private static void approveRejectWithdrawalApplication(HDBManager manager) {
+	private static void approveRejectWithdrawalApplication(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
-		ArrayList<application> withdrawalApplications = system.getwithdrawalApplications();
-		
-		for (int i = 0; i < withdrawalApplications.size(); i++) {
-            System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
-		}
-		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
-		
-		
+		// TODO: Withdrawal implementation
+//		ArrayList<Application> withdrawalApplications = system.getwithdrawalApplications();
+//		
+//		for (int i = 0; i < withdrawalApplications.size(); i++) {
+//            System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
+//		}
+//		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
+//		
+//		
 		
 	}
-	
-	
-		
-		
-		
 	
 	/**
 	 * View all projects in the system.
