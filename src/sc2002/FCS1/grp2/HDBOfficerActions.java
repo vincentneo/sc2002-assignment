@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
@@ -21,12 +23,7 @@ public class HDBOfficerActions {
         switch (option) {
             case VIEW_PROJECTS:
                 // TODO: filtering, access control etc etc
-        		List<BTOProject.TableColumnOption> options = new ArrayList<>();
-        		options.add(TableColumnOption.MANAGER);
-        		options.add(TableColumnOption.OPENING_DATE);
-        		options.add(TableColumnOption.CLOSING_DATE);
-				
-        		BTOProject.display(system.filterProjects(system.getApplicableProjects()), options);
+            	viewProjects(user);
                 break;
             case JOIN_PROJECT:
                 joinProject(user); 
@@ -38,7 +35,19 @@ public class HDBOfficerActions {
                 System.out.println("Option not implemented.");
         }
     }
-
+    
+    private static void viewProjects(HDBOfficer officer) throws Exception {
+		List<BTOProject.TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.MANAGER);
+		options.add(TableColumnOption.OPENING_DATE);
+		options.add(TableColumnOption.CLOSING_DATE);
+		
+		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		
+		BTOProject.display(system.filterProjects(projects), options);
+		
+		
+    }
     /**
 	 * Method which checks pre-req before letting HDB Officer submit their name for approval for a project.
 	 * @param user HDB Officer
@@ -122,7 +131,7 @@ public class HDBOfficerActions {
 		}
 	
 		// Ensure the officer is not applying for a project during the application period of a project they are already handling
-		for (BTOProject currentProject : system.getProjects()) {
+		for (BTOProject currentProject : system.getApplicableProjects()) {
 			// Skip the check if this is the selected project itself
 			if (currentProject.equals(selectedProject)) continue;
 	

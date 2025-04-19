@@ -57,31 +57,61 @@ public class HDBManagerActions {
 		}
 	}
 	
-	private static boolean checkProjectCreationEligibility() {
-		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
+
+	/**
+	 * Check if the project creation is eligible based on the opening and closing dates.
+	 * The project can only be created if there are no other projects that are on the same period (inclusive).
+	 * @param openingDate Opening date of the new project.
+	 * @param closingDate Closing date of the new project.
+	 * @return true if the project can be created, false otherwise.
+	 */
+	private static boolean checkProjectCreationEligibility(LocalDate openingDate, LocalDate closingDate) {
+		// ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
 		
-		LocalDate today = LocalDate.now();
-		long count = applicableProjects.stream()
-				.filter(p -> {
-					if (today.isEqual(p.getOpeningDate())) {
-						return true;
-					}
+		// LocalDate today = LocalDate.now();
+		// long count = applicableProjects.stream()
+		// 		.filter(p -> {
+		// 			if (today.isEqual(p.getOpeningDate())) {
+		// 				return true;
+		// 			}
 					
-					if (today.isEqual(p.getClosingDate())) {
-						return true;
-					}
+		// 			if (today.isEqual(p.getClosingDate())) {
+		// 				return true;
+		// 			}
 						
-					return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
-					})
-				.count();
-		return count < 1;
+		// 			return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
+		// 			})
+		// 		.count();
+		// return count < 1;
+
+		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
+
+		for(BTOProject project : applicableProjects) {
+			if (project.isDateWithin(closingDate) || project.isDateWithin(openingDate)) {
+				System.out.println("The new project's dates overlap with an existing project.");
+				System.out.println("Existing Project: " + project.getProjectName() + " (" + project.getOpeningDate() + " - " + project.getClosingDate() + ")");
+				return false; // Dates overlap with an existing project
+			}
+		}
+
+		return true;
 	}
 	
+
+	/**
+	 * Create a new project and add it to the system.
+	 * @param manager The manager creating the project.
+	 * @throws Exception If there is an error during project creation or adding the new project to the system.
+	 */
 	private static void createProject(HDBManager manager) throws Exception {
-		if (!checkProjectCreationEligibility()) {
-			System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
-			return;
-		}
+		// Managers are able to create projects if the dates of the project are not within the range of any other projects they are in charge regardless of current time.
+		
+		// if (!checkProjectCreationEligibility()) {
+		// 	System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
+		// 	return;
+		// } 
+
+	
 		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -98,6 +128,11 @@ public class HDBManagerActions {
 		
 		LocalDate openingDate = superScanner.nextDateUntilCorrect("Enter Opening Date (d/m/yy): ");
 		LocalDate closingDate = superScanner.nextDateUntilCorrect("Enter Closing Date (d/m/yy): ");
+
+		if (!checkProjectCreationEligibility(openingDate, closingDate)) {
+			System.out.println("You can only have one active project on hand on within an application period. Hence you are not allowed to create a new project at that time.");
+			return;
+		}
 
 		int officerSlots = superScanner.nextIntUntilCorrect("Enter number of officer slots: ");
 
@@ -117,6 +152,11 @@ public class HDBManagerActions {
 //		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 	}
 	
+
+	/**
+	 * Edit an existing project.
+	 * @param manager The manager editing the project.
+	 */
 	private static void editProject(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -263,6 +303,10 @@ public class HDBManagerActions {
 	}
 	
 	
+	/**
+	 * Delete a project from the system.
+	 * @param manager The manager deleting the project.
+	 */
 	private static void deleteProject(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -368,6 +412,10 @@ public class HDBManagerActions {
 		
 		
 	
+	/**
+	 * View all projects in the system.
+	 * @param manager The manager viewing the projects.
+	 */
 	private static void viewAllProjects(HDBManager manager) {
 		ArrayList<BTOProject> projects = system.getProjects();
 
@@ -397,6 +445,10 @@ public class HDBManagerActions {
 		BTOProject.display(projects, options);
 	}
 	
+	/**
+	 * View all projects created by the manager.
+	 * @param manager The manager viewing the projects.
+	 */
 	private static void viewCreatedProjects(HDBManager manager) {
 		ArrayList<BTOProject> projects = system.getApplicableProjects();
 		if(projects == null || projects.isEmpty()) {
