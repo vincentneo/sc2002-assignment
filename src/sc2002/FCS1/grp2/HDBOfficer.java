@@ -7,9 +7,6 @@ import java.util.Map;
 
 public class HDBOfficer extends Applicant {
 
-    // Field to store enquiries per project application
-    private Map<BTOProject, Enquiry> applicationEnquiries = new HashMap<>();
-    
     public HDBOfficer(List<CSVCell> cells) {
         super(cells);
     }
@@ -17,10 +14,6 @@ public class HDBOfficer extends Applicant {
     public boolean isOfficerForProject(BTOProject project) {
         return project.getOfficers().contains(this);
     }
-
-	public Map<BTOProject, Enquiry> getApplicationEnquiries() {
-		return applicationEnquiries;
-	}
 	
 	public void viewProjectDetails(BTOProject project) {
         if (!isOfficerForProject(project)) {

@@ -236,9 +236,7 @@ public class Applicant extends User {
        VIEW_APPLICABLE_PROJECTS("View Applicable Projects"),
        APPLY_PROJECT("Apply for Project"),
        VIEW_ENQUIRIES("View My Enquiries"),
-       SUBMIT_ENQUIRY("Submit Enquiry"),
-       EDIT_ENQUIRY("Edit Enquiry"),
-       DELETE_ENQUIRY("Delete Enquiry");
+       SEND_ENQUIRY("Send Enquiry");
        
        private final String optionName;
        
