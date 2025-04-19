@@ -109,7 +109,7 @@ public class ApplicantActions {
 		
 		if (option == 2) {
 			applyBTOFlow(applicant, projects, sscanner);
-			return;5
+			return;
 		}
 		
 		searchFlow(applicant, projects, sscanner);
