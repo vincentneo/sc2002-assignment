@@ -58,14 +58,18 @@ public class Application extends CSVDecodable implements CSVEncodable {
         return status;
     }
 
-    public FlatType getFlatType () {
+    public FlatType getFlatType() {
         return flatType;
     }
     
     public Applicant getApplicant() {
         return applicant;
     }
-
+    
+	public BTOProject getProject() {
+		return project;
+	}
+	
     @Override
     public String toString() {
         return applicant.getName() + " " + applicant.getNric() + " " + applicant.getAge() + " " + applicant.getMaritalStatus() + " applied " + project.getProjectName() + " " + flatType + " - " + status;
