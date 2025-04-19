@@ -106,6 +106,21 @@ public class HDBManagerActions {
 		
 		System.out.print("Enter Project Name: ");
 		String projectName = scanner.nextLine();
+		
+		while (system.doesProjectExist(projectName)) {
+			new Style.Builder().text("The project name ")
+			.code(Code.TEXT_RED)
+			.text(projectName)
+			.code(Code.UNDERLINE)
+			.bold()
+			.text(" is not acceptable as a project of the same or similar name already exists.\n")
+			.code(Code.TEXT_RED)
+			.print();
+			
+			System.out.print("Enter Project Name: ");
+			projectName = scanner.nextLine();
+		}
+		
 		System.out.print("Enter Neighbourhood: ");
 		String neighbourhood = scanner.nextLine();
 		int maxTwoRoom = superScanner.nextIntUntilCorrect("Enter maxmium number of 2-Room units: ");

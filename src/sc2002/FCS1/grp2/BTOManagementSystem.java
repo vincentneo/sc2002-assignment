@@ -379,6 +379,28 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 	
 	/**
+	 * Checks if there is already a project with a similar name.
+	 * 
+	 * Names must not be the same, regardless of caoitalisation or spaces.
+	 * For example, if a project of name: "Woodlands UrbanVille" exists, a new project name of
+	 * "wOoDLanDs URBANVille" or "woodlandsurbanville" will not be allowed.
+	 * @param name Name of new project to be checked against.
+	 * @return true if such a project name already exists, false if such a name is considered new by system.
+	 */
+	public boolean doesProjectExist(String name) {
+		for (BTOProject project : projects) {
+			String regex = "\\s+";
+			String projectNameWithoutSpaces = project.getProjectName().replaceAll(regex, "");
+			String comparableName = name.replaceAll(regex, "");
+			if (projectNameWithoutSpaces.equalsIgnoreCase(comparableName)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * call when finished
 	 */
 	public void cleanup() {
