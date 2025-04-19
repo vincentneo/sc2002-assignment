@@ -6,6 +6,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
     private BTOProject project;
     private FlatType flatType;
     private ApplicationStatus status;
+    private WithdrawalStatus withdrawalStatus;
     private Applicant applicant;
     
     private String projectName = null;
@@ -15,6 +16,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
         this.project = project;
         this.flatType = flatType;
         this.status = ApplicationStatus.PENDING;
+        this.withdrawalStatus = WithdrawalStatus.NOT;
         this.applicant = applicant;
     }
     
@@ -24,6 +26,12 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.flatType = FlatType.fromString(cells.get(1).getValue());
     	this.status = ApplicationStatus.fromString(cells.get(2).getValue());
     	this.applicantNRIC = cells.get(3).getValue();
+    	if (cells.size() > 4) {
+    		this.withdrawalStatus = WithdrawalStatus.fromString(cells.get(4).getValue());
+    	}
+    	else {
+    		this.withdrawalStatus = WithdrawalStatus.NOT;
+    	}
     }
     
     void linkApplicant(List<Applicant> applicants) throws Exception {
@@ -58,7 +66,15 @@ public class Application extends CSVDecodable implements CSVEncodable {
         return status;
     }
 
-    public FlatType getFlatType() {
+    public WithdrawalStatus getWithdrawalStatus() {
+		return withdrawalStatus;
+	}
+
+	public void setWithdrawalStatus(WithdrawalStatus withdrawalStatus) {
+		this.withdrawalStatus = withdrawalStatus;
+	}
+
+	public FlatType getFlatType() {
         return flatType;
     }
     
@@ -78,7 +94,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
 	@Override
 	public String encode() {
 		// TODO Auto-generated method stub
-		return String.format("%s,%s,%s,%s", project.getProjectName(), flatType.toString(), status.toString(), applicant.getNric());
+		return String.format("%s,%s,%s,%s,%s", project.getProjectName(), flatType.toString(), status.toString(), applicant.getNric(), withdrawalStatus.toString());
 	}
 
 	@Override

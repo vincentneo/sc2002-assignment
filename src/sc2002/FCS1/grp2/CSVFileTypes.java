@@ -27,7 +27,7 @@ public enum CSVFileTypes {
 		case ENQUIRIES_LIST:
 			return "ID,Applicant NRIC,Query,Query Submission Time,Responder NRIC,Response,Response Submission Time,Project Name";
 		case APPLICATIONS_LIST:
-			return "Project Name,Flat Type,Status,Applicant NRIC";
+			return "Project Name,Flat Type,Status,Applicant NRIC,Is Withdrawn?";
 		default:
 			return null;
 		}
