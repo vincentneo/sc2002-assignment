@@ -14,15 +14,6 @@ public class HDBOfficer extends Applicant {
     public boolean isOfficerForProject(BTOProject project) {
         return project.getOfficers().contains(this);
     }
-	
-	public void viewProjectDetails(BTOProject project) {
-        if (!isOfficerForProject(project)) {
-            System.out.println("You are not an officer for this project and cannot view its details.");
-            return;
-        }
-        // Display project info (including invisible ones)
-        System.out.println(project.toString());
-    }
 
 	@Override
 	String getReadableTypeName() {
@@ -52,7 +43,7 @@ public class HDBOfficer extends Applicant {
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
-				return "View Projects";
+				return "View Projects to Apply BTO";
 			case JOIN_PROJECT:
 				return "Join Project";
 			case CHECK_APPLICATION_STATUS:

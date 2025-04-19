@@ -164,7 +164,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 	
 	//region Getters & Setters
-	//-------------------------------------------------------
 	private ArrayList<User> allUsers() {
 		ArrayList<User> users = new ArrayList<>();
 		users.addAll(applicants);
@@ -244,6 +243,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 		
 		return new ArrayList<>();
+	}
+	
+	@Override
+	public void addEnquiry(Enquiry enquiry) throws Exception {
+		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
+		this.enquiries.add(enquiry);
+		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
 	}
 
 	/**
@@ -344,6 +350,8 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return filteredProjects;
 	}
 	
+	
+	//region Access Control
 	/**
 	 * Decide if the current active user should be permitted to do a certain task, based on access rights by type of user.
 	 * 
@@ -362,7 +370,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (isActiveUserPermitted(expectedType)) return (U) activeUser;
 		else throw new InsufficientAccessRightsException();
 	}
-
+	//endregion
+	
+	
 	public void addProject(BTOProject project) throws Exception {
 		// always check if logged-in user is permitted for activity, else return;
 		if (!isActiveUserPermitted(HDBManager.class)) throw new InsufficientAccessRightsException();
@@ -432,13 +442,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			user.print();
 		}
 		
-	}
-
-	@Override
-	public void addEnquiry(Enquiry enquiry) throws Exception {
-		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
-		this.enquiries.add(enquiry);
-		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
 	}
 	
 }

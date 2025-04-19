@@ -137,7 +137,7 @@ public class ApplicantActions {
 	}
 	
 	
-	private static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
+	public static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
 		BTOProject.display(projects, listingOptions);

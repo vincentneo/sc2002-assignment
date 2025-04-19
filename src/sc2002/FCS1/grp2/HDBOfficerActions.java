@@ -19,7 +19,7 @@ public class HDBOfficerActions {
     }
 
     public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
-		updateApplicationStatus(user);
+//		updateApplicationStatus(user);
         switch (option) {
             case VIEW_PROJECTS:
                 // TODO: filtering, access control etc etc
@@ -29,7 +29,7 @@ public class HDBOfficerActions {
                 joinProject(user); 
                 break;
             case CHECK_APPLICATION_STATUS:
-                displayOfficerApplications(user);
+//                displayOfficerApplications(user);
                 break;
             default:
                 System.out.println("Option not implemented.");
@@ -37,16 +37,43 @@ public class HDBOfficerActions {
     }
     
     private static void viewProjects(HDBOfficer officer) throws Exception {
+    	var sscanner = new SuperScanner(system.getScanner());
+    	
 		List<BTOProject.TableColumnOption> options = new ArrayList<>();
 		options.add(TableColumnOption.MANAGER);
 		options.add(TableColumnOption.OPENING_DATE);
 		options.add(TableColumnOption.CLOSING_DATE);
 		
-		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		ArrayList<BTOProject> projects = system.getApplicableProjectsAsApplicant();
+		
+		if (!officer.canApplyProject()) {
+			new Style.Builder()
+				.text("It appears that you are currently not elligible to apply for a BTO.")
+				.add256Colour(256, false)
+				.newLine()
+				.print();
+			return;
+		}
+		
+		if (projects.isEmpty()) {
+			System.out.println("There are no projects available for you right now.");
+			return;
+		}
 		
 		BTOProject.display(system.filterProjects(projects), options);
 		
+		new DisplayMenu.Builder()
+			.setTitle("Options")
+			.addContent("1. Apply for BTO")
+			.addContent("2. Back to Main Menu")
+			.build()
+			.display();
 		
+		int option = sscanner.nextIntUntilCorrect("Choose an option: ", 1, 2);
+		
+		if (option == 1) {
+			ApplicantActions.applyBTOFlow(officer, projects, sscanner);
+		}
     }
     /**
 	 * Method which checks pre-req before letting HDB Officer submit their name for approval for a project.
@@ -119,10 +146,10 @@ public class HDBOfficerActions {
 		}
 	
 		// Check if the officer has already applied as an applicant
-		if (user.getAppliedProject() != null && user.getAppliedProject().equals(selectedProject)) {
-			System.out.printf("You cannot join the project %s as an officer because you have already applied for it as an applicant.\n", selectedProject.getProjectName());
-			return;
-		}
+//		if (user.getAppliedProject() != null && user.getAppliedProject().equals(selectedProject)) {
+//			System.out.printf("You cannot join the project %s as an officer because you have already applied for it as an applicant.\n", selectedProject.getProjectName());
+//			return;
+//		}
 	
 		// Check if the project has room for more officers
 		if (selectedProject.getOfficers().size() >= selectedProject.getTotalOfficerSlots()) {
@@ -206,90 +233,90 @@ public class HDBOfficerActions {
 		// Check if project 1's dates overlap with project 2's dates
 		return (start1.isBefore(end2) && end1.isAfter(start2));
 	}
-
-    /**
-     * Update the officer's application status based on the manager's reply.
-     * For each project in the officer's application enquiries, if a reply exists:
-     * - "approve": adds officer to the project's officers list.
-     * - "reject": just continues to the next project.
-     * If no reply is found for an application, nothing happens.
-     */
-    public static void updateApplicationStatus(HDBOfficer officer) {
-		// Iterate through each project enquiry
-		for (Map.Entry<BTOProject, Enquiry> entry : officer.getApplicationEnquiries().entrySet()) {
-			BTOProject project = entry.getKey();
-			Enquiry enquiry = entry.getValue();
-	
-			// Check if there is a response from the manager
-			if (enquiry.getResponse() != null) {
-				String reply = enquiry.getResponse().getContent().trim();
-	
-				if (reply.equalsIgnoreCase("approve")) {
-					// If the manager approves, add the officer to the project's officers list
-					if (!project.getOfficers().contains(officer)) {
-						project.addOfficer(officer);
-						system.saveChanges(CSVFileTypes.PROJECT_LIST);
-					}
-				} else if (reply.equalsIgnoreCase("reject")) {
-					continue;
-				}
-			} else {
-				continue;
-			}
-		}
-	}
-	
-    
-    /**
-     * Display the officer's application statuses for projects in a table format.
-     * This table shows: Project Name, Neighborhood, Manager, and Status.
-     * The Manager's reply (if any) is shown in the last column.
-     */
-	public static void displayOfficerApplications(HDBOfficer officer) {
-		// Retrieve officer's applied projects and associated enquiries.
-		Map<BTOProject, Enquiry> appMap = officer.getApplicationEnquiries();
-		if (appMap.isEmpty()) {
-			System.out.println("No applications found.");
-			return;
-		}
-		
-		List<String> rows = new ArrayList<>();
-		// Header for the table
-		String header = String.format("%-25s │ %-20s │ %-12s │ %-10s │ %-25s", 
-				"Project Name", "Neighborhood", "Manager", "Status", "Manager Reply");
-		rows.add(header);
-		// Divider line
-		rows.add(new String(new char[header.length()]).replace("\0", "-"));
-		
-		// For each project and its enquiry, determine the status individually
-		for (Map.Entry<BTOProject, Enquiry> entry : appMap.entrySet()) {
-			BTOProject project = entry.getKey();
-			Enquiry enquiry = entry.getValue();
-			
-			// Determine status based on the enquiry's response (if any)
-			String statusText = "Pending";  // default
-			if (enquiry.getResponse() != null) {
-				String reply = enquiry.getResponse().getContent().trim();
-				if (reply.equalsIgnoreCase("approve")) {
-					statusText = "Approved";
-				} else if (reply.equalsIgnoreCase("reject")) {
-					statusText = "Denied";
-				} // else leave as Pending
-			}
-			
-			String managerReply = (enquiry.getResponse() != null) ? enquiry.getResponse().getContent() : "";
-			String row = String.format("%-25s │ %-20s │ %-12s │ %-10s │ %-25s", 
-					project.getProjectName(),
-					project.getNeighborhood(),
-					(project.getManagerInCharge() != null ? project.getManagerInCharge().getName() : "N/A"),
-					statusText,
-					managerReply);
-			rows.add(row);
-		}
-		
-		new DisplayMenu.Builder()
-			.addContents(rows)
-			.build()
-			.display();
-	}
+//
+//    /**
+//     * Update the officer's application status based on the manager's reply.
+//     * For each project in the officer's application enquiries, if a reply exists:
+//     * - "approve": adds officer to the project's officers list.
+//     * - "reject": just continues to the next project.
+//     * If no reply is found for an application, nothing happens.
+//     */
+//    public static void updateApplicationStatus(HDBOfficer officer) {
+//		// Iterate through each project enquiry
+//		for (Map.Entry<BTOProject, Enquiry> entry : officer.getApplicationEnquiries().entrySet()) {
+//			BTOProject project = entry.getKey();
+//			Enquiry enquiry = entry.getValue();
+//	
+//			// Check if there is a response from the manager
+//			if (enquiry.getResponse() != null) {
+//				String reply = enquiry.getResponse().getContent().trim();
+//	
+//				if (reply.equalsIgnoreCase("approve")) {
+//					// If the manager approves, add the officer to the project's officers list
+//					if (!project.getOfficers().contains(officer)) {
+//						project.addOfficer(officer);
+//						system.saveChanges(CSVFileTypes.PROJECT_LIST);
+//					}
+//				} else if (reply.equalsIgnoreCase("reject")) {
+//					continue;
+//				}
+//			} else {
+//				continue;
+//			}
+//		}
+//	}
+//	
+//    
+//    /**
+//     * Display the officer's application statuses for projects in a table format.
+//     * This table shows: Project Name, Neighborhood, Manager, and Status.
+//     * The Manager's reply (if any) is shown in the last column.
+//     */
+//	public static void displayOfficerApplications(HDBOfficer officer) {
+//		// Retrieve officer's applied projects and associated enquiries.
+//		Map<BTOProject, Enquiry> appMap = officer.getApplicationEnquiries();
+//		if (appMap.isEmpty()) {
+//			System.out.println("No applications found.");
+//			return;
+//		}
+//		
+//		List<String> rows = new ArrayList<>();
+//		// Header for the table
+//		String header = String.format("%-25s │ %-20s │ %-12s │ %-10s │ %-25s", 
+//				"Project Name", "Neighborhood", "Manager", "Status", "Manager Reply");
+//		rows.add(header);
+//		// Divider line
+//		rows.add(new String(new char[header.length()]).replace("\0", "-"));
+//		
+//		// For each project and its enquiry, determine the status individually
+//		for (Map.Entry<BTOProject, Enquiry> entry : appMap.entrySet()) {
+//			BTOProject project = entry.getKey();
+//			Enquiry enquiry = entry.getValue();
+//			
+//			// Determine status based on the enquiry's response (if any)
+//			String statusText = "Pending";  // default
+//			if (enquiry.getResponse() != null) {
+//				String reply = enquiry.getResponse().getContent().trim();
+//				if (reply.equalsIgnoreCase("approve")) {
+//					statusText = "Approved";
+//				} else if (reply.equalsIgnoreCase("reject")) {
+//					statusText = "Denied";
+//				} // else leave as Pending
+//			}
+//			
+//			String managerReply = (enquiry.getResponse() != null) ? enquiry.getResponse().getContent() : "";
+//			String row = String.format("%-25s │ %-20s │ %-12s │ %-10s │ %-25s", 
+//					project.getProjectName(),
+//					project.getNeighborhood(),
+//					(project.getManagerInCharge() != null ? project.getManagerInCharge().getName() : "N/A"),
+//					statusText,
+//					managerReply);
+//			rows.add(row);
+//		}
+//		
+//		new DisplayMenu.Builder()
+//			.addContents(rows)
+//			.build()
+//			.display();
+//	}
 }
