@@ -32,6 +32,9 @@ public class HDBManagerActions {
 		case APPROVE_OR_REJECT_APPLICATIONS:
 			approveRejectApplication(user);
 			break;
+		case APPROVE_OR_REJECT_WITHDRAWAL_APPLICATIONS:
+			approveRejectWithdrawalApplication(user);
+			break;
 		case VIEW_PENDING_OFFICER_REQUESTS:
 			viewPendingOfficerRequests(user);
 			break;
@@ -378,9 +381,9 @@ public class HDBManagerActions {
 	}
 	
 
-/*	private static void generateReport(HDBManager manager) {
-		//filter based on category
-	}*/
+	private static void generateReport(HDBManager manager) {
+		
+	}
 	
 	private static void approveRejectApplication(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
@@ -409,21 +412,35 @@ public class HDBManagerActions {
 		}
 	}
 	
-	//to do
+	//TODO: might need to add some additional details, after officer accept, do we need to update the primary status? 
+	//TODO: NEED TO
 		
 	private static void approveRejectWithdrawalApplication(HDBManager manager) {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
-		// TODO: Withdrawal implementation
-//		ArrayList<Application> withdrawalApplications = system.getwithdrawalApplications();
-//		
-//		for (int i = 0; i < withdrawalApplications.size(); i++) {
-//            System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
-//		}
-//		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
-//		
-//		
+		
+		ArrayList<Application> withdrawalApplications = system.getWithdrawalApplications();
+		
+		if(withdrawalApplications.isEmpty()) {
+			System.out.println("No Withdrawal Application waiting for approval");
+			return;
+		}
+		
+		for (int i = 0; i < withdrawalApplications.size(); i++) {
+			System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
+	}
+		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
+		Application chosenApplication = withdrawalApplications.get(choice);
+		
+		boolean choice2 = superScanner.nextBoolUntilCorrect("Enter Y for approve, N for reject");
+		 if(choice2 == true) {
+			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.WITHDRAWN);
+			 
+		 }
+		 else {
+			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.REJECTED);
+		 }
 		
 	}
 	

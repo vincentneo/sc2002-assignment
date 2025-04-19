@@ -8,11 +8,13 @@ public enum WithdrawalStatus {
 	/*
 	 * Withdrawal requested by user.
 	 */
-	PENDING("Pending Withdrawal"),
+
 	/*
 	 * Withdrawal is accepted by authority. Assume application voided.
 	 */
-	WITHDRAWN("Withdrawn");
+	WITHDRAWN("Withdrawn"),
+	
+	REJECTED("Rejected");
 	
 	private String value;
 	

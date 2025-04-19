@@ -38,6 +38,7 @@ public class HDBManager extends User {
 		DELETE_PROJECT,
 		VIEW_ALL_PROJECTS,
 		APPROVE_OR_REJECT_APPLICATIONS,
+		APPROVE_OR_REJECT_WITHDRAWAL_APPLICATIONS,
 		FILTER_PROJECT,
 		VIEW_PENDING_OFFICER_REQUESTS,
 		VIEW_CREATED_PROJECTS,
@@ -57,6 +58,8 @@ public class HDBManager extends User {
 				return "Delete Project";
 			case APPROVE_OR_REJECT_APPLICATIONS:
 				return "Approve/Reject Applications";
+			case APPROVE_OR_REJECT_WITHDRAWAL_APPLICATIONS:
+				return "Approve/reject Withdrawal Applications";
 			case VIEW_PENDING_OFFICER_REQUESTS:
 				return "View Pending Project Join Requests";
 			case VIEW_ALL_ENQUIRIES:
