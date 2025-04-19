@@ -100,14 +100,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
-	private ArrayList<User> allUsers() {
-		ArrayList<User> users = new ArrayList<>();
-		users.addAll(applicants);
-		users.addAll(managers);
-		users.addAll(officers);
-		return users;
-	}
-	
 	public User findUserByNRIC(String nric) {
 		for (User user : allUsers()) {
 			if (user.getNric().equalsIgnoreCase(nric)) {
@@ -171,6 +163,16 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 	}
 	
+	//region Getters & Setters
+	//-------------------------------------------------------
+	private ArrayList<User> allUsers() {
+		ArrayList<User> users = new ArrayList<>();
+		users.addAll(applicants);
+		users.addAll(managers);
+		users.addAll(officers);
+		return users;
+	}
+	
 	public User getActiveUser() {
 		return activeUser;
 	}
@@ -224,6 +226,25 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		return getVisibleProjects();
 	}
+	
+	public Scanner getScanner() {
+		return scanner;
+	}
+
+	@Override
+	public List<Enquiry> getApplicableEnquiries() {
+		if (activeUser instanceof HDBManager) {
+			return enquiries;
+		}
+		
+		if (activeUser instanceof Applicant) {
+			return enquiries.stream()
+					.filter(e -> e.isUserInvolved(activeUser))
+					.collect(Collectors.toList());
+		}
+		
+		return new ArrayList<>();
+	}
 
 	/**
 	 * Get the projects that are filtered by the active user's filter.
@@ -231,7 +252,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * @param filteredProjects The list of projects to be filtered.
 	 * @return The filtered list of projects.
 	 */
-	public ArrayList<BTOProject> filterProjects (ArrayList<BTOProject> filteredProjects) {
+	public ArrayList<BTOProject> filterProjects(ArrayList<BTOProject> filteredProjects) {
 		ListingSort sort = activeUser.getListingSort();
 		ListingFilter filter = activeUser.getListingFilter();
 		
@@ -374,10 +395,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
-	public Scanner getScanner() {
-		return scanner;
-	}
-	
 	/**
 	 * Checks if there is already a project with a similar name.
 	 * 
@@ -422,21 +439,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (!isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
 		this.enquiries.add(enquiry);
 		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
-	}
-
-	@Override
-	public List<Enquiry> getApplicableEnquiries() {
-		if (activeUser instanceof HDBManager) {
-			return enquiries;
-		}
-		
-		if (activeUser instanceof Applicant) {
-			return enquiries.stream()
-					.filter(e -> e.isUserInvolved(activeUser))
-					.collect(Collectors.toList());
-		}
-		
-		return new ArrayList<>();
 	}
 	
 }
