@@ -71,15 +71,8 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	}
 	
 	/** 
-	 * Retrieve the unique identifier of this object.
-	 * @return a UUID that uniquely represents this object.
-	 */
-	public UUID getId() {
-		return id;
-	}
-
-	/** 
 	 * Only call if projectName is provided by CSV parsing and not null.
+	 * @param projects All projects of system, used for matching and linking.
 	 */
 	public void linkProject(ArrayList<BTOProject> projects) {
 		BTOProject project = projects
@@ -114,6 +107,14 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	public boolean isUserInvolved(User user) {
 		return (question != null && question.getUser().equals(user)) || (response != null && response.getUser().equals(user));
 	}
+	
+	/** 
+	 * Retrieve the unique identifier of this object.
+	 * @return a UUID that uniquely represents this object.
+	 */
+	public UUID getId() {
+		return id;
+	}
 
 	/**
 	 * Retrieve the response object provided by an authorised officer or manager, if any.
@@ -129,6 +130,14 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	 */
 	public void setResponse(Message response) {
 		this.response = response;
+	}
+	
+	/**
+	 * Retrieve the project associated to this enquiry.
+	 * @return project information.
+	 */
+	public BTOProject getProject() {
+		return project;
 	}
 
 	/**

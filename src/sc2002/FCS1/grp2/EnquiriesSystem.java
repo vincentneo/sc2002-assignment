@@ -47,7 +47,12 @@ public class EnquiriesSystem {
 			Message question = enquiry.getQuestion();
 			if (question == null) continue;
 			
-			String responseState = enquiry.hasResponded() ? "Responded" : "Not Responded";
+			String resValue = enquiry.hasResponded() ? "Responded" : "Not Responded";
+			int colourCode = enquiry.hasResponded() ? 46 : 178;
+			String responseState = new Style.Builder()
+					.text(resValue)
+					.add256Colour(colourCode, false)
+					.toString();
 			
 			contents.add(String.format("%3d. %-50s %30s", index, question.getContent(), responseState));
 			

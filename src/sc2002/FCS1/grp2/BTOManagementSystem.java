@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import java.time.LocalDate;
 
@@ -247,6 +248,15 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	public List<Enquiry> getApplicableEnquiries() {
 		if (activeUser instanceof HDBManager) {
 			return enquiries;
+		}
+		
+		if (activeUser instanceof HDBOfficer) {
+			// always ensure that officer objects are at back
+			return Stream.concat(
+				enquiries.stream().filter(e -> e.isUserInvolved(activeUser)),
+				enquiries.stream().filter(e -> e.getProject().getOfficers().contains(activeUser))
+			).collect(Collectors.toCollection(ArrayList::new));
+			
 		}
 		
 		if (activeUser instanceof Applicant) {

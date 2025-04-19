@@ -20,6 +20,9 @@ public class HDBOfficerActions {
             case JOIN_PROJECT:
                 joinProject(user); 
                 break;
+            case ENTER_ENQUIRIES_SYSTEM:
+            	enquiriesSystemFlow(user);
+            	break;
             case CHECK_PENDING_PROJECT:
             	checkProjectApplicationStatus(user);
             	break;
@@ -30,6 +33,10 @@ public class HDBOfficerActions {
                 System.out.println("Option not implemented.");
         }
     }
+	
+	private static void enquiriesSystemFlow(HDBOfficer officer) throws Exception {
+		
+	}
 	
 	private static void checkProjectApplicationStatus(HDBOfficer officer) throws Exception {
 		List<TableColumnOption> displayOptions = new ArrayList<>();
