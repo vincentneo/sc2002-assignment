@@ -33,21 +33,9 @@ public class HDBManagerActions {
 		case DELETE_PROJECT:
 			deleteProject(user);
 			break;
-
-		case VIEW_ALL_PROJECTS:
-			viewAllProjects(user);
-			break;
 		case APPROVE_OR_REJECT_APPLICATIONS:
 			approveRejectApplication(user);
 			break;
-		case FILTER_PROJECT:
-			filterProjects(user);
-			break;
-
-		// case FILTER_PROJECT:
-		// 	filterProjects(user);
-		// 	break;
-
 		case VIEW_PENDING_OFFICER_REQUESTS:
 			viewPendingOfficerRequests(user);
 			break;
