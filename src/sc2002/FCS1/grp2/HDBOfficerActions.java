@@ -11,15 +11,9 @@ import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
 public class HDBOfficerActions {
+	private static BTOManagementSystem system = BTOManagementSystem.common();
 
-    private static BTOManagementSystem system;
-
-    public static void setSystem(BTOManagementSystem system) {
-        HDBOfficerActions.system = system;
-    }
-
-    public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
-//		updateApplicationStatus(user);
+	public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
         switch (option) {
             case VIEW_PROJECTS:
                 // TODO: filtering, access control etc etc
@@ -28,9 +22,9 @@ public class HDBOfficerActions {
             case JOIN_PROJECT:
                 joinProject(user); 
                 break;
-            case CHECK_APPLICATION_STATUS:
+//            case CHECK_APPLICATION_STATUS:
 //                displayOfficerApplications(user);
-                break;
+//                break;
             default:
                 System.out.println("Option not implemented.");
         }

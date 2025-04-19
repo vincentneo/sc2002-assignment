@@ -10,11 +10,7 @@ import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
 public class ApplicantActions {
-	private static BTOManagementSystem system;
-	
-	public static void setSystem(BTOManagementSystem system) {
-		ApplicantActions.system = system;
-	}
+	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	public static void handleAction(Applicant.Menu option, Applicant user) throws Exception {
 		switch (option) {

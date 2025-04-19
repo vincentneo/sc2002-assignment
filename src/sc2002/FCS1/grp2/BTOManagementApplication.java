@@ -10,11 +10,8 @@ public class BTOManagementApplication {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	public static void main(String[] args) {
-
-		system.debugPrintAllUsers();
-		setup();
-		
 		// TODO: Delete once finish debugging
+		system.debugPrintAllUsers();
 		System.out.print("Proj 1 officers: ");
 		System.out.println(system.getProjects().getFirst().getOfficers());
 
@@ -26,13 +23,7 @@ public class BTOManagementApplication {
 		
 		system.cleanup();
 	}
-	
-	private static void setup() {
-		HDBManagerActions.setSystem(system);
-		HDBOfficerActions.setSystem(system);
-		ApplicantActions.setSystem(system);
-	}
-	
+
 	private static String prepareHeader(String title) {
 		int max = 60;
 		

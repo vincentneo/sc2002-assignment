@@ -10,11 +10,7 @@ import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
 public class HDBManagerActions {
-	private static BTOManagementSystem system;
-	
-	public static void setSystem(BTOManagementSystem system) {
-		HDBManagerActions.system = system;
-	}
+	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {

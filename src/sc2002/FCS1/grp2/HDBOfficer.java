@@ -38,16 +38,16 @@ public class HDBOfficer extends Applicant {
 	enum Menu implements ScopedOption {
 		VIEW_PROJECTS,
 		JOIN_PROJECT,
-		CHECK_APPLICATION_STATUS;
+		CHECK_PROJECT_APPLICATION_STATUS;
 		
 		public String getOptionName() {
 			switch (this) {
 			case VIEW_PROJECTS: 
-				return "View Projects to Apply BTO";
+				return "View Projects (as Applicant)";
 			case JOIN_PROJECT:
 				return "Join Project";
-			case CHECK_APPLICATION_STATUS:
-				return "Check Application Status";
+			case CHECK_PROJECT_APPLICATION_STATUS:
+				return "Check Project Application Status";
 			default:
 				return null;
 			}
