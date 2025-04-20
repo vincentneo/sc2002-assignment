@@ -10,11 +10,12 @@ import java.util.List;
  */
 public class EnquiriesSystem {
 	private EnquiriesDelegate delegate;
-	private List<Enquiry> enquiries;
+	private List<Enquiry> ownEnquiries;
+	private List<Enquiry> respondableEnquiries;
 	
 	EnquiriesSystem(EnquiriesDelegate delegate) {
 		this.delegate = delegate;
-		this.enquiries = delegate.getApplicableEnquiries();
+		this.ownEnquiries = delegate.getOwnEnquiries();
 	}
 
 	public void setDelegate(EnquiriesDelegate delegate) {
@@ -23,20 +24,20 @@ public class EnquiriesSystem {
 	
 	public void addEnquiry(Enquiry enquiry) throws Exception {
 		this.delegate.addEnquiry(enquiry);
-		this.enquiries.add(enquiry);
+		this.ownEnquiries.add(enquiry);
 	}
 	
 	public List<Enquiry> getEnquiries() {
-		return enquiries;
+		return ownEnquiries;
 	}
 
 	
 	public boolean isEmpty() {
-		return enquiries.isEmpty();
+		return ownEnquiries.isEmpty();
 	}
 	
 	public int size() {
-		return enquiries.size();
+		return ownEnquiries.size();
 	}
 	
 	public void displayEnquiriesMenu() {
