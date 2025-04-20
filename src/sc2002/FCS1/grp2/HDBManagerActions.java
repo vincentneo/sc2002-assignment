@@ -415,7 +415,7 @@ public class HDBManagerActions {
 	//TODO: might need to add some additional details, after officer accept, do we need to update the primary status? 
 	//TODO: NEED TO
 		
-	private static void approveRejectWithdrawalApplication(HDBManager manager) {
+	private static void approveRejectWithdrawalApplication(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 		
