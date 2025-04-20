@@ -49,6 +49,12 @@ public enum FlatType {
 		return null;
 	}
 	
+	/**
+	 * Construct base on integer value that can represent a flat type.
+	 * For example, provide number 2 gives you {@code TWO_ROOM}
+	 * 
+	 * Any unsupported flat type value such as 4 or 5 will result in {@code null}
+	 */
 	public static FlatType fromInt(int number) {
 		switch (number) {
 		case 2:

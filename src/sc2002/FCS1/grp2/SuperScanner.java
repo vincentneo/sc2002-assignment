@@ -14,12 +14,23 @@ import sc2002.FCS1.grp2.Style.Code;
  * Here, it will automatically and recursively ask the user until the input given is in correct format.
  */
 public class SuperScanner {
+	/**
+	 * Scanner object to be referenced in class.
+	 */
 	private Scanner scanner;
 	
+	/**
+	 * Construct a SuperScanner to use convenient user input abilities
+	 * @param scanner Scanner to be used to get user input.
+	 */
 	public SuperScanner(Scanner scanner) {
 		this.scanner = scanner;
 	}
 	
+	/**
+	 * Where necessary, you can access the associated {@code Scanner} object where necessary.
+	 * @return Scanner object.
+	 */
 	public Scanner getScanner() {
 		return scanner;
 	}
@@ -39,6 +50,15 @@ public class SuperScanner {
 		}
 	}
 	
+	/**
+	 * Get input from user until input is a number, and falls within boundaries provided.
+	 * 
+	 * Both min and max parameters are inclusive; All values in between are also treated as accepted.
+	 * @param prompt The prompt to be shown to the user.
+	 * @param min The minimum value to be accepted. (inclusive)
+	 * @param max The maximum value to be accepted. (inclusive)
+	 * @return The integer that is provided by the user's input.
+	 */
 	public int nextIntUntilCorrect(String prompt, int min, int max) {
 		int value = nextIntUntilCorrect(prompt);
 		if (value < min || value > max) {
@@ -48,6 +68,13 @@ public class SuperScanner {
 		return value;
 	}
 	
+	/**
+	 * Get user input of date type, while ensuring format is correct.
+	 * 
+	 * Date format expected should be d/M/yy, where d is day, M is month, and yy is year (2 digits)
+	 * @param prompt
+	 * @return Date provided by the user.
+	 */
 	public LocalDate nextDateUntilCorrect(String prompt) {
 		try {
 			return nextDate(prompt);
@@ -59,6 +86,18 @@ public class SuperScanner {
 		}
 	}
 	
+	/**
+	 * Get user input that is binary (either true or false)
+	 * 
+	 * This method accepts a few forms to represent truthness.
+	 * <ul>
+	 * 		<li>true/false</li>
+	 * 		<li>Yes/No</li>
+	 * 		<li>y/n<li>
+	 * </ul>
+	 * @param prompt
+	 * @return
+	 */
 	public Boolean nextBoolUntilCorrect(String prompt) {
 		try {
 			return nextBool(prompt);

@@ -9,9 +9,18 @@ import java.util.stream.Collectors;
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.Style.Code;
 
+/**
+ * Handles all actions specific to Applicants.
+ */
 public class ApplicantActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
+	/**
+	 * Point of entry, to be handover from {@code BTOManagementApplication}
+	 * @param option Menu option selected by user.
+	 * @param user The user involved in the current action.
+	 * @throws Exception
+	 */
 	public static void handleAction(Applicant.Menu option, Applicant user) throws Exception {
 		switch (option) {
 		case VIEW_PROJECTS:
@@ -39,6 +48,11 @@ public class ApplicantActions {
 		 */
 	}
 	
+	/**
+	 * Action flow for an applicant to view BTO applications applied.
+	 * @param applicant The applicant that is actively using the application at current.
+	 * @throws Exception
+	 */
 	private static void viewApplication(Applicant applicant) throws Exception {
 		ArrayList<Application> applications = system.getApplications();
 		
