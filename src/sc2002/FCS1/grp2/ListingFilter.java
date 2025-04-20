@@ -4,11 +4,11 @@ package sc2002.FCS1.grp2;
  * Each enum value corresponds to a specific filter.
  */
 public enum ListingFilter {
-    DEFAULT, // No filter
-    TWO_ROOM, // Filter with at least 1 2-room unit
-    THREE_ROOM, // Filter with at least 1 3-room unit
-    NAME, // Filter with keywords in the name of the project
-    NEIGHBORHOOD; // Filter with keywords in the neighborhood of the project
+    DEFAULT("None (default)"), // No filter
+    TWO_ROOM("2-Room Availability"), // Filter with at least 1 2-room unit
+    THREE_ROOM("3-Room Availability"), // Filter with at least 1 3-room unit
+    NAME("Name"), // Filter with keywords in the name of the project
+    NEIGHBORHOOD("Neighbourhood"); // Filter with keywords in the neighborhood of the project
     
     /**
      * The keyword associated with this enum value.
@@ -45,6 +45,11 @@ public enum ListingFilter {
      * @return the keyword
      */
     public String getKeyword() {
+        return keyword;
+    }
+
+    @Override
+    public String toString() {
         return keyword;
     }
 

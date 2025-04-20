@@ -46,13 +46,13 @@ public class BTOManagementApplication {
 		ArrayList<String> additionalDetails = new ArrayList<>();
 		additionalDetails.add("To exit, type \"exit\"");
 		additionalDetails.add("To logout, type \"logout\"");
-		additionalDetails.add("You are logged in as " + system.getActiveUser().getName() + " (" + system.getActiveUser().getReadableTypeName() + ")");
-		additionalDetails.add("You are currently sorting project listing by " + system.getActiveUser().getListingSort().name() + ".");
-		additionalDetails.add("You are currently filtering project listing by " + system.getActiveUser().getListingFilter().name() + ".");
 
 		new DisplayMenu.Builder()
 				.setTitle("Menu")
 				.addContents(menuContents)
+				.addContent(new Style.Builder().text("Project Display Mode").italic().toString())
+				.addContent("Sorted by: " + system.getActiveUser().getListingSort())
+				.addContent("Filtered by: " + system.getActiveUser().getListingFilter())
 				.addContents(additionalDetails)
 				.build()
 				.display();
