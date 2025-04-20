@@ -100,7 +100,7 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	}
 	
 	/**
-	 * Checks if the provided user is involved in this enquiry, either as an enquirer or answerer.
+	 * Checks if the provided user is involved in this enquiry, as an enquirer.
 	 * @param user The user to be checked.
 	 * @return true, if user provided is found to be involved in this enquiry.
 	 */
