@@ -59,10 +59,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		ArrayList<Enquiry> enquiries = parser.parseEnquiries();
 		ArrayList<Application> applications = parser.parseApplications();
 
-		for (BTOProject project : projects) {
-			project.retrieveConnectedUsers(officers, managers);
-		}
-
 		this.applicants = applicants;
 		this.managers = managers;
 		this.officers = officers;
@@ -70,17 +66,29 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		this.enquiries = enquiries;
 		this.applications = applications;
 
+		crosslinking();
+		automatedChecks();
+	}
+
+	public static BTOManagementSystem common() {
+		return commonInstance;
+	}
+
+	private void crosslinking() {
+		for (BTOProject project : projects) {
+			project.retrieveConnectedUsers(officers, managers);
+		}
+
 		ArrayList<User> all = allUsers();
 		for (Enquiry enquiry : enquiries) {
 			enquiry.linkUsers(all);
 			enquiry.linkProject(projects);
 		}
 
-		automatedChecks();
-	}
-
-	public static BTOManagementSystem common() {
-		return commonInstance;
+		for (Application application : applications) {
+			application.linkApplicant(applicants);
+			application.linkProject(projects);
+		}
 	}
 
 	/**

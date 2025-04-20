@@ -34,8 +34,8 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	}
     }
     
-    void linkApplicant(List<Applicant> applicants) throws Exception {
-    	if (applicantNRIC == null) throw new IllegalArgumentException();
+    void linkApplicant(List<Applicant> applicants) { //throws Exception {
+    	// if (applicantNRIC == null) throw new IllegalArgumentException();
     	
     	Applicant applicant = applicants.stream()
     			.filter(ap -> ap.getNric().equalsIgnoreCase(applicantNRIC))
@@ -46,8 +46,8 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.applicantNRIC = null;
     }
     
-    void linkProject(List<BTOProject> projects) throws Exception {
-    	if (projectName == null) throw new IllegalArgumentException();
+    void linkProject(List<BTOProject> projects) {// throws Exception {
+    	// if (projectName == null) throw new IllegalArgumentException();
     	
     	BTOProject project = projects.stream()
     			.filter(p -> p.getProjectName().equals(projectName))
