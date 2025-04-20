@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import sc2002.FCS1.grp2.Style.Code;
+
 /**
  * Each enquiry acts as a question and answer session, between applicants and officers or managers of a project.
  * 
@@ -100,12 +102,12 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	}
 	
 	/**
-	 * Checks if the provided user is involved in this enquiry, either as an enquirer or answerer.
+	 * Checks if the provided user is involved in this enquiry, as an enquirer.
 	 * @param user The user to be checked.
 	 * @return true, if user provided is found to be involved in this enquiry.
 	 */
 	public boolean isUserInvolved(User user) {
-		return (question != null && question.getUser().equals(user)) || (response != null && response.getUser().equals(user));
+		return (question != null && question.getUser() == user);// || (response != null && response.getUser().equals(user));
 	}
 	
 	/** 
@@ -169,4 +171,45 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 		return CSVFileTypes.ENQUIRIES_LIST;
 	}
 	
+	public void display() {
+		int width = 100;
+		
+		String userRow = this.getQuestion().getUser().getName() + " asks:";
+		ArrayList<String> rows = new ArrayList<>();
+
+		String questionDate = Utilities.getInstance().formatUserReadableDateTime(this.getQuestion().getTimestamp());
+		rows.add(
+			new Style.Builder()
+			.text(" " + questionDate + " ")
+			.add256Colour(55, true)
+			.bold()
+			.toString()
+		);
+		rows.add(String.format("\u001B[1m%-" + (width - userRow.length()) + "s\u001B[0m", userRow));
+		rows.add(this.getQuestion().getContent());
+		
+		if (this.getResponse() != null) {
+			rows.add("");
+			Message response = this.getResponse();
+			
+			String responseDate = Utilities.getInstance().formatUserReadableDateTime(response.getTimestamp());
+
+			rows.add(
+				new Style.Builder()
+				.text(" " + responseDate + " ")
+				.add256Colour(35, true)
+				.bold()
+				.toString()
+			);
+			String responseInfo = String.format("%s (%s) replied:", response.getUser().getName(), response.getUser().getReadableTypeName());
+
+			rows.add(String.format("\u001B[1m%-" + (width - responseInfo.length()) + "s\u001B[0m", responseInfo));
+			rows.add(String.format("%-" + (width - response.getContent().length()) + "s", response.getContent()));
+		}
+		
+		new DisplayMenu.Builder()
+			.addContents(rows)
+			.build()
+			.display();
+	}
 }

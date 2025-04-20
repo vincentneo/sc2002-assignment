@@ -10,11 +10,14 @@ import java.util.List;
  */
 public class EnquiriesSystem {
 	private EnquiriesDelegate delegate;
-	private List<Enquiry> enquiries;
+	private List<Enquiry> ownEnquiries;
+	private List<Enquiry> respondableEnquiries;
 	
 	EnquiriesSystem(EnquiriesDelegate delegate) {
 		this.delegate = delegate;
-		this.enquiries = delegate.getApplicableEnquiries();
+		
+		this.ownEnquiries = delegate.getOwnEnquiries();
+		this.respondableEnquiries = delegate.getEnquiries();
 	}
 
 	public void setDelegate(EnquiriesDelegate delegate) {
@@ -23,51 +26,84 @@ public class EnquiriesSystem {
 	
 	public void addEnquiry(Enquiry enquiry) throws Exception {
 		this.delegate.addEnquiry(enquiry);
-		this.enquiries.add(enquiry);
+		this.ownEnquiries.add(enquiry);
 	}
 	
 	public List<Enquiry> getEnquiries() {
+		var enquiries = new ArrayList<Enquiry>();
+		enquiries.addAll(ownEnquiries);
+		enquiries.addAll(respondableEnquiries);
 		return enquiries;
 	}
 
 	
 	public boolean isEmpty() {
-		return enquiries.isEmpty();
+		return ownEnquiries.isEmpty();
 	}
 	
 	public int size() {
-		return enquiries.size();
+		return ownEnquiries.size();
 	}
 	
-	public void displayEnquiriesMenu() {
-		List<String> contents = new ArrayList<>();
+	private String buildMenuItem(int index, Enquiry enquiry) {
+		Message question = enquiry.getQuestion();
+		if (question == null) return null;
 		
+		String resValue = enquiry.hasResponded() ? "Responded" : "Not Responded";
+		int colourCode = enquiry.hasResponded() ? 46 : 178;
+		String responseState = new Style.Builder()
+				.text(resValue)
+				.add256Colour(colourCode, false)
+				.toString();
+		
+		String projectName = enquiry.getProject().getProjectName();
+		String title = String.format("(%s): %s", projectName, question.getContent());
+		
+		return String.format("%3d. %-50s %s", index, title, responseState);
+	}
+	
+	public void displayEnquiriesMenu() {		
 		int index = 1;
-		for (Enquiry enquiry : enquiries) {
-			Message question = enquiry.getQuestion();
-			if (question == null) continue;
+		
+		boolean ownEmpty = ownEnquiries.isEmpty();
+		boolean respondableEmpty = respondableEnquiries.isEmpty();
+		boolean allEmpty = ownEmpty && respondableEmpty;
+				
+		var builder = new DisplayMenu.Builder();
+		
+		if (!ownEmpty) {
+			List<String> myEnquiries = new ArrayList<>();
 			
-			String resValue = enquiry.hasResponded() ? "Responded" : "Not Responded";
-			int colourCode = enquiry.hasResponded() ? 46 : 178;
-			String responseState = new Style.Builder()
-					.text(resValue)
-					.add256Colour(colourCode, false)
-					.toString();
+			myEnquiries.add(new Style.Builder().text("My Enquiries").bold().italic().toString());
+			for (Enquiry enquiry : ownEnquiries) {
+				myEnquiries.add(buildMenuItem(index, enquiry));
+				
+				index++;
+			}
 			
-			contents.add(String.format("%3d. %-50s %30s", index, question.getContent(), responseState));
-			
-			index++;
+			builder.addContents(myEnquiries);
 		}
 		
-		if (contents.isEmpty()) {
-			contents.add(String.format("%s%s%s", " ".repeat(10), "No enquiries were found.", " ".repeat(10)));
+		if (!respondableEmpty) {
+			List<String> applicantEnquiries = new ArrayList<>();
+			
+			applicantEnquiries.add(new Style.Builder().text("Enquiries from Applicants").bold().italic().toString());
+			for (Enquiry enquiry : respondableEnquiries) {
+				applicantEnquiries.add(buildMenuItem(index, enquiry));
+				
+				index++;
+			}
+			
+			builder.addContents(applicantEnquiries);
 		}
 		
+		if (allEmpty) {
+			builder.addContent(String.format("%s%s%s", " ".repeat(10), "No enquiries were found.", " ".repeat(10)));
+		}
 		
-		new DisplayMenu.Builder()
-				.addContents(contents)
-				.setTitle("Enquiries")
-				.build()
-				.display();
+		builder
+			.setTitle("Enquiries")
+			.build()
+			.display();
 	}
 }

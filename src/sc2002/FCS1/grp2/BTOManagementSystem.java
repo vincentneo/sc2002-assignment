@@ -118,10 +118,20 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		boolean result = user.checkPassword(password);
 
 		if (result) {
-			this.activeUser = user;
+			login(user);
 		}
 
 		return result;
+	}
+	
+	private void login(User user) {
+		this.activeUser = user;
+		
+		if (user.getEnquiriesSystem() == null) {
+			EnquiriesSystem eSystem = new EnquiriesSystem(this);
+			
+			user.setEnquiriesSystem(eSystem);
+		}
 	}
 
 	public void logout() {
@@ -248,24 +258,24 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 
 	@Override
-	public List<Enquiry> getApplicableEnquiries() {
+	public List<Enquiry> getOwnEnquiries() {
+//		if (!(isActiveUserPermitted(HDBOfficer.class) || isActiveUserPermitted(Applicant.class))) return new ArrayList<>();
+		
+		return enquiries.stream().filter(e -> e.isUserInvolved(activeUser)).collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	@Override
+	public List<Enquiry> getEnquiries() {
 		if (activeUser instanceof HDBManager) {
 			return enquiries;
 		}
-
-		if (activeUser instanceof HDBOfficer) {
-			// always ensure that officer objects are at back
-			return Stream
-					.concat(enquiries.stream().filter(e -> e.isUserInvolved(activeUser)),
-							enquiries.stream().filter(e -> e.getProject().getOfficers().contains(activeUser)))
+		else if (activeUser instanceof HDBOfficer) {
+			return enquiries.stream()
+					.filter(e -> e.getProject().getOfficers().contains(activeUser))
 					.collect(Collectors.toCollection(ArrayList::new));
 
 		}
-
-		if (activeUser instanceof Applicant) {
-			return enquiries.stream().filter(e -> e.isUserInvolved(activeUser)).collect(Collectors.toList());
-		}
-
+		
 		return new ArrayList<>();
 	}
 
