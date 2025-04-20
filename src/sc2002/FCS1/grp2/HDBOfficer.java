@@ -1,9 +1,7 @@
 package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HDBOfficer extends Applicant {
 

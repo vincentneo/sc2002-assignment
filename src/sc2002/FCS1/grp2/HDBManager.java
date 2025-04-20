@@ -2,7 +2,6 @@ package sc2002.FCS1.grp2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class HDBManager extends User {
 	public HDBManager(List<CSVCell> cells) {

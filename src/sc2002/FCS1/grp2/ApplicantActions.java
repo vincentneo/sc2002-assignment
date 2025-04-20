@@ -26,6 +26,8 @@ public class ApplicantActions {
 		case VIEW_APPLICATIONS:
 			viewApplication(user);
 			break;
+		default:
+			break;
 		}
 		/*
 		 * TODO: move them else where

@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -891,9 +890,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		int index = 0;
 		
 		for (BTOProject project : projects) {
-			HDBManager manager = project.getManagerInCharge();
-			String managerName = manager == null ? " " : manager.getName();
-			
 			List<String> row = new ArrayList<>();
 			
 			if (options.contains(TableColumnOption.INDEX_NUMBER)) {

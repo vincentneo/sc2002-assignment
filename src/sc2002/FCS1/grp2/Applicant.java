@@ -232,9 +232,7 @@ public class Applicant extends User {
     * Applicant-specific menu options
     */
    enum Menu implements ScopedOption {
-       VIEW_PROJECTS("View All Projects"),
-//       VIEW_APPLICABLE_PROJECTS("View Applicable Projects"),
-       APPLY_PROJECT("Apply for Project"),
+       VIEW_PROJECTS("View Available Projects"),
        VIEW_ENQUIRIES("View My Enquiries"),
        VIEW_APPLICATIONS("View My Applications"),
        SEND_ENQUIRY("Send Enquiry");
