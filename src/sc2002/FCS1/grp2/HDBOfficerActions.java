@@ -35,7 +35,19 @@ public class HDBOfficerActions {
     }
 	
 	private static void enquiriesSystemFlow(HDBOfficer officer) throws Exception {
-		
+		Scanner scanner = system.getScanner();
+		SuperScanner sscanner = new SuperScanner(scanner);
+		EnquiriesSystem enquiriesSystem = officer.getEnquiriesSystem();
+
+		enquiriesSystem.displayEnquiriesMenu();
+
+		List<Enquiry> enquiries = enquiriesSystem.getEnquiries();
+		int option = sscanner.nextIntUntilCorrect("Choose the enquiry of interest (0 to go back): ", 0, enquiries.size());
+
+		if (option == 0) return;
+
+		Enquiry selectedEnquiry = enquiries.get(option);
+		selectedEnquiry.display();
 	}
 	
 	private static void checkProjectApplicationStatus(HDBOfficer officer) throws Exception {

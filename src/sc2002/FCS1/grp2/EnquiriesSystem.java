@@ -30,7 +30,10 @@ public class EnquiriesSystem {
 	}
 	
 	public List<Enquiry> getEnquiries() {
-		return ownEnquiries;
+		var enquiries = new ArrayList<Enquiry>();
+		enquiries.addAll(ownEnquiries);
+		enquiries.addAll(respondableEnquiries);
+		return enquiries;
 	}
 
 	
@@ -85,7 +88,7 @@ public class EnquiriesSystem {
 			List<String> applicantEnquiries = new ArrayList<>();
 			
 			applicantEnquiries.add(new Style.Builder().text("Enquiries from Applicants").bold().italic().toString());
-			for (Enquiry enquiry : ownEnquiries) {
+			for (Enquiry enquiry : respondableEnquiries) {
 				applicantEnquiries.add(buildMenuItem(index, enquiry));
 				
 				index++;

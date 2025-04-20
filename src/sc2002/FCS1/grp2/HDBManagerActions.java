@@ -619,32 +619,8 @@ public class HDBManagerActions {
 		if (shouldExit) return;
 		
 		Enquiry enquiry = eSystem.getEnquiries().get(userOption - 1);
-		int width = 100;
-		
-		String userRow = enquiry.getQuestion().getUser().getName() + " asks:";
-		ArrayList<String> rows = new ArrayList<>();
 
-		String questionDate = Utilities.getInstance().formatUserReadableDateTime(enquiry.getQuestion().getTimestamp());
-		rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", questionDate));
-		rows.add(String.format("\u001B[1m%-" + (width - userRow.length()) + "s\u001B[0m", userRow));
-		rows.add(enquiry.getQuestion().getContent());
-		
-		if (enquiry.getResponse() != null) {
-			rows.add("");
-			Message response = enquiry.getResponse();
-			
-			String responseDate = Utilities.getInstance().formatUserReadableDateTime(response.getTimestamp());
-			rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", responseDate));
-			
-			String responseInfo = String.format("%s (%s) replied:", response.getUser().getName(), response.getUser().getReadableTypeName());
-			rows.add(String.format("\u001B[1m%-" + (width - responseInfo.length()) + "s\u001B[0m", responseInfo));
-			rows.add(String.format("%-" + (width - response.getContent().length()) + "s", response.getContent()));
-		}
-		
-		new DisplayMenu.Builder()
-			.addContents(rows)
-			.build()
-			.display();
+		enquiry.display();
 		
 		if (!enquiry.hasResponded()) {
 			Boolean wantsReply = superScanner.nextBoolUntilCorrect("Would you like to reply? (Y/N): ");

@@ -19,7 +19,7 @@ public class DisplayMenu {
 	private final String BOX_LEADING_DIVIDER = "├";
 	private final String BOX_TRAILING_DIVIDER = "┤";
 	
-	DisplayMenu(Builder builder) {
+	private DisplayMenu(Builder builder) {
 		this.title = builder.title;
 		this.contents = builder.contents;
 	}

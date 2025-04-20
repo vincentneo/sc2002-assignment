@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import sc2002.FCS1.grp2.Style.Code;
+
 /**
  * Each enquiry acts as a question and answer session, between applicants and officers or managers of a project.
  * 
@@ -169,4 +171,39 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 		return CSVFileTypes.ENQUIRIES_LIST;
 	}
 	
+	public void display() {
+		int width = 100;
+		
+		String userRow = this.getQuestion().getUser().getName() + " asks:";
+		ArrayList<String> rows = new ArrayList<>();
+
+		String questionDate = Utilities.getInstance().formatUserReadableDateTime(this.getQuestion().getTimestamp());
+		rows.add(
+			new Style.Builder()
+			.text(" " + questionDate + " ")
+			.add256Colour(242, true)
+			.bold()
+			.toString()
+		);
+		// rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", questionDate));
+		rows.add(String.format("\u001B[1m%-" + (width - userRow.length()) + "s\u001B[0m", userRow));
+		rows.add(this.getQuestion().getContent());
+		
+		if (this.getResponse() != null) {
+			rows.add("");
+			Message response = this.getResponse();
+			
+			String responseDate = Utilities.getInstance().formatUserReadableDateTime(response.getTimestamp());
+			rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", responseDate));
+			
+			String responseInfo = String.format("%s (%s) replied:", response.getUser().getName(), response.getUser().getReadableTypeName());
+			rows.add(String.format("\u001B[1m%-" + (width - responseInfo.length()) + "s\u001B[0m", responseInfo));
+			rows.add(String.format("%-" + (width - response.getContent().length()) + "s", response.getContent()));
+		}
+		
+		new DisplayMenu.Builder()
+			.addContents(rows)
+			.build()
+			.display();
+	}
 }
