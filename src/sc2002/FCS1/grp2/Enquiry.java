@@ -181,11 +181,10 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 		rows.add(
 			new Style.Builder()
 			.text(" " + questionDate + " ")
-			.add256Colour(242, true)
+			.add256Colour(55, true)
 			.bold()
 			.toString()
 		);
-		// rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", questionDate));
 		rows.add(String.format("\u001B[1m%-" + (width - userRow.length()) + "s\u001B[0m", userRow));
 		rows.add(this.getQuestion().getContent());
 		
@@ -194,9 +193,16 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 			Message response = this.getResponse();
 			
 			String responseDate = Utilities.getInstance().formatUserReadableDateTime(response.getTimestamp());
-			rows.add(String.format("\u001B[1;30;46m %s \u001B[0m", responseDate));
-			
+
+			rows.add(
+				new Style.Builder()
+				.text(" " + responseDate + " ")
+				.add256Colour(35, true)
+				.bold()
+				.toString()
+			);
 			String responseInfo = String.format("%s (%s) replied:", response.getUser().getName(), response.getUser().getReadableTypeName());
+
 			rows.add(String.format("\u001B[1m%-" + (width - responseInfo.length()) + "s\u001B[0m", responseInfo));
 			rows.add(String.format("%-" + (width - response.getContent().length()) + "s", response.getContent()));
 		}

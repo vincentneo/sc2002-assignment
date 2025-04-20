@@ -46,8 +46,23 @@ public class HDBOfficerActions {
 
 		if (option == 0) return;
 
-		Enquiry selectedEnquiry = enquiries.get(option);
+		Enquiry selectedEnquiry = enquiries.get(option - 1);
 		selectedEnquiry.display();
+		
+		if (selectedEnquiry.getQuestion().getUser() == officer) return;
+
+		if (!selectedEnquiry.hasResponded()) {
+			Boolean wantsReply = sscanner.nextBoolUntilCorrect("Would you like to reply? (Y/N): ");
+			
+			if (wantsReply) {
+				System.out.print("Your reply: ");
+				String reply = scanner.nextLine();
+				selectedEnquiry.setResponse(new Message(officer, reply));
+				system.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+				
+				System.out.println("Your response has been sent.");
+			}
+		}
 	}
 	
 	private static void checkProjectApplicationStatus(HDBOfficer officer) throws Exception {
