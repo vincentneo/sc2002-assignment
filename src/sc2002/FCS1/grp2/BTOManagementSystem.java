@@ -74,6 +74,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		ArrayList<User> all = allUsers();
 		for (Enquiry enquiry : enquiries) {
 			enquiry.linkUsers(all);
+			enquiry.linkProject(projects);
 		}
 
 		automatedChecks();
