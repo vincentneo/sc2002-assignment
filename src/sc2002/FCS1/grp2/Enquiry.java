@@ -105,7 +105,7 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	 * @return true, if user provided is found to be involved in this enquiry.
 	 */
 	public boolean isUserInvolved(User user) {
-		return (question != null && question.getUser().equals(user)); //|| (response != null && response.getUser().equals(user));
+		return (question != null && question.getUser() == user);// || (response != null && response.getUser().equals(user));
 	}
 	
 	/** 

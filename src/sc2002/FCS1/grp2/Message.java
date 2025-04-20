@@ -43,7 +43,11 @@ public class Message extends CSVDecodable implements CSVEncodable {
 	
 	public void linkUser(List<User> users) {
 		if (nric == null) return;
-		user = users.stream().filter(u -> u.getNric().equals(nric)).findFirst().orElse(null);
+		this.user = users.stream()
+				.filter(u -> u.getNric().equals(nric))
+				.findFirst()
+				.orElse(null);
+//		System.out.println("x");
 	}
 
 	@Override

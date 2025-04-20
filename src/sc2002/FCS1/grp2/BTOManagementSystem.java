@@ -125,13 +125,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 	
 	private void login(User user) {
+		this.activeUser = user;
+		
 		if (user.getEnquiriesSystem() == null) {
 			EnquiriesSystem eSystem = new EnquiriesSystem(this);
 			
 			user.setEnquiriesSystem(eSystem);
 		}
-		
-		this.activeUser = user;
 	}
 
 	public void logout() {
@@ -258,14 +258,14 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 
 	@Override
-	public List<Enquiry> getOwnEnquiries() throws Exception {
-		if (!(isActiveUserPermitted(HDBOfficer.class) || isActiveUserPermitted(Applicant.class))) throw new InsufficientAccessRightsException();
-
-		return enquiries.stream().filter(e -> e.isUserInvolved(activeUser)).collect(Collectors.toList());
+	public List<Enquiry> getOwnEnquiries() {
+//		if (!(isActiveUserPermitted(HDBOfficer.class) || isActiveUserPermitted(Applicant.class))) return new ArrayList<>();
+		
+		return enquiries.stream().filter(e -> e.isUserInvolved(activeUser)).collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 	@Override
-	public List<Enquiry> getEnquiries() throws Exception {
+	public List<Enquiry> getEnquiries() {
 		if (activeUser instanceof HDBManager) {
 			return enquiries;
 		}
@@ -275,7 +275,8 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 					.collect(Collectors.toCollection(ArrayList::new));
 
 		}
-		throw new InsufficientAccessRightsException();
+		
+		return new ArrayList<>();
 	}
 
 	@Override
