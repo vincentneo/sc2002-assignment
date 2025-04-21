@@ -233,9 +233,8 @@ public class Applicant extends User {
     */
    enum Menu implements ScopedOption {
        VIEW_PROJECTS("View Available Projects"),
-       VIEW_ENQUIRIES("View My Enquiries"),
-       VIEW_APPLICATIONS("View My Applications"),
-       SEND_ENQUIRY("Send Enquiry");
+       VIEW_ENQUIRIES("Enter Enquiries System"),
+       VIEW_APPLICATIONS("View My Applications");
        
        private final String optionName;
        

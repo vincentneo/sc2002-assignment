@@ -30,10 +30,7 @@ public class ApplicantActions {
 			viewProjects(user);
 			break;
 		case VIEW_ENQUIRIES:
-			showEnquiries(user);
-			break;
-		case SEND_ENQUIRY:
-			enquiryFlow(user);
+			enterEnquiriesSystem(user);
 			break;
 		case VIEW_APPLICATIONS:
 			viewApplication(user);
@@ -254,16 +251,65 @@ public class ApplicantActions {
 		Application application = new Application(selectedProject, flat.getType(), applicant);
 		system.addApplication(application);
 		System.out.println("Application successfully submitted");
-		
-		// TODO: investigate why on return of this method will cause "invalid option" in subsequent cycle. Wheres the uncaptured \n coming from?
-		
 	}
 	
-	private static void showEnquiries(Applicant applicant) throws Exception {
-		applicant.getEnquiriesSystem().displayEnquiriesMenu();
+	private static void enterEnquiriesSystem(Applicant applicant) throws Exception {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
+		var enquiriesSystem = applicant.getEnquiriesSystem();
+		
+		enquiriesSystem.displayEnquiriesMenu();
+
+		new DisplayMenu.Builder()
+		.setTitle("Options")
+		.addContent("1. View More About Enquiry")
+		.addContent("2. Send Enquiry")
+		.addContent("3. Delete Enquiry")
+		.addContent("4. Edit Enquiry")
+		.addContent("5. Back")
+		.build()
+		.display();
+
+		int option = superScanner.nextIntUntilCorrect("Choose option: ", 1, 5);
+
+		int size = enquiriesSystem.size();
+		if (option == 5) return;
+
+		if (option == 2) {
+			sendEnquiryFlow(applicant);
+			return;
+		}
+
+		enquiriesSystem.displayEnquiriesMenu();
+		int enquiryIndex = superScanner.nextIntUntilCorrect("Choose enquiry: ", 1, size) - 1;
+		Enquiry selectedEnquiry = enquiriesSystem.getEnquiries().get(enquiryIndex);
+
+		switch (option) {
+			case 1: { // view more info
+				selectedEnquiry.display();
+				break;
+			}
+			case 3: { // delete
+				enquiriesSystem.removeEnquiry(selectedEnquiry);
+				break;
+			}
+			case 4: { // edit
+				if (selectedEnquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
+
+				System.out.println("Current question: " + selectedEnquiry.getQuestion().getContent());
+				System.out.print("New question: ");
+				String newQuestion = scanner.nextLine();
+				enquiriesSystem.updateEnquiry(selectedEnquiry, newQuestion);
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("An unknown error has occurred");
+			}
+		}
 	}
 	
-	private static void enquiryFlow(Applicant applicant) throws Exception {
+	private static void sendEnquiryFlow(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner sscanner = new SuperScanner(scanner);
 		

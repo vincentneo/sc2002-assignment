@@ -214,4 +214,13 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 			.build()
 			.display();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Enquiry) {
+			var that = (Enquiry) obj;
+			return this.getId() == that.getId();
+		}
+		return false;
+	}
 }
