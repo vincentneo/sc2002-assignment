@@ -51,41 +51,117 @@ public class HDBManagerActions {
 	}
 	
 	private static void reportsFlow(HDBManager manager) throws Exception {
+		SuperScanner superScanner = new SuperScanner(system.getScanner());
 		List<Application> applications = system.getApplications();
 
-		HashMap<String, Integer> map = new HashMap<>();
-		for (Application application : applications) {
-			String key = application.getFlatType().toString();
-			Integer current = map.get(key);
+		List<String> menuOptions = new ArrayList<>();
 
-			if (current == null) {
-				current = 0;
+		for (int i = 0; i < ReportType.all.length; i++) {
+			menuOptions.add(String.format("%d. By %s", i+1, ReportType.fromOrdinal(i)));
+		}
+
+		new DisplayMenu.Builder()
+			.setTitle("Report Types")
+			.addContents(menuOptions)
+			.build()
+			.display();
+
+		int option = superScanner.nextIntUntilCorrect("Select option (0 to exit): ", 0, menuOptions.size());
+
+		if (option == 0) return;
+
+		ReportType selectedReportType = ReportType.fromOrdinal(option - 1);
+
+		HashMap<String, Integer> barMap = new HashMap<>();
+		HashMap<String, List<Application>> appsMap = new HashMap<>();
+
+		for (Application application : applications) {
+			String key;
+
+			switch (selectedReportType) {
+				case AGE:
+					key = "" + application.getApplicant().getAge();
+					break;
+				case FLAT_TYPE:
+					key = application.getFlatType().toString();
+					break;
+				case MARITAL_STATUS:
+					key = application.getApplicant().getMaritalStatus().toString();
+					break;
+				case PROJECT:
+					key = application.getProject().getProjectName();
+					break;
+				default:
+					continue;
 			}
 
-			map.put(key, current + 1);
+			Integer currentValue = barMap.get(key);
+			List<Application> currentApplications = appsMap.get(key);
+
+			if (currentValue == null) {
+				currentValue = 0;
+				currentApplications = new ArrayList<>();
+			}
+
+			currentApplications.add(application);
+
+			barMap.put(key, currentValue + 1);
+			appsMap.put(key, currentApplications);
 		}
 
 		var builder = new Bar.Builder(30, applications.size());
 
 		boolean dotted = true;
 
-		List<String> keys = new ArrayList<>(map.keySet());
+		List<String> keys = new ArrayList<>(barMap.keySet());
 		Collections.sort(keys);
 
 		for (var key : keys) {
-			int value = map.get(key);
+			int value = barMap.get(key);
 
 			builder.add(dotted ? Type.DOTTED : Type.SOLID, value, key, true);
 			dotted = !dotted;
 		}
 
-		builder.print();
-	}
+		new Style.Builder()
+		.text("Applications Received: ")
+		.text(applications.size() + "")
+		.bold()
+		.newLine()
+		.print();
 
-	// private enum ReportType {
-	// 	ALL,
-	// 	MARRIED
-	// }
+		builder.print();
+		System.out.print("\n");
+
+		for (var key : keys) {
+			List<Application> sectionApplications = appsMap.get(key);
+			var table = new DisplayMenu.Builder();
+
+			new Style.Builder()
+				.text(selectedReportType.toString())
+				.italic()
+				.text(": ")
+				.text(key)
+				.bold()
+				.italic()
+				.newLine()
+				.print();
+
+			table.addContent(String.format("%-25s │ %-3s │ %-20s │ %15s │ %25s │ %12s", "Applicant", "Age", "Marital Status", "Flat Type", "Project", "Status")).addDivider();
+	
+			for (Application application : sectionApplications) {
+				table.addContent(String.format("%-25s │ %-3d │ %-20s │ %15s │ %25s │ %12s",
+				 application.getApplicant().getName(), 
+				 application.getApplicant().getAge(), 
+				 application.getApplicant().getMaritalStatus(), 
+				 application.getFlatType(), 
+				 application.getProject().getProjectName(), 
+				 application.getStatus()));
+			}
+
+			table.build().display();
+		}
+	}
 
 	/**
 	 * Check if the project creation is eligible based on the opening and closing dates.
@@ -420,11 +496,6 @@ public class HDBManagerActions {
 		else {
 			System.out.println("Invalid input, project remains undeleted");
 		}	
-	}
-	
-
-	private static void generateReport(HDBManager manager) {
-		
 	}
 	
 	private static void approveRejectApplication(HDBManager manager) throws Exception {
