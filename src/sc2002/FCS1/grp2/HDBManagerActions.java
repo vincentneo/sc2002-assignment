@@ -2,11 +2,14 @@ package sc2002.FCS1.grp2;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
+import sc2002.FCS1.grp2.Bar.Type;
 import sc2002.FCS1.grp2.Style.Code;
 
 public class HDBManagerActions {
@@ -41,9 +44,48 @@ public class HDBManagerActions {
 		case VIEW_ALL_ENQUIRIES:
 			viewAllEnquiries(user);
 			break;
+		case REPORTS:
+			reportsFlow(user);
+			break;
 		}
 	}
 	
+	private static void reportsFlow(HDBManager manager) throws Exception {
+		List<Application> applications = system.getApplications();
+
+		HashMap<String, Integer> map = new HashMap<>();
+		for (Application application : applications) {
+			String key = application.getFlatType().toString();
+			Integer current = map.get(key);
+
+			if (current == null) {
+				current = 0;
+			}
+
+			map.put(key, current + 1);
+		}
+
+		var builder = new Bar.Builder(30, applications.size());
+
+		boolean dotted = true;
+
+		List<String> keys = new ArrayList<>(map.keySet());
+		Collections.sort(keys);
+
+		for (var key : keys) {
+			int value = map.get(key);
+
+			builder.add(dotted ? Type.DOTTED : Type.SOLID, value, key, true);
+			dotted = !dotted;
+		}
+
+		builder.print();
+	}
+
+	// private enum ReportType {
+	// 	ALL,
+	// 	MARRIED
+	// }
 
 	/**
 	 * Check if the project creation is eligible based on the opening and closing dates.

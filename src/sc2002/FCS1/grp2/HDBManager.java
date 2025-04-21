@@ -41,7 +41,8 @@ public class HDBManager extends User {
 //		FILTER_PROJECT,
 		VIEW_PENDING_OFFICER_REQUESTS,
 		VIEW_CREATED_PROJECTS,
-		VIEW_ALL_ENQUIRIES;
+		VIEW_ALL_ENQUIRIES,
+		REPORTS;
 		
 		public String getOptionName() {
 			switch (this) {
@@ -63,6 +64,8 @@ public class HDBManager extends User {
 				return "View Pending Project Join Requests";
 			case VIEW_ALL_ENQUIRIES:
 				return "View All Enquiries";
+			case REPORTS:
+				return "Reports";
 			default:
 				return null;
 			}
