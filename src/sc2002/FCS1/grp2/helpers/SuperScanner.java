@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 import sc2002.FCS1.grp2.builders.Style;
-import sc2002.FCS1.grp2.builders.Style.Builder;
 import sc2002.FCS1.grp2.builders.Style.Code;
 
 /**
