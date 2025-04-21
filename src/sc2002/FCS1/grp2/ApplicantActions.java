@@ -186,8 +186,8 @@ public class ApplicantActions {
 	
 	public static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		
-		ArrayList<Application> application = system.getApplications();
-		for (Application apps : application) {
+		ArrayList<Application> applications = system.getApplications();
+		for (Application apps : applications) {
 			if((apps.getStatus() == ApplicationStatus.BOOKED || 
 					apps.getStatus() == ApplicationStatus.PENDING 
 					|| apps.getStatus() == ApplicationStatus.SUCCESSFUL) && (apps.getWithdrawalStatus() != WithdrawalStatus.WITHDRAWN)) {
