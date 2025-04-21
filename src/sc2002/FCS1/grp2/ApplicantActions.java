@@ -260,7 +260,32 @@ public class ApplicantActions {
 	}
 	
 	private static void showEnquiries(Applicant applicant) throws Exception {
-		applicant.getEnquiriesSystem().displayEnquiriesMenu();
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
+		var enquiriesSystem = applicant.getEnquiriesSystem();
+		
+		enquiriesSystem.displayEnquiriesMenu();
+
+		new DisplayMenu.Builder()
+		.addContent("1. View More About Enquiry")
+		.addContent("2. Send Enquiry")
+		.addContent("3. Withdrawal Enquiry")
+		.addContent("4. Edit Enquiry")
+		.addContent("5. Back")
+		.build()
+		.display();
+
+		int option = superScanner.nextIntUntilCorrect("Choose option: ", 1, 5);
+
+		if (option == 5) return;
+
+		if (option == 1) {
+			int enquiryIndex = superScanner.nextIntUntilCorrect("Choose enquiry: ", 1, enquiriesSystem.size()) - 1;
+
+			Enquiry selectedEnquiry = enquiriesSystem.getEnquiries().get(enquiryIndex);
+			selectedEnquiry.display();
+		}
 	}
 	
 	private static void enquiryFlow(Applicant applicant) throws Exception {
