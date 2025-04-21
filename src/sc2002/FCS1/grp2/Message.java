@@ -55,7 +55,7 @@ public class Message extends CSVDecodable implements CSVEncodable {
 	@Override
 	public String encode() {
 		String formattedTime = Utilities.getInstance().formatDateTime(timestamp);
-		return String.format("%s,%s,%s", user.getNric(), content, formattedTime);
+		return String.format("%s,\"%s\",%s", user.getNric(), content, formattedTime);
 	}
 
 	@Override
