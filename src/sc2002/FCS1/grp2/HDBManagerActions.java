@@ -57,7 +57,17 @@ public class HDBManagerActions {
 	
 	private static void reportsFlow(HDBManager manager) throws Exception {
 		SuperScanner superScanner = new SuperScanner(system.getScanner());
-		List<Application> applications = system.getApplications();
+		ArrayList<Application> applications = system.getApplications();
+
+		applications = system.filterApplications(applications);
+		if (applications.isEmpty()) {
+			new Style.Builder()
+				.text("There are no applications to display with your filter.")
+				.newLine()
+				.code(Code.TEXT_YELLOW)
+				.print();
+			return;
+		}
 
 		List<String> menuOptions = new ArrayList<>();
 
@@ -295,6 +305,7 @@ public class HDBManagerActions {
         }
 
 		projects = system.filterProjects(projects);
+
 		if (projects.isEmpty()) {
 			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
 			return;

@@ -386,6 +386,105 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return filteredProjects;
 	}
 
+	/**
+	 * Get the applications that are filtered by the active user's filter.
+	 * 
+	 * @param filteredApplications The list of projects to be filtered.
+	 * @return The filtered list of projects.
+	 */
+	public ArrayList<Application> filterApplications(ArrayList<Application> filteredApplications) {
+		ListingSort sort = activeUser.getListingSort();
+		ListingFilter filter = activeUser.getListingFilter();
+		
+		switch (sort) {
+		case DEFAULT: // Alphabetical order by project name
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing(a -> a.getProject().getProjectName().toLowerCase()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case REVERSE_DEFAULT: // Reverse alphabetical order by project name
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing((Application a) -> a.getProject().getProjectName().toLowerCase())
+							.reversed())
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case OPENING_DATE_ASCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing(a -> a.getProject().getOpeningDate()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case OPENING_DATE_DESCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing((Application a) -> a.getProject().getOpeningDate()).reversed())
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case CLOSING_DATE_ASCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing(a -> a.getProject().getClosingDate()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case CLOSING_DATE_DESCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing((Application a) -> a.getProject().getClosingDate()).reversed())
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case TWO_ROOM_PRICE_ASCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing(a -> a.getProject().getTwoRoomPrice()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case TWO_ROOM_PRICE_DESCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing((Application a) -> a.getProject().getTwoRoomPrice()).reversed())
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case THREE_ROOM_PRICE_ASCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing(a -> a.getProject().getThreeRoomPrice()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case THREE_ROOM_PRICE_DESCENDING:
+			filteredApplications = filteredApplications.stream()
+					.sorted(Comparator.comparing((Application a) -> a.getProject().getThreeRoomPrice()).reversed())
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case null:
+			// No sort applied, keep the original list
+			break;
+		}
+
+		switch (filter) {
+		case DEFAULT:
+			// No filter applied, keep the original list
+			break;
+		case TWO_ROOM:
+			filteredApplications = filteredApplications.stream().filter(a -> a.getProject().getTwoRoomUnits() > 0)
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case THREE_ROOM:
+			filteredApplications = filteredApplications.stream().filter(a -> a.getProject().getThreeRoomUnits() > 0)
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case NAME:
+			filteredApplications = filteredApplications.stream()
+					.filter(a -> a.getProject().getProjectName().toLowerCase()
+							.contains(filter.getKeyword().toLowerCase()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case NEIGHBORHOOD:
+			filteredApplications = filteredApplications.stream()
+					.filter(a -> a.getProject().getNeighborhood().toLowerCase()
+							.contains(filter.getKeyword().toLowerCase()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			break;
+		case null:
+			// No filter applied, keep the original list
+			break;
+		}
+
+		return filteredApplications;
+	}
+
 	// region Access Control
 	/**
 	 * Decide if the current active user should be permitted to do a certain task,
