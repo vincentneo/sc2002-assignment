@@ -1,4 +1,4 @@
-package sc2002.FCS1.grp2;
+package sc2002.FCS1.grp2.builders;
 
 import java.util.ArrayList;
 import java.util.List;
