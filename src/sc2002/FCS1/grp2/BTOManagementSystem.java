@@ -460,12 +460,21 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 		return null;
 	}
+	/**
+	 * Get withdrawal applications made by applicant.
+	 * Applicant can only view his/her own withdrawal applications.
+	 * Manager can view all withdrawal Applications of projects that he/her is in charge of.
+	 * Officer is unable to access this method. 
+	 * @return
+	 * @throws Exception
+	 */
 
 	public ArrayList<Application> getWithdrawalApplications() throws Exception {
 		if(!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(Applicant.class))) throw new InsufficientAccessRightsException();
 		
 		if(activeUser instanceof HDBManager) {
-			return applications.stream().filter((a -> a.getWithdrawalStatus().equals(WithdrawalStatus.WITHDRAWN)))
+			ArrayList<Application> Withdrawn = getApplications();
+			Withdrawn.stream().filter((a -> a.getWithdrawalStatus().equals(WithdrawalStatus.WITHDRAWN)))
 					.collect(Collectors.toCollection(ArrayList::new));
 		}
 		if(activeUser instanceof Applicant) {

@@ -294,6 +294,9 @@ public class HDBOfficerActions {
 //		System.out.println("Enquiry sent to manager for approval.");
 		System.out.println("Your application status is now PENDING. Please wait for manager's response...");
 	}
+    
+      
+    
 	/**
 	 * helper function to check with date overlaps
 	 * @param start1 start date of project officer is handling
@@ -306,6 +309,9 @@ public class HDBOfficerActions {
 		// Check if project 1's dates overlap with project 2's dates
 		return (start1.isBefore(end2) && end1.isAfter(start2));
 	}
+	
+	
+	
 //
 //    /**
 //     * Update the officer's application status based on the manager's reply.

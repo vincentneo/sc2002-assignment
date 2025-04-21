@@ -185,6 +185,20 @@ public class ApplicantActions {
 	
 	
 	public static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
+		
+		ArrayList<Application> application = system.getApplications();
+		for (Application apps : application) {
+			if((apps.getStatus() == ApplicationStatus.BOOKED || 
+					apps.getStatus() == ApplicationStatus.PENDING 
+					|| apps.getStatus() == ApplicationStatus.SUCCESSFUL) && (apps.getWithdrawalStatus() != WithdrawalStatus.WITHDRAWN)) {
+				System.out.println("Only can apply for maximum of one project");
+
+				return;
+			}
+		}
+			
+			
+		
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
 		BTOProject.display(projects, listingOptions);
