@@ -273,7 +273,6 @@ public class ApplicantActions {
 
 		int option = superScanner.nextIntUntilCorrect("Choose option: ", 1, 5);
 
-		int size = enquiriesSystem.size();
 		if (option == 5) return;
 
 		if (option == 2) {
@@ -281,32 +280,61 @@ public class ApplicantActions {
 			return;
 		}
 
-		enquiriesSystem.displayEnquiriesMenu();
-		int enquiryIndex = superScanner.nextIntUntilCorrect("Choose enquiry: ", 1, size) - 1;
-		Enquiry selectedEnquiry = enquiriesSystem.getEnquiries().get(enquiryIndex);
-
 		switch (option) {
 			case 1: { // view more info
-				selectedEnquiry.display();
+				selectAndDisplayEnquiryConversation(superScanner, enquiriesSystem);
 				break;
 			}
 			case 3: { // delete
-				enquiriesSystem.removeEnquiry(selectedEnquiry);
+				selectAndRemoveEnquiry(superScanner, enquiriesSystem);
 				break;
 			}
 			case 4: { // edit
-				if (selectedEnquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
-
-				System.out.println("Current question: " + selectedEnquiry.getQuestion().getContent());
-				System.out.print("New question: ");
-				String newQuestion = scanner.nextLine();
-				enquiriesSystem.updateEnquiry(selectedEnquiry, newQuestion);
+				selectAndEditEnquiry(superScanner, enquiriesSystem);
 				break;
 			}
 			default: {
 				throw new IllegalArgumentException("An unknown error has occurred");
 			}
 		}
+	}
+
+	private static Enquiry retrieveEnquiryFromUser(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) {
+		int size = enquiriesSystem.size();
+		enquiriesSystem.displayEnquiriesMenu();
+		int enquiryIndex = superScanner.nextIntUntilCorrect("Choose enquiry: ", 1, size) - 1;
+		Enquiry selectedEnquiry = enquiriesSystem.getEnquiries().get(enquiryIndex);
+		return selectedEnquiry;
+	}
+
+	public static void selectAndDisplayEnquiryConversation(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) {
+		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+		selectedEnquiry.display();
+	}
+
+	public static void selectAndRemoveEnquiry(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) throws Exception {
+		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+		enquiriesSystem.removeEnquiry(selectedEnquiry);
+		new Style.Builder()
+			.text("Enquiry successfully deleted.")
+			.code(Style.Code.TEXT_GREEN)
+			.newLine()
+			.print();
+	}
+
+	public static void selectAndEditEnquiry(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) throws Exception {
+		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+		if (selectedEnquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
+
+		System.out.println("Current question: " + selectedEnquiry.getQuestion().getContent());
+		System.out.print("    New question: ");
+		String newQuestion = superScanner.getScanner().nextLine();
+		enquiriesSystem.updateEnquiry(selectedEnquiry, newQuestion);
+		new Style.Builder()
+			.text("Enquiry successfully updated.")
+			.code(Style.Code.TEXT_GREEN)
+			.newLine()
+			.print();
 	}
 	
 	private static void sendEnquiryFlow(Applicant applicant) throws Exception {
