@@ -412,6 +412,12 @@ public class HDBManagerActions {
 		}
 	}
 	
+	/** To approve or reject withdrawal application made by applicant
+	 * by default if applicant submit a withdrawal application it is successful, unless otherwise rejected manually by manager.
+	 * @param manager
+	 * @throws Exception
+	 */
+	
 	//TODO: might need to add some additional details, after officer accept, do we need to update the primary status? 
 	//TODO: NEED TO
 		
