@@ -3,6 +3,9 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
+import sc2002.FCS1.grp2.builders.DisplayMenu;
+import sc2002.FCS1.grp2.builders.Style;
+
 /**
  * Handles all enquiry related processes for a user.
  * 
