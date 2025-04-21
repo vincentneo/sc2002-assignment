@@ -42,6 +42,11 @@ public class Message extends CSVDecodable implements CSVEncodable {
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
+
+	public void updateContent(String newContent) {
+		this.content = newContent;
+		this.timestamp = LocalDateTime.now();
+	}
 	
 	public void linkUser(List<User> users) {
 		if (nric == null) return;

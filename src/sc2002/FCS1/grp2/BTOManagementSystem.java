@@ -294,6 +294,28 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
 	}
 
+	@Override
+	public void removeEnquiry(Enquiry enquiry) throws Exception {
+		if (!isActiveUserPermitted(Applicant.class))
+		throw new InsufficientAccessRightsException();
+
+		if (enquiry.hasResponded()) throw new IllegalStateException("This enquiry has already been responded, hence, cannot be removed.");
+
+		boolean success = enquiries.remove(enquiry);
+
+		if (!success) throw new IllegalArgumentException("Removal Failed");
+		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+	}
+
+	@Override
+	public void updateEnquiry() {
+		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
+	}
+
+	// @Override
+	// public void updateEnquiry(Enquiry enquiry) throws Exception {
+	// }
+
 	/**
 	 * Get the projects that are filtered by the active user's filter.
 	 * 

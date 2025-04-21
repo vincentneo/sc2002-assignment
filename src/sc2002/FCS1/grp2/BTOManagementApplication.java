@@ -93,21 +93,41 @@ public class BTOManagementApplication {
 			handleAction(index);
 		}
 		catch (NumberFormatException e) {
-			System.out.println("Invalid option.");
+			new Style.Builder()
+				.text("Invalid Option.")
+				.code(Style.Code.TEXT_YELLOW)
+				.bold()
+				.newLine()
+				.print();
+		}
+		catch (IllegalStateException e) {
+			new Style.Builder()
+				.text(e.getMessage())
+				.code(Style.Code.TEXT_RED)
+				.bold()
+				.newLine()
+				.print();
+		}
+		catch (IllegalArgumentException e) {
+			new Style.Builder()
+				.text(e.getMessage())
+				.code(Style.Code.TEXT_YELLOW)
+				.newLine()
+				.print();
 		}
 		catch (InsufficientAccessRightsException e) {
 			new Style.Builder()
-			.text("You have attempted to use a functionality that you have ")
-			.bold()
-			.add256Colour(196, false)
-			.text("NO ACCESS RIGHTS")
-			.add256Colour(196, true)
-			.bold()
-			.text(" to!")
-			.bold()
-			.add256Colour(196, false)
-			.newLine()
-			.print();
+				.text("You have attempted to use a functionality that you have ")
+				.bold()
+				.add256Colour(196, false)
+				.text("NO ACCESS RIGHTS")
+				.add256Colour(196, true)
+				.bold()
+				.text(" to!")
+				.bold()
+				.add256Colour(196, false)
+				.newLine()
+				.print();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

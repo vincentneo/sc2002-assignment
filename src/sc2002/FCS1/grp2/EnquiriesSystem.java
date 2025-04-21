@@ -39,7 +39,26 @@ public class EnquiriesSystem {
 		return enquiries;
 	}
 
-	
+	public void removeEnquiry(Enquiry enquiry) throws Exception {
+		delegate.removeEnquiry(enquiry);
+		updateState();
+	}
+
+	public void updateEnquiry(Enquiry enquiry, String updatedQuestion) throws Exception {
+		if (enquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
+
+		enquiry.getQuestion().updateContent(updatedQuestion);
+		delegate.updateEnquiry();
+	}
+
+	/**
+	 * Always call this after a list mutative action.
+	 */
+	private void updateState() {
+		this.ownEnquiries = delegate.getOwnEnquiries();
+		this.respondableEnquiries = delegate.getEnquiries();
+	}
+
 	public boolean isEmpty() {
 		return ownEnquiries.isEmpty();
 	}
