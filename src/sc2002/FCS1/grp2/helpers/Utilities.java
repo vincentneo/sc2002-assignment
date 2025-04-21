@@ -1,4 +1,4 @@
-package sc2002.FCS1.grp2;
+package sc2002.FCS1.grp2.helpers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

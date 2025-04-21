@@ -3,6 +3,8 @@ package sc2002.FCS1.grp2;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import sc2002.FCS1.grp2.helpers.Utilities;
+
 /**
  * This class represents a message of an enquiry, by a user of our application, typically an applicant.
  * 

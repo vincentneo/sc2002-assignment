@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import sc2002.FCS1.grp2.builders.DisplayMenu;
+import sc2002.FCS1.grp2.builders.Style;
+import sc2002.FCS1.grp2.helpers.Utilities;
+
 /**
  * Each enquiry acts as a question and answer session, between applicants and officers or managers of a project.
  * 
