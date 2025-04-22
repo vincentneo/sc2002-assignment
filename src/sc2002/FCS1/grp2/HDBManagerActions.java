@@ -15,7 +15,6 @@ import sc2002.FCS1.grp2.builders.Style;
 import sc2002.FCS1.grp2.builders.Bar.Type;
 import sc2002.FCS1.grp2.builders.Style.Code;
 import sc2002.FCS1.grp2.helpers.SuperScanner;
-import sc2002.FCS1.grp2.helpers.Utilities;
 
 public class HDBManagerActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
