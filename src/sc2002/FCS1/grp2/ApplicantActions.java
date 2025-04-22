@@ -63,14 +63,16 @@ public class ApplicantActions {
 		
 		var builder = new DisplayMenu.Builder()
 		.setTitle("Applications")
-		.addContent(String.format("%-5s │ %-20s │ %-20s", "No.", "Project", "Status"))
+		.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", "No.", "Project", "Size", "Status"))
 		.addDivider();
 		
 		for (int i = 0; i < applications.size(); i++) {
 			var application = applications.get(i);
 			var name = application.getProject().getProjectName();
+			var flatSize = application.getFlatType();
 			var status = application.getStatus();
-			builder.addContent(String.format("%-5s │ %-20s │ %-20s", (i+1) + ".", name, status.toString()));
+			var indexValue = (i + 1) + ".";
+			builder.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", indexValue, name, flatSize, status));
 		}
 		
 		builder.build().display();
@@ -191,13 +193,13 @@ public class ApplicantActions {
 			if((apps.getStatus() == ApplicationStatus.BOOKED || 
 					apps.getStatus() == ApplicationStatus.PENDING 
 					|| apps.getStatus() == ApplicationStatus.SUCCESSFUL) && (apps.getWithdrawalStatus() != WithdrawalStatus.WITHDRAWN)) {
-				System.out.println("Only can apply for maximum of one project");
-
+				new Style.Builder()
+					.text("Only can apply for maximum of one project")
+					.code(Code.TEXT_YELLOW)
+					.print();
 				return;
 			}
 		}
-			
-			
 		
 		List<BTOProject.TableColumnOption> listingOptions = new ArrayList<>();
 		listingOptions.add(TableColumnOption.INDEX_NUMBER);
