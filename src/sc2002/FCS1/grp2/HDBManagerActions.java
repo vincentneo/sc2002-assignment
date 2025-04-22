@@ -496,7 +496,7 @@ public class HDBManagerActions {
 
 		BTOProject.display(projects, options);
 		
-		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to delete? (enter the corresponding number): ", 1, projects.size());
+		int choose = superScanner.nextIntUntilCorrect("Which project would you like to delete? (enter the corresponding number): ", 1, projects.size());
 		BTOProject selectedProject = projects.get(choose-1);
 
 		System.out.println("Would you delete project " + selectedProject.getProjectName() + "? (Y/N) : ");
@@ -528,7 +528,7 @@ public class HDBManagerActions {
 		ArrayList<Application> applications = system.getApplications();
 		
 		if(applications.isEmpty()) {
-			System.out.println("No Application needed for approval");
+			System.out.println("There are currently no applications that require your approval.");
 			return;
 		}
 		 
@@ -538,7 +538,7 @@ public class HDBManagerActions {
 		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject?");
 		
 		Application selectedApplication = applications.get(choice - 1);
-		boolean choose = superScanner.nextBoolUntilCorrect("Would you like to approve or reject this application? (input Y if approve, N if reject");
+		boolean choose = superScanner.nextBoolUntilCorrect("Would you like to approve or reject this application? (input Y if approve, N if reject): ");
 		
 		if (choose == true) {
 			selectedApplication.setStatus(ApplicationStatus.SUCCESSFUL);
@@ -546,6 +546,8 @@ public class HDBManagerActions {
 		else {
 			selectedApplication.setStatus(ApplicationStatus.UNSUCCESSFUL);
 		}
+
+		system.saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
 	
 	/** To approve or reject withdrawal application made by applicant
