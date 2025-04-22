@@ -430,6 +430,14 @@ public class HDBManagerActions {
 					selectedProject.setTotalOfficerSlots(newOfficerSlots);
 					break;
 				case 10:
+					if (selectedProject.getVisibility())
+					{
+						System.out.println("The project is currently visible");
+					}
+					else
+					{
+						System.out.println("The project is currently not visible");
+					}
 					System.out.println("Would you like to toggle visibility? (Y/N): ");
 					String visibility = scanner.nextLine();
 					if(visibility.equalsIgnoreCase("Y")) {
