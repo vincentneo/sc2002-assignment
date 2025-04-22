@@ -41,7 +41,7 @@ public class HDBManager extends User {
 //		FILTER_PROJECT,
 		VIEW_PENDING_OFFICER_REQUESTS,
 		VIEW_CREATED_PROJECTS,
-		VIEW_ALL_ENQUIRIES,
+		ENQUIRIES_SYSTEM,
 		REPORTS;
 		
 		public String getOptionName() {
@@ -62,8 +62,8 @@ public class HDBManager extends User {
 				return "Approve/reject Withdrawal Applications";
 			case VIEW_PENDING_OFFICER_REQUESTS:
 				return "View Pending Project Join Requests";
-			case VIEW_ALL_ENQUIRIES:
-				return "View All Enquiries";
+			case ENQUIRIES_SYSTEM:
+				return "Enter Enquiries System";
 			case REPORTS:
 				return "Reports";
 			default:

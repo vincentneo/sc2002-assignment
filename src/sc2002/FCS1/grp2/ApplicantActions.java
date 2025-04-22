@@ -302,7 +302,7 @@ public class ApplicantActions {
 	}
 
 	private static Enquiry retrieveEnquiryFromUser(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) {
-		int size = enquiriesSystem.size();
+		int size = enquiriesSystem.ownEnquiriesSize();
 		enquiriesSystem.displayEnquiriesMenu();
 		int enquiryIndex = superScanner.nextIntUntilCorrect("Choose enquiry: ", 1, size) - 1;
 		Enquiry selectedEnquiry = enquiriesSystem.getEnquiries().get(enquiryIndex);

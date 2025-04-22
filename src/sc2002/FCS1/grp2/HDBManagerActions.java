@@ -46,8 +46,8 @@ public class HDBManagerActions {
 		case VIEW_PENDING_OFFICER_REQUESTS:
 			viewPendingOfficerRequests(user);
 			break;
-		case VIEW_ALL_ENQUIRIES:
-			viewAllEnquiries(user);
+		case ENQUIRIES_SYSTEM:
+			enterEnquiriesFlow(user);
 			break;
 		case REPORTS:
 			reportsFlow(user);
@@ -718,11 +718,13 @@ public class HDBManagerActions {
 		system.saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
-	private static void viewAllEnquiries(HDBManager manager) throws Exception {
+	private static void enterEnquiriesFlow(HDBManager manager) throws Exception {
 		EnquiriesSystem eSystem = manager.getEnquiriesSystem();
 		eSystem.displayEnquiriesMenu();
 		
-		if (eSystem.isEmpty()) return;
+		List<Enquiry> enquiries = eSystem.getRespondableEnquiries();
+
+		if (enquiries.isEmpty()) return;
 		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -731,35 +733,13 @@ public class HDBManagerActions {
 				.addContent("Which enquiry would you like to view more details or reply?")
 				.addContent("Choose based on the number option shown above.")
 				.addDivider()
-				.addContent("To go back, type \"back\"")
+				.addContent("To go back, type 0")
 				.build()
 				.display();
 		
-		boolean shouldExit = false;
-		int userOption = -1;
+		int userOption = superScanner.nextIntUntilCorrect("Choose option: ", 0, enquiries.size());
 		
-		while (true) {
-			System.out.print("Choose option: ");
-			String userInput = scanner.nextLine();
-			
-			if (userInput.equalsIgnoreCase("back")) {
-				shouldExit = true;
-				break;
-			}
-			
-			try {
-				userOption = Integer.parseInt(userInput);
-				if (userOption > eSystem.size() || userOption <= 0) throw new IllegalArgumentException();
-				break;
-			}
-			catch (Exception e) {
-				Utilities.getInstance().printYellow("Invalid option.");
-				continue;
-			}
-			
-		}
-		
-		if (shouldExit) return;
+		if (userOption == 0) return;
 		
 		Enquiry enquiry = eSystem.getEnquiries().get(userOption - 1);
 

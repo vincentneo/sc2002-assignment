@@ -39,6 +39,10 @@ public class EnquiriesSystem {
 		return enquiries;
 	}
 
+	public List<Enquiry> getRespondableEnquiries() {
+		return respondableEnquiries;
+	}
+
 	public void removeEnquiry(Enquiry enquiry) throws Exception {
 		delegate.removeEnquiry(enquiry);
 		updateState();
@@ -58,12 +62,8 @@ public class EnquiriesSystem {
 		this.ownEnquiries = delegate.getOwnEnquiries();
 		this.respondableEnquiries = delegate.getEnquiries();
 	}
-
-	public boolean isEmpty() {
-		return ownEnquiries.isEmpty();
-	}
 	
-	public int size() {
+	public int ownEnquiriesSize() {
 		return ownEnquiries.size();
 	}
 	
