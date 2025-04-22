@@ -136,7 +136,16 @@ public class HDBOfficerActions {
 			return;
 		}
 		
-		BTOProject.display(system.filterProjects(projects), options);
+		projects = system.filterProjects(projects);
+		
+		if (projects.isEmpty()) {
+			System.out.println("There is currently no BTO projects suitable for your filter citeria.");
+			return;
+		}
+
+		BTOProject.display(projects, options);
+
+
 		
 		new DisplayMenu.Builder()
 			.setTitle("Options")
