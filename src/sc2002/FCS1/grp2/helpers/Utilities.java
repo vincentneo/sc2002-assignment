@@ -76,6 +76,14 @@ public class Utilities {
 	public LocalDateTime parseDateTime(String string) {
 		return LocalDateTime.parse(string, formatterForCSVDateTime());
 	}
+
+	public String formatDateFromDateTime(LocalDateTime dateTime) {
+		return dateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+	}
+
+	public String formatTimeFromDateTime(LocalDateTime dateTime) {
+		return dateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
+	}
 	
 	public String formatDateTime(LocalDateTime dateTime) {
 		return dateTime.format(formatterForCSVDateTime());

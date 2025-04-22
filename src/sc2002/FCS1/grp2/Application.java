@@ -3,6 +3,8 @@ package sc2002.FCS1.grp2;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import sc2002.FCS1.grp2.builders.DisplayMenu;
+import sc2002.FCS1.grp2.builders.Style;
 import sc2002.FCS1.grp2.helpers.Utilities;
 
 public class Application extends CSVDecodable implements CSVEncodable {
@@ -103,6 +105,45 @@ public class Application extends CSVDecodable implements CSVEncodable {
 
 	public LocalDateTime getLastUpdatedDate() {
 		return lastUpdated;
+	}
+
+	public String getReceipt() throws Exception {
+		if (this.status != ApplicationStatus.BOOKED) throw new IllegalArgumentException("No receipt can be generated as application has not been booked.");
+
+		int size = 60;
+
+		var date = Utilities.getInstance().formatDateFromDateTime(lastUpdated);
+		var time = Utilities.getInstance().formatTimeFromDateTime(lastUpdated);
+
+		var projectName = this.project.getProjectName();
+		var neighborhood = this.project.getNeighborhood();
+
+		var flatType = this.flatType;
+		var price = this.project.getFlatForType(flatType).getPrice();
+
+		var total = String.format("%-20s%s", " ", new Style.Builder().text("TOTAL (INCL. TAX): $" + price).bold().toString());
+
+		var purchaserInfo = String.format("Purchased by: %s (%s)", applicant.getName(), applicant.getNric());
+
+		String receipt = new DisplayMenu.Builder()
+		.addCenteredContent("Housing & Development Board", size)
+		.addCenteredContent("480 Lorong 6 Toa Payoh, Singapore 310480", size)
+		.addCenteredContent("Phone: 6490 1111", size)
+		.addContent(String.format("%-40s%20s", date, time))
+		.addDivider()
+		.addContent(String.format("%-40s%20s", "BTO Flat of Project " + projectName, "$" + price))
+		.addContent(String.format(" -  %-50s", "at " + neighborhood + " neighbourhood"))
+		.addContent(String.format(" -  %-50s", flatType))
+		.addContent(" ")
+		.addContent(" ")
+		.addContent(" ")
+		.addDivider()
+		.addContent(total)
+		.addContent(" ")
+		.addCenteredContent(purchaserInfo, size)
+		.build()
+		.asString();
+		return receipt;
 	}
 	
     @Override

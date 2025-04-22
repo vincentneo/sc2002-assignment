@@ -166,6 +166,19 @@ public class DisplayMenu {
 			
 			return this;
 		}
+
+		public Builder addCenteredContent(String content, int width) {
+			int spacers = width - content.length();
+			int halfSpacer = spacers / 2;
+			
+			String centeredText = String.format("%s %s %s",
+					" ".repeat(halfSpacer),
+					content,
+					" ".repeat((spacers % 2 == 0) ? halfSpacer : halfSpacer + 1)
+					);
+
+			return addContent(centeredText);
+		}
 		
 		public Builder addDivider() {
 			if (this.current == null) return this;

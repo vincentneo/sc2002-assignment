@@ -10,6 +10,7 @@ import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
 import sc2002.FCS1.grp2.builders.DisplayMenu;
 import sc2002.FCS1.grp2.builders.Style;
 import sc2002.FCS1.grp2.builders.Style.Code;
+import sc2002.FCS1.grp2.helpers.ReceiptPrinter;
 import sc2002.FCS1.grp2.helpers.SuperScanner;
 
 /**
@@ -54,6 +55,9 @@ public class ApplicantActions {
 	 * @throws Exception
 	 */
 	private static void viewApplication(Applicant applicant) throws Exception {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
 		ArrayList<Application> applications = system.getApplications();
 		
 		if (applications.isEmpty()) {
@@ -66,6 +70,8 @@ public class ApplicantActions {
 		.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", "No.", "Project", "Size", "Status"))
 		.addDivider();
 		
+		boolean hasBookedApplication = false;
+
 		for (int i = 0; i < applications.size(); i++) {
 			var application = applications.get(i);
 			var name = application.getProject().getProjectName();
@@ -73,9 +79,32 @@ public class ApplicantActions {
 			var status = application.getStatus();
 			var indexValue = (i + 1) + ".";
 			builder.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", indexValue, name, flatSize, status));
+
+			if (application.getStatus() == ApplicationStatus.BOOKED) {
+				hasBookedApplication = true;
+			}
 		}
 		
 		builder.build().display();
+
+		if (hasBookedApplication) {
+			int choice = superScanner.nextIntUntilCorrect("Would you like to print the receipt? Choose application (0 to go back): ", 0, applications.size());
+
+			if (choice == 0) return;
+
+			Application application = applications.get(choice - 1);
+			
+			if (application.getStatus() == ApplicationStatus.BOOKED) {
+				String receiptContents = application.getReceipt();
+				ReceiptPrinter.print(receiptContents);
+			}
+			else {
+				new Style.Builder()
+				.text("This application is not yet booked and thus has no receipt printable.")
+				.code(Code.TEXT_YELLOW)
+				.print();
+			}
+		}
 	}
 	
 	private static void viewProjects(Applicant applicant) throws Exception {
