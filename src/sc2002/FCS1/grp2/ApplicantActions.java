@@ -280,17 +280,19 @@ public class ApplicantActions {
 			return;
 		}
 
+		Enquiry selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+
 		switch (option) {
 			case 1: { // view more info
-				selectAndDisplayEnquiryConversation(superScanner, enquiriesSystem);
+				selectedEnquiry.display();
 				break;
 			}
 			case 3: { // delete
-				selectAndRemoveEnquiry(superScanner, enquiriesSystem);
+				removeEnquiry(selectedEnquiry, enquiriesSystem);
 				break;
 			}
 			case 4: { // edit
-				selectAndEditEnquiry(superScanner, enquiriesSystem);
+				editEnquiry(superScanner, enquiriesSystem, selectedEnquiry);
 				break;
 			}
 			default: {
@@ -307,13 +309,7 @@ public class ApplicantActions {
 		return selectedEnquiry;
 	}
 
-	public static void selectAndDisplayEnquiryConversation(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) {
-		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
-		selectedEnquiry.display();
-	}
-
-	public static void selectAndRemoveEnquiry(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) throws Exception {
-		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+	static void removeEnquiry(Enquiry selectedEnquiry, EnquiriesSystem enquiriesSystem) throws Exception {
 		enquiriesSystem.removeEnquiry(selectedEnquiry);
 		new Style.Builder()
 			.text("Enquiry successfully deleted.")
@@ -322,8 +318,7 @@ public class ApplicantActions {
 			.print();
 	}
 
-	public static void selectAndEditEnquiry(SuperScanner superScanner, EnquiriesSystem enquiriesSystem) throws Exception {
-		var selectedEnquiry = retrieveEnquiryFromUser(superScanner, enquiriesSystem);
+	static void editEnquiry(SuperScanner superScanner, EnquiriesSystem enquiriesSystem, Enquiry selectedEnquiry) throws Exception {
 		if (selectedEnquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
 
 		System.out.println("Current question: " + selectedEnquiry.getQuestion().getContent());
@@ -337,12 +332,18 @@ public class ApplicantActions {
 			.print();
 	}
 	
-	private static void sendEnquiryFlow(Applicant applicant) throws Exception {
+	static void sendEnquiryFlow(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner sscanner = new SuperScanner(scanner);
 		
-		// TODO: print out projects for user to select first
-		ArrayList<BTOProject> projects = system.getApplicableProjects();
+		ArrayList<BTOProject> projects;
+		
+		if (applicant instanceof HDBOfficer) {
+			projects = system.getApplicableProjectsAsApplicant();
+		}
+		else {
+			projects = system.getApplicableProjects();
+		}
 		
 		if (projects.isEmpty()) {
 			System.out.println("As you are not eligible to apply a BTO flat at this moment, you cannot enquire about current BTO projects.");

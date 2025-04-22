@@ -42,19 +42,58 @@ public class HDBOfficerActions {
 		SuperScanner sscanner = new SuperScanner(scanner);
 		EnquiriesSystem enquiriesSystem = officer.getEnquiriesSystem();
 
+		new DisplayMenu.Builder()
+			.setTitle("Options")
+			.addContent("1. View Enquiries List")
+			.addContent("2. Send Enquiry as Applicant")
+			.addContent("3. Back")
+			.build()
+			.display();
+
+		int option = sscanner.nextIntUntilCorrect("Choose option: ", 1, 3);
+
+		if (option == 3) return;
+
+		if (option == 2) {
+			ApplicantActions.sendEnquiryFlow(officer);
+			return;
+		}
+
 		enquiriesSystem.displayEnquiriesMenu();
-
 		List<Enquiry> enquiries = enquiriesSystem.getEnquiries();
-		int option = sscanner.nextIntUntilCorrect("Choose the enquiry of interest (0 to go back): ", 0, enquiries.size());
 
-		if (option == 0) return;
+		if (enquiries.isEmpty()) return;
 
-		Enquiry selectedEnquiry = enquiries.get(option - 1);
+		int selectionOption = sscanner.nextIntUntilCorrect("Choose enquiry (0 to exit): ", 0, enquiries.size());
+
+		if (selectionOption == 0) return;
+
+		Enquiry selectedEnquiry = enquiries.get(selectionOption - 1);
 		selectedEnquiry.display();
 		
-		if (selectedEnquiry.getQuestion().getUser() == officer) return;
+		if (selectedEnquiry.getQuestion().getUser() == officer) {
+			new DisplayMenu.Builder()
+				.setTitle("Applicant Actions")
+				.addContent("1. Edit My Question")
+				.addContent("2. Delete")
+				.addContent("3. Back")
+				.build()
+				.display();
 
-		if (!selectedEnquiry.hasResponded()) {
+			int applicantOption = sscanner.nextIntUntilCorrect("Choose action: ", 1, 3);
+
+			if (applicantOption == 3) return;
+			
+			if (applicantOption == 2) {
+				ApplicantActions.removeEnquiry(selectedEnquiry, enquiriesSystem);
+			}
+
+			if (applicantOption == 1) {
+				ApplicantActions.editEnquiry(sscanner, enquiriesSystem, selectedEnquiry);
+			}
+			
+		}
+		else if (!selectedEnquiry.hasResponded()) {
 			Boolean wantsReply = sscanner.nextBoolUntilCorrect("Would you like to reply? (Y/N): ");
 			
 			if (wantsReply) {
