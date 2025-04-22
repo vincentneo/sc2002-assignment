@@ -1,6 +1,9 @@
 package sc2002.FCS1.grp2;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import sc2002.FCS1.grp2.helpers.Utilities;
 
 public class Application extends CSVDecodable implements CSVEncodable {
     private BTOProject project;
@@ -8,6 +11,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
     private ApplicationStatus status;
     private WithdrawalStatus withdrawalStatus;
     private Applicant applicant;
+	private LocalDateTime lastUpdated;
     
     private String projectName = null;
     private String applicantNRIC = null;
@@ -18,6 +22,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
         this.status = ApplicationStatus.PENDING;
         this.withdrawalStatus = WithdrawalStatus.NOT;
         this.applicant = applicant;
+		this.lastUpdated = LocalDateTime.now();
     }
     
     public Application(List<CSVCell> cells) {
@@ -26,12 +31,20 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.flatType = FlatType.fromString(cells.get(1).getValue());
     	this.status = ApplicationStatus.fromString(cells.get(2).getValue());
     	this.applicantNRIC = cells.get(3).getValue();
+
     	if (cells.size() > 4) {
     		this.withdrawalStatus = WithdrawalStatus.fromString(cells.get(4).getValue());
     	}
     	else {
     		this.withdrawalStatus = WithdrawalStatus.NOT;
     	}
+
+		if (cells.size() > 5) {
+			this.lastUpdated = cells.get(5).getDateTimeValue();
+		}
+		else {
+			this.lastUpdated = LocalDateTime.now();
+		}
     }
     
     void linkApplicant(List<Applicant> applicants) { //throws Exception {
@@ -60,6 +73,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
     
     public void setStatus(ApplicationStatus status) {
         this.status = status;
+		this.lastUpdated = LocalDateTime.now();
     }
 
     public ApplicationStatus getStatus() {
@@ -72,6 +86,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
 
 	public void setWithdrawalStatus(WithdrawalStatus withdrawalStatus) {
 		this.withdrawalStatus = withdrawalStatus;
+		this.lastUpdated = LocalDateTime.now();
 	}
 
 	public FlatType getFlatType() {
@@ -85,6 +100,10 @@ public class Application extends CSVDecodable implements CSVEncodable {
 	public BTOProject getProject() {
 		return project;
 	}
+
+	public LocalDateTime getLastUpdatedDate() {
+		return lastUpdated;
+	}
 	
     @Override
     public String toString() {
@@ -93,13 +112,12 @@ public class Application extends CSVDecodable implements CSVEncodable {
 
 	@Override
 	public String encode() {
-		// TODO Auto-generated method stub
-		return String.format("%s,%s,%s,%s,%s", project.getProjectName(), flatType.toString(), status.toString(), applicant.getNric(), withdrawalStatus.toString());
+		String lastUpdatedFormatted = Utilities.getInstance().formatDateTime(lastUpdated);
+		return String.format("%s,%s,%s,%s,%s,%s", project.getProjectName(), flatType.toString(), status.toString(), applicant.getNric(), withdrawalStatus.toString(), lastUpdatedFormatted);
 	}
 
 	@Override
 	public CSVFileTypes sourceFileType() {
-		// TODO Auto-generated method stub
 		return CSVFileTypes.APPLICATIONS_LIST;
 	}
 }

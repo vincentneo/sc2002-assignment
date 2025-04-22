@@ -768,6 +768,17 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     			.collect(Collectors.toList());
     }
 
+    boolean bookFlat(FlatType type) throws Exception {
+        if (!BTOManagementSystem.common().isActiveUserPermitted(HDBOfficer.class)) throw new InsufficientAccessRightsException();
+        int currentUnits = flats.get(type).getRemainingUnits();
+
+        if (currentUnits > 0) {
+            flats.get(type).setRemainingUnits(currentUnits - 1);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Get the string representation of the BTO project.
      * @return The string representation of the BTO project.

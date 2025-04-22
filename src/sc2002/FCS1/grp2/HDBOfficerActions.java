@@ -29,6 +29,9 @@ public class HDBOfficerActions {
             case CHECK_PENDING_PROJECT:
             	checkProjectApplicationStatus(user);
             	break;
+			case BOOK_APPLICATION:
+				bookApplication(user);
+				break;
 //            case CHECK_APPLICATION_STATUS:
 //                displayOfficerApplications(user);
 //                break;
@@ -36,6 +39,62 @@ public class HDBOfficerActions {
                 System.out.println("Option not implemented.");
         }
     }
+
+	private static void bookApplication(HDBOfficer officer) throws Exception {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+		ArrayList<Application> applications = system.getSuccessfulApplications();
+		int applicationsCount = applications.size();
+
+		if (applications.isEmpty()) {
+			System.out.println("There are currently no applications available for booking.");
+			return;
+		}
+
+		var table = new DisplayMenu.Builder();
+		table.addContent(String.format("%-5s │ %-15s │ %-15s │ %-10s", "No.", "Applicant", "Project", "Size")).addDivider();
+
+
+		for (int i = 0; i < applicationsCount; i++) {
+			var application = applications.get(i);
+			var index = (i + 1) + ".";
+
+			var applicantName = application.getApplicant().getName();
+			var projectName = application.getProject().getProjectName();
+			var size = application.getFlatType();
+			table.addContent(String.format("%-5s │ %-15s │ %-15s │ %-10s", index, applicantName, projectName, size));
+		}
+
+		table.build().display();
+
+		int option = superScanner.nextIntUntilCorrect("Choose application for booking (0 to go back): ", 0, applicationsCount);
+
+		if (option == 0) return;
+
+		var application = applications.get(option - 1);
+		var project = application.getProject();
+
+		var bookingResult = project.bookFlat(application.getFlatType());
+
+		if (!bookingResult) {
+			new Style.Builder()
+			.text("Not enough available units to book a flat.")
+			.code(Code.TEXT_RED)
+			.newLine()
+			.print();
+			return;
+		}
+
+		application.setStatus(ApplicationStatus.BOOKED);
+		system.saveChanges(CSVFileTypes.APPLICATIONS_LIST);
+		system.saveChanges(CSVFileTypes.PROJECT_LIST);
+
+		new Style.Builder()
+			.text("Flat successfully booked for applicant.")
+			.code(Code.TEXT_GREEN)
+			.newLine()
+			.print();
+	}
 	
 	private static void enquiriesSystemFlow(HDBOfficer officer) throws Exception {
 		Scanner scanner = system.getScanner();
