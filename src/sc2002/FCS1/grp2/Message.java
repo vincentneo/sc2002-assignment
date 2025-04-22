@@ -60,7 +60,10 @@ public class Message extends CSVDecodable implements CSVEncodable {
 	@Override
 	public String encode() {
 		String formattedTime = Utilities.getInstance().formatDateTime(timestamp);
-		return String.format("%s,\"%s\",%s", user.getNric(), content, formattedTime);
+
+		// double quotes (") may intefere with decoding, so swapping all to single quotes.
+		String encodableContent = content.replaceAll("\"", "'");
+		return String.format("%s,\"%s\",%s", user.getNric(), encodableContent, formattedTime);
 	}
 
 	@Override
