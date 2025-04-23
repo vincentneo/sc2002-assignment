@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Construct visual bars on the console, using this builder class.
+ * @author Vincent Neo
  */
 public class Bar {
     /** 

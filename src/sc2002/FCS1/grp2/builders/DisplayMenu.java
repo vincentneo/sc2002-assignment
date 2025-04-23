@@ -4,21 +4,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Draw menus and tables enclosed in rectangles using this class.
+ * Draw menus and tables enclosed in rectangles using this class, visually.
+ * @author Vincent Neo
  */
 public class DisplayMenu {
+	/**
+	 * Title of the rectangle box, centered on top. Optional.
+	 */
 	private String title;
+
+	/**
+	 * Sections of rows of content
+	 */
 	private List<List<String>> contents;
 	
+	//region Box Characters
+	/**
+	 * Represents top left corner of box.
+	 */
 	private final String BOX_TOP_LEFT_CORNER = "┌";
+	/**
+	 * Represents top right corner of box.
+	 */
 	private final String BOX_TOP_RIGHT_CORNER = "┐";
+	/**
+	 * Represents bottom left corner of box.
+	 */
 	private final String BOX_BOTTOM_LEFT_CORNER = "└";
+	/**
+	 * Represents bottom right corner of box.
+	 */
 	private final String BOX_BOTTOM_RIGHT_CORNER = "┘";
+	/**
+	 * Represents horizontal line of box.
+	 */
 	private final String LINE_HORIZONTAL = "─";
+	/**
+	 * Represents vertical line of box.
+	 */
 	private final String LINE_VERTICAL = "│";
+	/**
+	 * Represents section divider of leading (left) edge of box.
+	 */
 	private final String BOX_LEADING_DIVIDER = "├";
+		/**
+	 * Represents section divider of trailing (right) edge of box.
+	 */
 	private final String BOX_TRAILING_DIVIDER = "┤";
+	//endregion
 	
+	/**
+	 * Private constructor for builder class to use.
+	 * @param builder Builder object.
+	 */
 	private DisplayMenu(Builder builder) {
 		this.title = builder.title;
 		this.contents = builder.contents;
@@ -126,18 +164,42 @@ public class DisplayMenu {
 		return longest;
 	}
 	
+	/**
+	 * Use this class to build a menu.
+	 */
 	public static class Builder {
+		/**
+		 * Title of the rectangle box, centered on top. Optional.
+		 */
 		private String title;
+
+		/**
+		 * Sections of rows of content
+		 */
 		private List<List<String>> contents = new ArrayList<>();
 		
+		/**
+		 * Incomplete section of content of currrent.
+		 */
 		private List<String> current;
 		
+		/**
+		 * Set the title of this menu.
+		 * @param title The title to be shown in menu.
+		 * @return this builder object.
+		 */
 		public Builder setTitle(String title) {
 			this.title = title;
 			return this;
 		}
 		
-		
+		/**
+		 * Add an entire section of this menu or table.
+		 * 
+		 * If there exists an incomplete section, calling this will finalise that section.
+		 * @param contents Row of contents.
+		 * @return this builder object.
+		 */
 		public Builder addContents(List<String> contents) {
 			if (contents == null) {
 				return this;
@@ -157,6 +219,11 @@ public class DisplayMenu {
 			return this;
 		}
 		
+		/**
+		 * Add a row in the current section of this menu or table.
+		 * @param content A new row of content.
+		 * @return this builder object.
+		 */
 		public Builder addContent(String content) {
 			if (this.current == null) {
 				this.current = new ArrayList<>();
@@ -167,6 +234,12 @@ public class DisplayMenu {
 			return this;
 		}
 
+		/**
+		 * Add a row where contents in this row is centered, as long as width provided fits the menu/table well.
+		 * @param content A new row of content.
+		 * @param width width of this row, unit: characters.
+		 * @return this builder object.
+		 */
 		public Builder addCenteredContent(String content, int width) {
 			int spacers = width - content.length();
 			int halfSpacer = spacers / 2;
@@ -180,6 +253,10 @@ public class DisplayMenu {
 			return addContent(centeredText);
 		}
 		
+		/**
+		 * Finalise the current section by adding the divider.
+		 * @return this builder object.
+		 */
 		public Builder addDivider() {
 			if (this.current == null) return this;
 			
@@ -191,6 +268,10 @@ public class DisplayMenu {
 			return this;
 		}
 		
+		/**
+		 * Finalise and build menu or table.
+		 * @return display menu object, which can export to {@code String} or display menu or table in console.
+		 */
 		public DisplayMenu build() {
 			if (this.current != null && !this.current.isEmpty()) {
 				contents.add(current);
