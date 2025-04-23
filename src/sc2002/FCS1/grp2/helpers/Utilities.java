@@ -21,19 +21,6 @@ public class Utilities {
 	private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d'/'M'/'yy");
 	
 	/**
-	 * Escape code to tint text to yellow.
-	 * Make sure to reset after text completion.
-	 */
-	private String ANSI_YELLOW = "\u001B[33m";
-	
-	/**
-	 * Escape code to reset colour tint. 
-	 * Make sure to add this to the back of any tinted text content before return.
-	 */
-	private String ANSI_RESET = "\u001B[0m";
-	
-	
-	/**
 	 * Constructor that should not be used outside this class.
 	 */
 	private Utilities() {}
