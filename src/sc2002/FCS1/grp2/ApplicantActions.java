@@ -107,6 +107,7 @@ public class ApplicantActions {
 						.bold()
 						.code(Code.TEXT_RED);
 					}
+					break;
 				case WITHDRAWN:
 					comboStatusBuilder.text(status.toString()).strikethrough();
 					comboStatusBuilder.text(" ");

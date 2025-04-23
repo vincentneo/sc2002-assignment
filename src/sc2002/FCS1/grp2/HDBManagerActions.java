@@ -580,16 +580,17 @@ public class HDBManagerActions {
 		Application chosenApplication = withdrawalApplications.get(choice-1);
 		
 		boolean choice2 = superScanner.nextBoolUntilCorrect("Enter Y for approve, N for reject");
-		 if(choice2 == true) {
-			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.WITHDRAWN);
-			 System.out.println("Withdrawal Application has been approved");
-			 
-		 }
-		 else {
-			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.REJECTED);
-			 System.out.println("Withdrawal Application has been rejected");
-		 }
+		if(choice2 == true) {
+			chosenApplication.setWithdrawalStatus(WithdrawalStatus.WITHDRAWN);
+			System.out.println("Withdrawal Application has been approved");
+			
+		}
+		else {
+			chosenApplication.setWithdrawalStatus(WithdrawalStatus.REJECTED);
+			System.out.println("Withdrawal Application has been rejected");
+		}
 		
+		system.saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
 	
 	/**
