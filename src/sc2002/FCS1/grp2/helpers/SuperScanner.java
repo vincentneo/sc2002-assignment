@@ -94,11 +94,24 @@ public class SuperScanner {
 	 * Get user input that is binary (either true or false)
 	 * 
 	 * This method accepts a few forms to represent truthness.
-	 * <ul>
-	 * 		<li>true/false</li>
-	 * 		<li>Yes/No</li>
-	 * 		<li>y/n<li>
-	 * </ul>
+		<ul>
+			<li>{@code true}:
+				<ul>
+					<li>T</li>
+					<li>True</li>
+					<li>Yes</li>
+					<li>Y</li>
+				</ul>
+			</li>
+			<li>{@code false}:
+				<ul>
+					<li>F</li>
+					<li>False</li>
+					<li>No</li>
+					<li>N</li>
+				</ul>
+			</li>
+		</ul>
 	 * @param prompt
 	 * @return
 	 */
