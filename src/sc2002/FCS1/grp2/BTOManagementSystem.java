@@ -618,9 +618,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		
 		if(activeUser instanceof HDBManager) {
 			ArrayList<Application> Withdrawn = getApplications();
-			Withdrawn.stream().filter((a -> a.getWithdrawalStatus().equals(WithdrawalStatus.WITHDRAWN)))
+			ArrayList<Application> filteredWithdrawal = Withdrawn.stream().filter((a -> a.getWithdrawalStatus().equals(WithdrawalStatus.WITHDRAWN)))
 					.collect(Collectors.toCollection(ArrayList::new));
-			return Withdrawn;
+			return filteredWithdrawal;
 		}
 		if((activeUser instanceof Applicant) || activeUser instanceof HDBOfficer) {
 			ArrayList<Application> withdrawalApplications = applications.stream().filter(a -> a.getApplicant() == activeUser)
