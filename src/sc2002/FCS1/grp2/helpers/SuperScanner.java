@@ -73,7 +73,7 @@ public class SuperScanner {
 	 * Get user input of date type, while ensuring format is correct.
 	 * 
 	 * Date format expected should be d/M/yy, where d is day, M is month, and yy is year (2 digits)
-	 * @param prompt
+	 * @param prompt The prompt to be shown to the user.
 	 * @return Date provided by the user.
 	 */
 	public LocalDate nextDateUntilCorrect(String prompt) {
@@ -91,7 +91,7 @@ public class SuperScanner {
 	}
 	
 	/**
-	 * Get user input that is binary (either true or false)
+	 * Get user input that is binary (either true or false). Repeats until user input given is valid.
 	 * 
 	 * This method accepts a few forms to represent truthness.
 		<ul>
@@ -112,8 +112,8 @@ public class SuperScanner {
 				</ul>
 			</li>
 		</ul>
-	 * @param prompt
-	 * @return
+	 * @param prompt The prompt to be shown to the user.
+	 * @return boolean representative of user's input.
 	 */
 	public Boolean nextBoolUntilCorrect(String prompt) {
 		try {
