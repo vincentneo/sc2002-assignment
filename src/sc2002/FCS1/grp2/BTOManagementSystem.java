@@ -619,7 +619,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 					.collect(Collectors.toCollection(ArrayList::new));
 			return Withdrawn;
 		}
-		if(activeUser instanceof Applicant) {
+		if((activeUser instanceof Applicant) || activeUser instanceof HDBOfficer) {
 			ArrayList<Application> withdrawalApplications = applications.stream().filter(a -> a.getApplicant() == activeUser)
 										.filter(a -> !a.getWithdrawalStatus().equals(WithdrawalStatus.NOT))
 										.collect(Collectors.toCollection(ArrayList::new));
