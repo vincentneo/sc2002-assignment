@@ -8,9 +8,19 @@ import sc2002.FCS1.grp2.builders.DisplayMenu;
 import sc2002.FCS1.grp2.builders.Style;
 import sc2002.FCS1.grp2.helpers.SuperScanner;
 
+/**
+ * Main entry for our project's CLI application.
+ */
 public class BTOManagementApplication {
+	/**
+	 * System object, for easy access.
+	 */
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
+	/**
+	 * Entry point for CLI application, read and write.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// TODO: Delete once finish debugging
 		system.debugPrintAllUsers();
@@ -24,6 +34,11 @@ public class BTOManagementApplication {
 		system.cleanup();
 	}
 
+	/**
+	 * Use this to prepare a string that centers text and places hyphens left and right of it.
+	 * @param title The title to be centered.
+	 * @return string ready for display.
+	 */
 	private static String prepareHeader(String title) {
 		int max = 60;
 		
@@ -39,6 +54,9 @@ public class BTOManagementApplication {
 		return headerText;
 	}
 	
+	/**
+	 * Displays the main menu of the application.
+	 */
 	private static void displayMenu() {
 		ArrayList<String> menuList = system.getActiveUser().getMenu();
 		ArrayList<String> menuContents = new ArrayList<>();
@@ -62,6 +80,9 @@ public class BTOManagementApplication {
 				.display();
 	}
 	
+	/**
+	 * Once called, this method will always ask the user to do something, again and again, unless requested by the user to exit or logout.
+	 */
 	private static void startResponseLoop() {
 		String response = "";
 		Scanner scanner = system.getScanner();
@@ -87,6 +108,10 @@ public class BTOManagementApplication {
 		}
 	}
 	
+	/**
+	 * Handle what the user has inputed.
+	 * @param response To be converted
+	 */
 	private static void handleUserResponse(String response) {
 		try {
 			int index = Integer.parseInt(response);

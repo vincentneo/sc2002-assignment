@@ -70,6 +70,11 @@ public class CSVParser {
 		return decodables;
 	}
 	
+	/**
+	 * Parse each line, with special handling for CSV cells with list values.
+	 * @param line A CSV line.
+	 * @return a list of cells, of that line.
+	 */
 	private ArrayList<CSVCell> parseLine(String line) {
 		ArrayList<CSVCell> cells = new ArrayList<>();
 		
