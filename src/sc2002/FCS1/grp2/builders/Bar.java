@@ -33,7 +33,7 @@ public class Bar {
         /**
          * Standardised bar formatting
          * 
-         * <Title> [----Bar----] <Percentage %>
+         * Title [----Bar----] Percentage
          * @return format string.
          */
         private String getFormat() {
