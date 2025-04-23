@@ -338,10 +338,14 @@ public class HDBOfficerActions {
 		}
 	
 		// Check if the officer has already applied as an applicant
-//		if (user.getAppliedProject() != null && user.getAppliedProject().equals(selectedProject)) {
-//			System.out.printf("You cannot join the project %s as an officer because you have already applied for it as an applicant.\n", selectedProject.getProjectName());
-//			return;
-//		}
+		var applications = system.getApplications();
+
+		for (var app : applications) {
+			if (app.getProject() == selectedProject) {
+				System.out.println("You cannot join the project %s as an officer because you have already applied for it as an applicant.");
+				break;
+			}
+		}
 	
 		// Check if the project has room for more officers
 		if (selectedProject.getOfficers().size() >= selectedProject.getTotalOfficerSlots()) {

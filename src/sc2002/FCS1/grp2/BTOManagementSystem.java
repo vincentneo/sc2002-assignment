@@ -85,8 +85,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			enquiry.linkProject(projects);
 		}
 
+		var allApplicants = new ArrayList<Applicant>();
+
+		allApplicants.addAll(applicants);
+		allApplicants.addAll(officers);
 		for (Application application : applications) {
-			application.linkApplicant(applicants);
+			application.linkApplicant(allApplicants);
 			application.linkProject(projects);
 		}
 	}
