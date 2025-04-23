@@ -105,7 +105,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
     
 	/**
 	 * Call this to link relevant project to this object, post CSV parse.
-	 * @param applicants Pool of all projects
+	 * @param projects Pool of all projects
 	 */
     void linkProject(List<BTOProject> projects) {// throws Exception {
     	// if (projectName == null) throw new IllegalArgumentException();
