@@ -545,9 +545,11 @@ public class HDBManagerActions {
 		
 		if (choose == true) {
 			selectedApplication.setStatus(ApplicationStatus.SUCCESSFUL);
+			System.out.println("Application have been approved!");
 		}
 		else {
 			selectedApplication.setStatus(ApplicationStatus.UNSUCCESSFUL);
+			System.out.println("Application have been rejected!");
 		}
 
 		system.saveChanges(CSVFileTypes.APPLICATIONS_LIST);
