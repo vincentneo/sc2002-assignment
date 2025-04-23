@@ -77,7 +77,7 @@ public class Applicant extends User {
        public static Menu[] allMenuOptions = Menu.values();
        
        /**
-        * Get the menu value based on index. Each enum value starts from 0..<size of enum values.
+        * Get the menu value based on index. Each enum value starts from 0..size of enum values.
         * @param o Index expected of the option
         * @return the menu enum value.
         */
