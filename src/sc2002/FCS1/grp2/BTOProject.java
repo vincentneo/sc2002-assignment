@@ -856,7 +856,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
      */
 	@Override
 	public CSVFileTypes sourceFileType() {
-		// TODO Auto-generated method stub
 		return CSVFileTypes.PROJECT_LIST;
 	}
 	
@@ -988,6 +987,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			.display();
 	}
 	
+    /** Options to decide which columns to be displayed */
 	enum TableColumnOption {
 		INDEX_NUMBER(3,6, "No."),
 		MANAGER(12, "Manager"),
@@ -1018,7 +1018,7 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 			this.title = title;
 		}
 		
-		public int getHeaderSpacing() {
+        public int getHeaderSpacing() {
 			return headerSpacing;
 		}
 

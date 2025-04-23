@@ -7,17 +7,51 @@ import sc2002.FCS1.grp2.builders.DisplayMenu;
 import sc2002.FCS1.grp2.builders.Style;
 import sc2002.FCS1.grp2.helpers.Utilities;
 
+/**
+ * This class represents a BTO application.
+ */
 public class Application extends CSVDecodable implements CSVEncodable {
+	/**
+	 * The project which this application is applied to.
+	 */
     private BTOProject project;
+
+	/**
+	 * The flat type that is applied.
+	 */
     private FlatType flatType;
+
+	/** 
+	 * The status of this application.
+	 */
     private ApplicationStatus status;
+
+	/**
+	 * Whether if this application shall be invalidated due to withdrawal.
+	 */
     private WithdrawalStatus withdrawalStatus;
+
+	/** The applicant */
     private Applicant applicant;
+
+	/** The last updated date and time */
 	private LocalDateTime lastUpdated;
     
+	//region temporary values
+
+	/** Temporary value for CSV parse and link */
     private String projectName = null;
+	/** Temporary value for CSV parse and link */
     private String applicantNRIC = null;
 
+	//endregion
+
+	/**
+	 * Construct a BTO application.
+	 * @param project The project which this application is applying to.
+	 * @param flatType The flat type/size applied for.
+	 * @param applicant The applicant
+	 */
     public Application(BTOProject project, FlatType flatType, Applicant applicant) {
         this.project = project;
         this.flatType = flatType;
@@ -27,6 +61,10 @@ public class Application extends CSVDecodable implements CSVEncodable {
 		this.lastUpdated = LocalDateTime.now();
     }
     
+	/**
+	 * For {@code CSVParser} to parse a CSV row representing this class.
+	 * @param cells cells of a CSV row, of application type.
+	 */
     public Application(List<CSVCell> cells) {
     	super(cells);
     	this.projectName = cells.get(0).getValue();
@@ -49,6 +87,10 @@ public class Application extends CSVDecodable implements CSVEncodable {
 		}
     }
     
+	/**
+	 * Call this to link relevant applicant objects to this object, post CSV parse.
+	 * @param applicants Pool of all applicants
+	 */
     void linkApplicant(List<Applicant> applicants) { //throws Exception {
     	// if (applicantNRIC == null) throw new IllegalArgumentException();
     	
@@ -61,6 +103,10 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.applicantNRIC = null;
     }
     
+	/**
+	 * Call this to link relevant project to this object, post CSV parse.
+	 * @param applicants Pool of all projects
+	 */
     void linkProject(List<BTOProject> projects) {// throws Exception {
     	// if (projectName == null) throw new IllegalArgumentException();
     	
@@ -73,46 +119,91 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.projectName = null;
     }
 
+	/**
+	 * Withdraw this application.
+	 * Should only be called by applicant.
+	 * @throws Exception access control.
+	 */
 	public void withdraw() throws Exception {
-		if (!BTOManagementSystem.common().isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
 
+		var system = BTOManagementSystem.common();
+		var user = system.getActiveUserForPermittedTask(Applicant.class);
+
+		if (!this.applicant.getNric().equals(user.getNric())) throw new IllegalStateException("You are attempting to mutate someone else's application. This is not allowed.");
 		this.withdrawalStatus = WithdrawalStatus.WITHDRAWN;
 	}
     
+	/**
+	 * Update status and update last updated time.
+	 * @param status application status
+	 */
     public void setStatus(ApplicationStatus status) {
         this.status = status;
 		this.lastUpdated = LocalDateTime.now();
     }
 
+	/**
+	 * Get the application's status.
+	 * @return the status.
+	 */
     public ApplicationStatus getStatus() {
         return status;
     }
 
+	/**
+	 * Get the withdrawal status.
+	 * @return the status.
+	 */
     public WithdrawalStatus getWithdrawalStatus() {
 		return withdrawalStatus;
 	}
 
+	/**
+	 * Set the withdrawal status.
+	 * @param withdrawalStatus the new status.
+	 */
 	public void setWithdrawalStatus(WithdrawalStatus withdrawalStatus) {
 		this.withdrawalStatus = withdrawalStatus;
 		this.lastUpdated = LocalDateTime.now();
 	}
 
+	/**
+	 * Get flat type
+	 * @return the flat type
+	 */
 	public FlatType getFlatType() {
         return flatType;
     }
     
+	/**
+	 * Get the applicant of this application
+	 * @return the applicant
+	 */
     public Applicant getApplicant() {
         return applicant;
     }
     
+	/**
+	 * The project that's being applied for.
+	 * @return the project.
+	 */
 	public BTOProject getProject() {
 		return project;
 	}
 
+	/**
+	 * The last update date and time.
+	 * @return date and time object.
+	 */
 	public LocalDateTime getLastUpdatedDate() {
 		return lastUpdated;
 	}
 
+	/**
+	 * The receipt for a successfully booked application.
+	 * @return The receipt.
+	 * @throws Exception Non-booked applications does not have receipts.
+	 */
 	public String getReceipt() throws Exception {
 		if (this.status != ApplicationStatus.BOOKED) throw new IllegalArgumentException("No receipt can be generated as application has not been booked.");
 
