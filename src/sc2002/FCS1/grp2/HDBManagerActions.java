@@ -538,7 +538,7 @@ public class HDBManagerActions {
 		for (int i = 0; i < applications.size(); i++) {
 	            System.out.println((i + 1) + ". " + applications.get(i));
 		}
-		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject?");
+		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject?", 1, applications.size() );
 		
 		Application selectedApplication = applications.get(choice - 1);
 		boolean choose = superScanner.nextBoolUntilCorrect("Would you like to approve or reject this application? (input Y if approve, N if reject): ");
@@ -578,7 +578,7 @@ public class HDBManagerActions {
 		for (int i = 0; i < withdrawalApplications.size(); i++) {
 			System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
 	}
-		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
+		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?", 1, withdrawalApplications.size());
 		Application chosenApplication = withdrawalApplications.get(choice-1);
 		
 		boolean choice2 = superScanner.nextBoolUntilCorrect("Enter Y for approve, N for reject");
