@@ -588,7 +588,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 
 	/**
-	 * Get withdrawable applications
+	 * Get withdrawal applications
 	 * @return
 	 * @throws Exception
 	 */
@@ -617,6 +617,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			ArrayList<Application> Withdrawn = getApplications();
 			Withdrawn.stream().filter((a -> a.getWithdrawalStatus().equals(WithdrawalStatus.WITHDRAWN)))
 					.collect(Collectors.toCollection(ArrayList::new));
+			return Withdrawn;
 		}
 		if(activeUser instanceof Applicant) {
 			ArrayList<Application> withdrawalApplications = applications.stream().filter(a -> a.getApplicant() == activeUser)
