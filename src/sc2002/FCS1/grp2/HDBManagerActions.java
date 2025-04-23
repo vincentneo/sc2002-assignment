@@ -577,15 +577,17 @@ public class HDBManagerActions {
 			System.out.println((i + 1) + ". " + withdrawalApplications.get(i));
 	}
 		int choice = superScanner.nextIntUntilCorrect("Which Withdrawal Application would you like to approve or reject?");
-		Application chosenApplication = withdrawalApplications.get(choice);
+		Application chosenApplication = withdrawalApplications.get(choice-1);
 		
 		boolean choice2 = superScanner.nextBoolUntilCorrect("Enter Y for approve, N for reject");
 		 if(choice2 == true) {
 			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.WITHDRAWN);
+			 System.out.println("Withdrawal Application has been approved");
 			 
 		 }
 		 else {
 			 chosenApplication.setWithdrawalStatus(WithdrawalStatus.REJECTED);
+			 System.out.println("Withdrawal Application has been rejected");
 		 }
 		
 	}
