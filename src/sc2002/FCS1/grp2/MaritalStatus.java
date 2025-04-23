@@ -1,5 +1,8 @@
 package sc2002.FCS1.grp2;
 
+/**
+ * Represents the marital status of each user.
+ */
 public enum MaritalStatus {
 	SINGLE("Single"),
 	MARRIED("Married");

@@ -5,6 +5,11 @@ import java.util.List;
 
 public class HDBOfficer extends Applicant {
 
+	/**
+     * Constructor for {@code CSVParser} class
+     * This constructor constructs values based on CSV encoded rows representing this object.
+     * @param cells
+     */
     public HDBOfficer(List<CSVCell> cells) {
         super(cells);
     }
@@ -64,6 +69,11 @@ public class HDBOfficer extends Applicant {
 		
 		public static Menu[] allMenuOptions = Menu.values();
 		
+		/**
+        * Get the menu value based on index. Each enum value starts from 0..<size of enum values.
+        * @param o Index expected of the option
+        * @return the menu enum value.
+        */
 		public static Menu fromOrdinal(int o) {
 			if (o >= allMenuOptions.length) return null;
 			return allMenuOptions[o];

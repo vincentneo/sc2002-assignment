@@ -9,6 +9,9 @@ package sc2002.FCS1.grp2;
  */
 @SuppressWarnings("serial")
 class InsufficientAccessRightsException extends Exception {
+	/**
+	 * Construct the exception.
+	 */
 	InsufficientAccessRightsException() {
 		super("Logged in user is not permitted to perform the current action.");
 	}
