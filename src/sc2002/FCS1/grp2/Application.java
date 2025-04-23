@@ -72,6 +72,12 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	this.project = project;
     	this.projectName = null;
     }
+
+	public void withdraw() throws Exception {
+		if (!BTOManagementSystem.common().isActiveUserPermitted(Applicant.class)) throw new InsufficientAccessRightsException();
+
+		this.withdrawalStatus = WithdrawalStatus.WITHDRAWN;
+	}
     
     public void setStatus(ApplicationStatus status) {
         this.status = status;

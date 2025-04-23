@@ -37,7 +37,9 @@ public class HDBOfficer extends Applicant {
 		JOIN_PROJECT,
 		ENTER_ENQUIRIES_SYSTEM,
 		CHECK_PENDING_PROJECT,
-		BOOK_APPLICATION;
+		BOOK_APPLICATION,
+		VIEW_MY_APPLICATION,
+		WITHDRAW_APPLICATION;
 		
 		public String getOptionName() {
 			switch (this) {
@@ -51,6 +53,10 @@ public class HDBOfficer extends Applicant {
 				return "Check Officer Project Application Status";
 			case BOOK_APPLICATION:
 				return "Book Flats for Applicants";
+			case VIEW_MY_APPLICATION:
+				return "View My Applications (as Applicant)";
+			case WITHDRAW_APPLICATION:
+				return "Withdraw My Application (as Applicant)";
 			default:
 				return null;
 			}

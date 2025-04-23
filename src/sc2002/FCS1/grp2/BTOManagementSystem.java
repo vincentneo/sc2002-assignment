@@ -586,6 +586,22 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			.filter(a -> a.getStatus() == ApplicationStatus.SUCCESSFUL && a.getProject().getOfficers().contains(activeUser))
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
+
+	/**
+	 * Get withdrawable applications
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<Application> getWithdrawableApplications() throws Exception {
+		if (!(isActiveUserPermitted(Applicant.class) || isActiveUserPermitted(HDBOfficer.class))) throw new InsufficientAccessRightsException();
+
+		var applications = getApplications();
+
+		return applications.stream()
+			.filter(a -> a.getStatus() == ApplicationStatus.PENDING)
+			.collect(Collectors.toCollection(ArrayList::new));
+	}
+
 	/**
 	 * Get withdrawal applications made by applicant.
 	 * Applicant can only view his/her own withdrawal applications.
@@ -594,7 +610,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 * @return
 	 * @throws Exception
 	 */
-
 	public ArrayList<Application> getWithdrawalApplications() throws Exception {
 		if(!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(Applicant.class))) throw new InsufficientAccessRightsException();
 		

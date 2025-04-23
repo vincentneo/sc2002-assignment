@@ -32,6 +32,12 @@ public class HDBOfficerActions {
 			case BOOK_APPLICATION:
 				bookApplication(user);
 				break;
+			case VIEW_MY_APPLICATION:
+				ApplicantActions.viewApplication(user);
+				break;
+			case WITHDRAW_APPLICATION:
+				ApplicantActions.withdrawalApplicationFlow(user);
+				break;
 //            case CHECK_APPLICATION_STATUS:
 //                displayOfficerApplications(user);
 //                break;

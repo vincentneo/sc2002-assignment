@@ -36,17 +36,88 @@ public class ApplicantActions {
 		case VIEW_APPLICATIONS:
 			viewApplication(user);
 			break;
+		case WITHDRAW_APPLICATION:
+			withdrawalApplicationFlow(user);
+			break;
 		default:
 			break;
 		}
-		/*
-		 * TODO: move them else where
-		 *            menu.add("View Applied Project");
-           menu.add("Withdraw Application");
-           if(applicationStatus == ApplicationStatus.SUCCESSFUL && !hasBookedFlat) {
-               menu.add("Book Flat");
-           }
-		 */
+	}
+
+	static void withdrawalApplicationFlow(Applicant applicant) throws Exception {
+		Scanner scanner = system.getScanner();
+		SuperScanner superScanner = new SuperScanner(scanner);
+
+		ArrayList<Application> applications = system.getWithdrawableApplications();
+		
+		if (applications.isEmpty()) {
+			System.out.println("You have no BTO applications that can be withdrawn right now.");
+			return;
+		}
+		
+		printApplicationsTable(applications);
+
+		int option = superScanner.nextIntUntilCorrect("Choose application you wish to withdraw (0 to go back): ", 0, applications.size());
+
+		if (option == 0) return;
+
+		Application application = applications.get(option - 1);
+		application.withdraw();
+		system.saveChanges(CSVFileTypes.APPLICATIONS_LIST);
+
+		new Style.Builder()
+		.text("Application withdrawn, subject to agreement by authorised personnel.")
+		.code(Code.TEXT_GREEN)
+		.newLine()
+		.print();
+	}
+
+	private static boolean printApplicationsTable(List<Application> applications) {
+		var builder = new DisplayMenu.Builder()
+		.setTitle("Applications")
+		.addContent(String.format("%-5s │ %-20s │ %-10s │ %-30s", "No.", "Project", "Size", "Status"))
+		.addDivider();
+		
+		boolean hasBookedApplication = false;
+
+		for (int i = 0; i < applications.size(); i++) {
+			var application = applications.get(i);
+			var name = application.getProject().getProjectName();
+			var flatSize = application.getFlatType();
+			var withdrawalStatus = application.getWithdrawalStatus();
+			var status = application.getStatus();
+
+			var comboStatusBuilder = new Style.Builder();
+			switch (withdrawalStatus) {
+				case NOT, REJECTED:
+					comboStatusBuilder.text(status.toString());
+					if (withdrawalStatus == WithdrawalStatus.REJECTED) {
+						comboStatusBuilder.text(" ");
+						comboStatusBuilder.text(String.format("(%s)", withdrawalStatus.toString()))
+						.bold()
+						.code(Code.TEXT_RED);
+					}
+				case WITHDRAWN:
+					comboStatusBuilder.text(status.toString()).strikethrough();
+					comboStatusBuilder.text(" ");
+					comboStatusBuilder.text(String.format("(%s)", withdrawalStatus.toString()))
+					.bold()
+					.code(Code.BACK_RED);
+			}
+
+			var comboStatus = comboStatusBuilder.toString();
+
+			var indexValue = (i + 1) + ".";
+			builder.addContent(String.format("%-5s │ %-20s │ %-10s │ %-30s", indexValue, name, flatSize, comboStatus));
+
+			if (application.getStatus() == ApplicationStatus.BOOKED) {
+				hasBookedApplication = true;
+			}
+		}
+		
+		builder.build().display();
+
+		return hasBookedApplication;
 	}
 	
 	/**
@@ -54,7 +125,7 @@ public class ApplicantActions {
 	 * @param applicant The applicant that is actively using the application at current.
 	 * @throws Exception
 	 */
-	private static void viewApplication(Applicant applicant) throws Exception {
+	static void viewApplication(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
 
@@ -65,27 +136,7 @@ public class ApplicantActions {
 			return;
 		}
 		
-		var builder = new DisplayMenu.Builder()
-		.setTitle("Applications")
-		.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", "No.", "Project", "Size", "Status"))
-		.addDivider();
-		
-		boolean hasBookedApplication = false;
-
-		for (int i = 0; i < applications.size(); i++) {
-			var application = applications.get(i);
-			var name = application.getProject().getProjectName();
-			var flatSize = application.getFlatType();
-			var status = application.getStatus();
-			var indexValue = (i + 1) + ".";
-			builder.addContent(String.format("%-5s │ %-20s │ %-10s │ %-15s", indexValue, name, flatSize, status));
-
-			if (application.getStatus() == ApplicationStatus.BOOKED) {
-				hasBookedApplication = true;
-			}
-		}
-		
-		builder.build().display();
+		boolean hasBookedApplication = printApplicationsTable(applications);
 
 		if (hasBookedApplication) {
 			int choice = superScanner.nextIntUntilCorrect("Would you like to print the receipt? Choose application (0 to go back): ", 0, applications.size());
@@ -100,7 +151,7 @@ public class ApplicantActions {
 			}
 			else {
 				new Style.Builder()
-				.text("This application is not yet booked and thus has no receipt printable.")
+				.text("This application is not yet booked and thus has no receipt printable.\n")
 				.code(Code.TEXT_YELLOW)
 				.print();
 			}
