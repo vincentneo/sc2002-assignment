@@ -20,7 +20,7 @@ public class ApplicantActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	/**
-	 * Point of entry, to be handover from {@code BTOManagementApplication}
+	 * Point of entry, to be handed over from {@code BTOManagementApplication}
 	 * @param option Menu option selected by user.
 	 * @param user The user involved in the current action.
 	 * @throws Exception
@@ -43,6 +43,11 @@ public class ApplicantActions {
 			break;
 		}
 	}
+	/** 
+	 * The flow for withdrawing of application
+	 * @param applicant
+	 * @throws Exception
+	 */
 
 	static void withdrawalApplicationFlow(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
@@ -71,6 +76,11 @@ public class ApplicantActions {
 		.newLine()
 		.print();
 	}
+	/** 
+	 * Method to print the application that applicant have applied, if any.
+	 * @param applications
+	 * @return
+	 */
 
 	private static boolean printApplicationsTable(List<Application> applications) {
 		var builder = new DisplayMenu.Builder()
@@ -157,7 +167,11 @@ public class ApplicantActions {
 			}
 		}
 	}
-	
+	/**
+	 * Method for user to view all the available projects for user to apply, filtered based on the user's age and marital status.
+	 * @param applicant
+	 * @throws Exception
+	 */
 	private static void viewProjects(Applicant applicant) throws Exception {
 		SuperScanner sscanner = new SuperScanner(system.getScanner());
 		
@@ -179,7 +193,13 @@ public class ApplicantActions {
 		
 		repeatableMenuFlow(applicant, projects, sscanner);
 	}
-	
+	/**
+	 * this is the menu display which will be displayed at the home page for applicants.
+	 * @param applicant
+	 * @param projects
+	 * @param sscanner
+	 * @throws Exception
+	 */
 	private static void repeatableMenuFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		List<BTOProject.TableColumnOption> viewingOptions = new ArrayList<>();
 		viewingOptions.add(TableColumnOption.CLOSING_DATE);

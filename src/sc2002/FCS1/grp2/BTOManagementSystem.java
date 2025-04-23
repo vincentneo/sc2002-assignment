@@ -145,7 +145,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		this.activeUser.setEnquiriesSystem(null);
 		this.activeUser = null;
 	}
-
+	/**
+	 * Save changes to the CSV file
+	 * @param type
+	 */
 	public void saveChanges(CSVFileTypes type) {
 		ArrayList<CSVEncodable> encodables = new ArrayList<>();
 
