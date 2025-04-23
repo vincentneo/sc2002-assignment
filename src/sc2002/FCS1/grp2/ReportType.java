@@ -1,5 +1,8 @@
 package sc2002.FCS1.grp2;
 
+/**
+ * Type of report.
+ */
 enum ReportType {
     FLAT_TYPE("Flat Type"),
     PROJECT("BTO Project"),

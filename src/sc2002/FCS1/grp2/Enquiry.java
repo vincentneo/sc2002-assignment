@@ -49,6 +49,9 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 	private BTOProject project;
 	
 	
+	/** 
+	 * Construct an enquiry by the {@code CSVParser}.
+	 */
 	public Enquiry(List<CSVCell> cells) {
 		this.id = cells.get(0).getUUIDValue();
 		if (!cells.get(1).isBlank()) {
@@ -173,6 +176,9 @@ public class Enquiry extends CSVDecodable implements CSVEncodable {
 		return CSVFileTypes.ENQUIRIES_LIST;
 	}
 	
+	/**
+	 * Display this enquiry on the console, formatted.
+	 */
 	public void display() {
 		int width = 100;
 		

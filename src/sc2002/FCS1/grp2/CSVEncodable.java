@@ -1,6 +1,6 @@
 package sc2002.FCS1.grp2;
 
-/*
+/**
  * The purpose of this interface is to provide a set of common functionality for the {@code CSVEncoder} class to encode objects for generating a CSV file, that is compliant for future parsing.
  * 
  * This allows for a consistent CSV file encoding experience, of which all encodable files should subscribe to.

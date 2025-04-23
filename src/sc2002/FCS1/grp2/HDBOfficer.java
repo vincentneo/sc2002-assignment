@@ -3,6 +3,9 @@ package sc2002.FCS1.grp2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This represents a user that is of HDB Officer role.
+ */
 public class HDBOfficer extends Applicant {
 
 	/**

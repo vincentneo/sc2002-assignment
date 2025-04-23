@@ -16,6 +16,9 @@ import sc2002.FCS1.grp2.builders.Bar.Type;
 import sc2002.FCS1.grp2.builders.Style.Code;
 import sc2002.FCS1.grp2.helpers.SuperScanner;
 
+/**
+ * User interactable actions for when logged in user is of HDB Manager role
+ */
 public class HDBManagerActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	

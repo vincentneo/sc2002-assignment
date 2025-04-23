@@ -14,7 +14,7 @@ import sc2002.FCS1.grp2.helpers.ReceiptPrinter;
 import sc2002.FCS1.grp2.helpers.SuperScanner;
 
 /**
- * Handles all actions specific to Applicants.
+ * Handles all actions specific to users logged in with applicant role.
  */
 public class ApplicantActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();

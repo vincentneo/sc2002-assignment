@@ -23,15 +23,26 @@ public class EnquiriesSystem {
 		this.respondableEnquiries = delegate.getEnquiries();
 	}
 
+	/**
+	 * Set the delegate object
+	 * @param delegate The delegate object
+	 */
 	public void setDelegate(EnquiriesDelegate delegate) {
 		this.delegate = delegate;
 	}
 	
+	/** 
+	 * Add an enquiry to the system
+	 */
 	public void addEnquiry(Enquiry enquiry) throws Exception {
 		this.delegate.addEnquiry(enquiry);
 		this.ownEnquiries.add(enquiry);
 	}
 	
+	/**
+	 * Get all enquiries of system, self and respondable (if access control allows)
+	 * @return list of enquiries.
+	 */
 	public List<Enquiry> getEnquiries() {
 		var enquiries = new ArrayList<Enquiry>();
 		enquiries.addAll(ownEnquiries);
@@ -39,15 +50,30 @@ public class EnquiriesSystem {
 		return enquiries;
 	}
 
+	/**
+	 * Retrieve a list of enquiries that are respondable by a manager or officer.
+	 * @return list of enquiries.
+	 */
 	public List<Enquiry> getRespondableEnquiries() {
 		return respondableEnquiries;
 	}
 
+	/**
+	 * Remove an enquiry.
+	 * @param enquiry The enquiry to be removed.
+	 * @throws Exception access control.
+	 */
 	public void removeEnquiry(Enquiry enquiry) throws Exception {
 		delegate.removeEnquiry(enquiry);
 		updateState();
 	}
 
+	/**
+	 * Update the enquiry.
+	 * @param enquiry The enquiry to be updated.
+	 * @param updatedQuestion The new question to be updated to.
+	 * @throws Exception access control.
+	 */
 	public void updateEnquiry(Enquiry enquiry, String updatedQuestion) throws Exception {
 		if (enquiry.hasResponded()) throw new IllegalStateException("You cannot change your message after an officer or manager has responded to you.");
 
@@ -63,10 +89,19 @@ public class EnquiriesSystem {
 		this.respondableEnquiries = delegate.getEnquiries();
 	}
 	
+	/** 
+	 * Size of own enquiries list
+	 */
 	public int ownEnquiriesSize() {
 		return ownEnquiries.size();
 	}
 	
+	/**
+	 * Build a menu item ready for display later on.
+	 * @param index This item's index
+	 * @param enquiry The enquiry that this represents
+	 * @return string value that represents a menu item.
+	 */
 	private String buildMenuItem(int index, Enquiry enquiry) {
 		Message question = enquiry.getQuestion();
 		if (question == null) return null;
@@ -84,6 +119,9 @@ public class EnquiriesSystem {
 		return String.format("%3d. %-50s %s", index, title, responseState);
 	}
 	
+	/**
+	 * Display applicable menu items
+	 */
 	public void displayEnquiriesMenu() {		
 		int index = 1;
 		

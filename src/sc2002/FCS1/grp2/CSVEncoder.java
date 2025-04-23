@@ -69,11 +69,23 @@ public class CSVEncoder {
 		bufferedWriter.close();
 	}
 	
+	/**
+	 * Encode Booleans 
+	 * 
+	 * In caps, as it seems Excel does it this way.
+	 * @param bool The boolean
+	 * @return encoded boolean ready for a CSV cell.
+	 */
 	public static String encodeBoolean(boolean bool) {
 		if (bool) return "TRUE";
 		return "FALSE";
 	}
 	
+	/**
+	 * Encode a list of strings to be represented within a CSV cell.
+	 * @param strings list of strings.
+	 * @return a string, accurately formatted for future decodes.
+	 */
 	public static String encodeListOfStrings(List<String> strings) {
 		return String.format("\"%s\"", String.join(",", strings));
 	}

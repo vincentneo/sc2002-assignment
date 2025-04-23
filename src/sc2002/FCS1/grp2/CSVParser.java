@@ -129,6 +129,10 @@ public class CSVParser {
 		return parse(filePath, Application.class);
 	}
 	
+	/**
+	 * Parse all users, regardless of user type.
+	 * @return all user objects.
+	 */
 	ArrayList<User> retrieveAllUsers() {
 		ArrayList<User> users = new ArrayList<>();
 		users.addAll(parseApplicants());
