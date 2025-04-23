@@ -21,8 +21,6 @@ public interface EnquiriesDelegate {
 
 	/**
 	 * Update an enquiry of system.
-	 * @param enquiry The enquiry
-	 * @throws Exception access control
 	 */
 	public void updateEnquiry();
 
