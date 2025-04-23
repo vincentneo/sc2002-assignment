@@ -81,8 +81,11 @@ public class SuperScanner {
 			return nextDate(prompt);
 		}
 		catch (DateTimeParseException e) {
-			Utilities.getInstance().printYellow("Date input is incorrect. Please double check the date and format of d/m/yy");
-			System.out.println();
+			new Style.Builder()
+				.text("Date input is incorrect. Please double check the date and format of d/m/yy")
+				.code(Code.TEXT_YELLOW)
+				.newLine()
+				.print();
 			return nextDateUntilCorrect(prompt);
 		}
 	}
@@ -104,24 +107,70 @@ public class SuperScanner {
 			return nextBool(prompt);
 		}
 		catch (IllegalArgumentException e) {
-			Utilities.getInstance().printYellow("Invalid input.");
-			System.out.println();
+			new Style.Builder()
+				.text("Invalid input.")
+				.code(Code.TEXT_YELLOW)
+				.newLine()
+				.print();
 			return nextBoolUntilCorrect(prompt);
 		}
 	}
 	
-	private int nextInt(String prompt) {
+	/**
+	 * Prints the prompt, and then wait for user's input, on same line, expecting a number.
+	 * @param prompt The prompt associated with the input.
+	 * @return User's input as an integer.
+	 * @throws NumberFormatException When user's input is not an integer.
+	 */
+	private int nextInt(String prompt) throws NumberFormatException {
 		System.out.print(prompt);
 		String userInput = scanner.nextLine();
 		return Integer.parseInt(userInput);
 	}
 	
+
+	/**
+	 * Prints the prompt, and then wait for user's input, on same line, expecting a date, of d/M/yy.
+	 * 
+	 * d/M/yy format is used as that is the date format that the spreadsheet samples given to us are using.
+	 * @param prompt The prompt associated with the input.
+	 * @return User's input as an date (format: d/M/yy).
+	 * @throws java.time.format.DateTimeParseException When user's input is not a date or of incorrect formatting.
+	 */
 	private LocalDate nextDate(String prompt) {
 		System.out.print(prompt);
 		String userInput = scanner.nextLine();
 		return Utilities.getInstance().parseDate(userInput);
 	}
 	
+	/**
+	 * Prints the prompt, and then wait for user's input, on same line, expecting a boolean.
+	 * 
+	 * This method employs a very relaxed way of detecting boolean state.
+	 * Users can input the following, irrespective of case:
+		<ul>
+			<li>{@code true}:
+				<ul>
+					<li>T</li>
+					<li>True</li>
+					<li>Yes</li>
+					<li>Y</li>
+				</ul>
+			</li>
+			<li>{@code false}:
+				<ul>
+					<li>F</li>
+					<li>False</li>
+					<li>No</li>
+					<li>N</li>
+				</ul>
+			</li>
+		</ul>
+	 * 
+	 * @param prompt The prompt associated with the input.
+	 * @return A boolean according to user's input
+	 * @throws IllegalArgumentException When user's input does not fit detectable boolean state.
+	 */
 	private Boolean nextBool(String prompt) throws IllegalArgumentException {
 		System.out.print(prompt);
 		String userInput = scanner.nextLine();
