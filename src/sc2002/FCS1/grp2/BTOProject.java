@@ -11,7 +11,6 @@ import sc2002.FCS1.grp2.builders.DisplayMenu;
 import sc2002.FCS1.grp2.helpers.Utilities;
 
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -21,71 +20,53 @@ import java.util.Set;
  *  @author Ryu Hyungjoon
  */
 public class BTOProject extends CSVDecodable implements CSVEncodable {
+    /**
+     * name of project
+     */
     private String projectName;
+    /**
+     * neighbourhood which project belong to
+     */
     private String neighborhood;
-
-    //TODO: Store which floors are assigned to certain users
-//    private int maxTwoRoomUnits;
-//    private int maxThreeRoomUnits;
-//
-//    private EnumMap<FlatType, ArrayList<Flat>> remainingRooms;
-//    private EnumMap<FlatType, ArrayList<Flat>> bookedRooms;
-//
-//    private int twoRoomPrice;
-//    private int threeRoomPrice;
     
+    /** flat info, based on flat type */
     private EnumMap<FlatType,FlatInfo> flats = new EnumMap<>(FlatType.class);
 
-    private ArrayList<Application> applications;
-
+    /** Opening date of project */
     private LocalDate openingDate;
+    /** closing date of project */
     private LocalDate closingDate;
 
+    /** temporary value for decoding and linking purposes. */
     private String managerName;
+    /** the manager in charge of this project */
     private HDBManager managerInCharge;
+
+    /** slots of project, for project. does not decrement */
     private int totalOfficerSlots;
     
+    /** temporary value for decoding and linking purposes. */
     private List<String> officerNames;
+    /** officers of this project */
     private List<HDBOfficer> officers;
 
+    /** whether this is pubically visible */
     private boolean visibility;
     
+     /** temporary value for decoding and linking purposes. */
     private List<String> pendingOfficerNames;
+    /** Officers that are pending approval */
     private List<HDBOfficer> pendingOfficers;
 
+    /** Number of officers at max */
     static private int MAX_OFFICER_NUM = 10;
     
-    /**
-     * Values should be transient do not persist.
-     */
-    private Set<FlatType> excludedFlatTypes = new HashSet<>();
-
-    public Set<FlatType> getExcludedFlatTypes() {
-		return excludedFlatTypes;
-	}
-
-	public void setExcludedFlatType(FlatType type) {
-		this.excludedFlatTypes.add(type);
-	}
-	
-	public void resetExcludedFlatTypes() {
-		this.excludedFlatTypes.clear();
-	}
-
 	//region Consturctors
     //Construct with a string parsed from a csv file.
     public BTOProject (List<CSVCell> cells) throws Exception {
     	super(cells);
-//        List<String> splitted = Arrays.asList(line.split(","));
 		projectName = cells.get(0).getValue();
 		neighborhood = cells.get(1).getValue();
-
-//		  maxTwoRoomUnits = cells.get(3).getIntValue();
-//        maxThreeRoomUnits = cells.get(6).getIntValue();
-//        // TODO: Retrieve booked rooms
-//
-//        twoRoomPrice = cells.get(4).getIntValue();
-//        threeRoomPrice = cells.get(7).getIntValue();
 		
 		FlatType type1 = FlatType.fromString(cells.get(2).getValue());
 		int units1 = cells.get(3).getIntValue();
@@ -100,11 +81,8 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
 		flats.put(type1, info1);
 		flats.put(type2, info2);
 
-		openingDate = cells.get(8).getDateValue();//the parse method throws a DateTimeParseExecption if the string is in wrong format.
-        //For throwing exception
+		openingDate = cells.get(8).getDateValue();
 		closingDate = cells.get(9).getDateValue();
-        
-        //TODO: Get objects for manager and officers
         
         managerName = cells.get(10).getValue();
         totalOfficerSlots = cells.get(11).getIntValue();
@@ -131,7 +109,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         	this.pendingOfficerNames = new ArrayList<>();
         }
         
-        //officers = new ArrayList<String>(splitted.subList(12, splitted.size()));
 
         if (projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Project name cannot be empty.");
@@ -139,12 +116,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
         else if (neighborhood == null || neighborhood.isEmpty()) {
             throw new IllegalArgumentException("Neighborhood cannot be empty.");
         }
-//        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
-//            throw new IllegalArgumentException("Number of units cannot be negative.");
-//        }
-//        else if (maxTwoRoomUnits < 0 || maxThreeRoomUnits < 0) {
-//            throw new IllegalArgumentException("Number of price cannot be negative.");
-//        }
         else if (openingDate.isAfter(closingDate)) { // the parse method throws a DateTimeParseExecption if the string is in wrong format.
             throw new IllegalArgumentException("Opening date cannot be after closing date.");
         }
@@ -621,116 +592,23 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     	if (pendingOfficers.contains(officer)) pendingOfficers.remove(officer);
     }
     
-//    public void approveOfficer(HDBOfficer officer) throws Exception {
-//    	if (pendingOfficers.contains(officer)) {
-//    		pendingOfficers.remove(officer);
-//    		addOfficer(officer);
-//    	}
-//    	else {
-//    		throw new IllegalArgumentException("Officer " + officer.getName() + " not found in project's pending list.");
-//    	}
-//    }
-    
     public List<HDBOfficer> getPendingOfficers() {
     	return pendingOfficers;
     }
 
-    
-    // TODO: Think about next steps for how to handle application (probs move to *Action class)
-//    //region Applications and allocation of rooms
-//    public void submitApplication(Applicant applicant, FlatType flatType) throws IllegalArgumentException {
-//        ArrayList<Flat> remaining = remainingRooms.get(flatType);
-//
-//        if (remaining.isEmpty()) {
-//            throw new IllegalArgumentException("Invalid application! There are no remaing " + flatType + " in " + projectName + ".");
-//        }
-//        
-//        applications.add(new Application(this, flatType, ApplicationStatus.PENDING, applicant));
-//    }
-//
-//    // The user inputs index to identify which application to approve/reject/book
-//    public void approveApplication(int index) throws IllegalArgumentException {
-//        if(applications.isEmpty()) {
-//            throw new IllegalArgumentException("There is no applications for the project " + projectName + ".");
-//        }
-//        else if (index - 1 > applications.size() || index - 1 < 0) {
-//            throw new IllegalArgumentException("Invalid input! The index out of bound!");
-//        }
-//        
-//        Application appli = applications.get(index - 1);
-//        ApplicationStatus status = appli.getStatus();
-//        if (status != ApplicationStatus.PENDING) {
-//            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
-//        }
-//        else if (remainingRooms.get(appli.getFlatType()).isEmpty()) {
-//            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-//            throw new IllegalArgumentException("The selected room type has been already fully booked!");
-//        }
-//
-//        appli.setStatus(ApplicationStatus.SUCCESSFUL);
-//        System.out.println("Approval successful.");
-//    }
-//
-//    public void rejectApplication(int index) throws IllegalArgumentException {
-//        if(applications.isEmpty()) {
-//            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
-//        }
-//        else if (index - 1 > applications.size() || index - 1 < 0) {
-//            throw new IllegalArgumentException("Invalid input! Index out of bound!");
-//        }
-//        
-//        ApplicationStatus status = applications.get(index - 1).getStatus();
-//        if (status != ApplicationStatus.PENDING) {
-//            throw new IllegalArgumentException("Invalid input! The Application has been already processed!");
-//        }
-//
-//        applications.get(index - 1).setStatus(ApplicationStatus.UNSUCCESSFUL);
-//        System.out.println("Rejection successful.");
-//    }
-//
-//    public void bookApplication(int index) throws IllegalArgumentException {
-//        if(applications.isEmpty()) {
-//            throw new IllegalArgumentException("There is no applications for project " + projectName + ".");
-//        }
-//        else if (index - 1 > applications.size() || index - 1 < 0) {
-//            throw new IllegalArgumentException("Invalid input! Index out of bound!");
-//        }
-//        
-//        Application appli = applications.get(index - 1);
-//
-//        ApplicationStatus status = appli.getStatus();
-//        ArrayList<Flat> remaining = remainingRooms.get(appli.getFlatType());
-//
-//        if (status != ApplicationStatus.SUCCESSFUL) {
-//            throw new IllegalArgumentException("Invalid input! The application is not successful!");
-//        }
-//        else if (remaining.isEmpty()) {
-//            appli.setStatus(ApplicationStatus.UNSUCCESSFUL);
-//            throw new IllegalArgumentException("The selected room type has been already fully booked!");
-//        }
-//
-//        appli.setStatus(ApplicationStatus.BOOKED);
-//        
-//        Flat bookedFlat = remaining.removeLast();
-//        bookedFlat.setBookedApplicant(appli.getApplicant());
-//        bookedRooms.get(appli.getFlatType()).add(bookedFlat);
-//        System.out.println("Booking successful.");
-//    }
-    
-
     /**
      * Print the list of applications for the project.
      */
-    public void printApplications() {
-        if (applications.isEmpty()) {
-            System.out.println("There is no applications for project " + projectName + ".");
-            return;
-        }
+    // public void printApplications() {
+    //     if (applications.isEmpty()) {
+    //         System.out.println("There is no applications for project " + projectName + ".");
+    //         return;
+    //     }
 
-        for(int i = 0; i < applications.size(); i++) {
-            System.out.println((i + 1) + ": " + applications.get(i));
-        }
-    }
+    //     for(int i = 0; i < applications.size(); i++) {
+    //         System.out.println((i + 1) + ": " + applications.get(i));
+    //     }
+    // }
     //endregion
     
     /**

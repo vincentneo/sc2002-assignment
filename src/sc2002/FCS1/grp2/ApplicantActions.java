@@ -48,7 +48,6 @@ public class ApplicantActions implements IUserActions {
 	 * @param applicant
 	 * @throws Exception
 	 */
-
 	static void withdrawalApplicationFlow(Applicant applicant) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -81,7 +80,6 @@ public class ApplicantActions implements IUserActions {
 	 * @param applications
 	 * @return
 	 */
-
 	private static boolean printApplicationsTable(List<Application> applications) {
 		var builder = new DisplayMenu.Builder()
 		.setTitle("Applications")
@@ -230,6 +228,13 @@ public class ApplicantActions implements IUserActions {
 		searchFlow(applicant, projects, sscanner);
 	}
 	
+	/**
+	 * Flow to search for a project
+	 * @param applicant applicant thats trying to search a project
+	 * @param projects applicable projects
+	 * @param sscanner scanner for user input.
+	 * @throws Exception access control, etc
+	 */
 	private static void searchFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		new DisplayMenu.Builder()
 		.setTitle("Search By?")
@@ -286,7 +291,14 @@ public class ApplicantActions implements IUserActions {
 		repeatableMenuFlow(applicant, projects, sscanner);
 	}
 	
-	
+	/** 
+	 * Flow for applying BTO project, for both applicants and hdb officers.
+	 * 
+	 * @param applicant The applicant thats applying for project
+	 * @param projects Projects that applicant can apply
+	 * @param sscanner The scanner
+	 * @throws Exception access control, etc.
+	 */
 	public static void applyBTOFlow(Applicant applicant, ArrayList<BTOProject> projects, SuperScanner sscanner) throws Exception {
 		
 		ArrayList<Application> applications = system.getApplications();
@@ -474,7 +486,6 @@ public class ApplicantActions implements IUserActions {
 		
 		Message question = new Message(applicant, query);
 		
-		// TODO: Link with a project.
 		Enquiry enquiry = new Enquiry(question, project);
 		
 		applicant.getEnquiriesSystem().addEnquiry(enquiry);

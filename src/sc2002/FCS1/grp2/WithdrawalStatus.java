@@ -19,8 +19,15 @@ public enum WithdrawalStatus {
 	 */
 	REJECTED("Rejected");
 	
+	/**
+	 * User readable name thats also used for csv encode/decode.
+	 */
 	private String value;
 	
+	/**
+	 * Internal constructor for enum
+	 * @param value
+	 */
 	private WithdrawalStatus(String value) {
 		this.value = value;
 	}
@@ -30,6 +37,11 @@ public enum WithdrawalStatus {
 		return value;
 	}
 	
+	/**
+	 * Decode from string content
+	 * @param value Content such as from CSV file
+	 * @return this status, or null if invalid.
+	 */
 	public static WithdrawalStatus fromString(String value) {
 		for (WithdrawalStatus status : WithdrawalStatus.values()) {
 			if (status.value.equalsIgnoreCase(value)) {

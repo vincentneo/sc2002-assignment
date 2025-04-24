@@ -17,10 +17,10 @@ import sc2002.FCS1.grp2.helpers.SuperScanner;
 public class HDBOfficerActions implements IUserActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 
+	/** Handles user input selection from {@code BTOManagementApplication} */
 	public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
         switch (option) {
             case VIEW_PROJECTS:
-                // TODO: filtering, access control etc etc
             	viewProjects(user);
                 break;
             case JOIN_PROJECT:

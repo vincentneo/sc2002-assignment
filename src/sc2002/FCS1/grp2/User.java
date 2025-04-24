@@ -58,6 +58,10 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 	 */
 	private ListingFilter listingFilter;
 
+
+	/**
+	 * Enquiries system handles all enquiry needs of the user.
+	 */
 	private EnquiriesSystem enquiriesSystem;
 	
 	/**
@@ -69,6 +73,10 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 			"Filter BTO Project Listing",
 	};
 	
+	/**
+	 * Get number of common menu items
+	 * @return number of common menu items
+	 */
 	public static int getCommonMenuOptions() {
 		return commonMenuOptions.length;
 	}
@@ -240,6 +248,9 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 				+ ", password=" + password + "]";
 	}
 	
+	/**
+	 * Checks if user is same, based on NRIC.
+	 */
 	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
@@ -253,15 +264,28 @@ public abstract class User extends CSVDecodable implements CSVEncodable {
 		return ((User) object).getNric().equals(this.getNric());
 	}
 	
+	/**
+	 * Checks if name is equal between this and another user.
+	 * @param user User to check against.
+	 * @return true if both users are of the same name.
+	 */
 	public boolean nameEquals(User user) {
 		return user.getName().equals(this.getName());
 	}
 	
+	/**
+	 * Get the enquiries system object
+	 * @return enquiries system object.
+	 */
 	public EnquiriesSystem getEnquiriesSystem() {
 		return enquiriesSystem;
 	}
 
-	public void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
+	/**
+	 * Assign a new enquiries system object, should only be handled by {@code BTOManagementSystem}.
+	 * @param enquiriesSystem the new system to assign to, or null.
+	 */
+	void setEnquiriesSystem(EnquiriesSystem enquiriesSystem) {
 		if (enquiriesSystem == null) {
 			this.enquiriesSystem.setDelegate(null);
 		}

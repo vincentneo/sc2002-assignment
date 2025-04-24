@@ -94,7 +94,6 @@ public class HDBManager extends User {
 
 	@Override
 	String getReadableTypeName() {
-		// TODO Auto-generated method stub
 		return "HDB Manager";
 	}
 }

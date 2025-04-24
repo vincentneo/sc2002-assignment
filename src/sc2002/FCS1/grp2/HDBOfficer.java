@@ -17,6 +17,11 @@ public class HDBOfficer extends Applicant {
         super(cells);
     }
 
+	/**
+	 * Check if this officer is involved in given project.
+	 * @param project The project to check against.
+	 * @return true if officer is involved in project, false otherwise.
+	 */
     public boolean isOfficerForProject(BTOProject project) {
         return project.getOfficers().contains(this);
     }

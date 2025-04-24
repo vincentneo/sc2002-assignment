@@ -97,7 +97,6 @@ public class Message extends CSVDecodable implements CSVEncodable {
 				.filter(u -> u.getNric().equals(nric))
 				.findFirst()
 				.orElse(null);
-//		System.out.println("x");
 	}
 
 	@Override

@@ -212,7 +212,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 			CSVEncoder encoder = new CSVEncoder(type.getFileName(), type.getHeader(), encodables);
 			encoder.encode();
 		} catch (Exception e) {
-			// TODO: handle properly.
 			e.printStackTrace();
 		}
 	}

@@ -45,15 +45,7 @@ public class CSVEncoder {
 	 * Call this method to write the CSV file with the respective data at path.
 	 * @throws java.io.IOException if path provided could not be used to write the file, for whatever reason.
 	 */
-	public void encode() throws IOException {
-		// TODO: support case whereby callable without retrieval of header row.
-		//File file = new File(path);
-		//Scanner reader = new Scanner(file);
-		
-		// get the header row from the current file.
-		//String headerLine = reader.nextLine();
-		//reader.close();
-		
+	public void encode() throws IOException {		
 		FileWriter writer = new FileWriter(path);
 		BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		
