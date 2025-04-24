@@ -295,7 +295,7 @@ public class ApplicantActions {
 					apps.getStatus() == ApplicationStatus.PENDING 
 					|| apps.getStatus() == ApplicationStatus.SUCCESSFUL) && (apps.getWithdrawalStatus() != WithdrawalStatus.WITHDRAWN)) {
 				new Style.Builder()
-					.text("Only can apply for maximum of one project")
+					.text("Only can apply for maximum of one project\n")
 					.code(Code.TEXT_YELLOW)
 					.print();
 				return;
