@@ -188,24 +188,6 @@ public class HDBManagerActions {
 	 * @return true if the project can be created, false otherwise.
 	 */
 	private static boolean checkProjectCreationEligibility(LocalDate openingDate, LocalDate closingDate) {
-		// ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
-		
-		// LocalDate today = LocalDate.now();
-		// long count = applicableProjects.stream()
-		// 		.filter(p -> {
-		// 			if (today.isEqual(p.getOpeningDate())) {
-		// 				return true;
-		// 			}
-					
-		// 			if (today.isEqual(p.getClosingDate())) {
-		// 				return true;
-		// 			}
-						
-		// 			return today.isAfter(p.getOpeningDate()) && today.isBefore(p.getClosingDate());
-		// 			})
-		// 		.count();
-		// return count < 1;
-
 		ArrayList<BTOProject> applicableProjects = system.getApplicableProjects();
 
 		for(BTOProject project : applicableProjects) {
@@ -227,13 +209,6 @@ public class HDBManagerActions {
 	 */
 	private static void createProject(HDBManager manager) throws Exception {
 		// Managers are able to create projects if the dates of the project are not within the range of any other projects they are in charge regardless of current time.
-		
-		// if (!checkProjectCreationEligibility()) {
-		// 	System.out.println("You can only have one active project on hand. Hence you are not allowed to create a new project at this time.");
-		// 	return;
-		// } 
-
-	
 		
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -286,7 +261,6 @@ public class HDBManagerActions {
 		}
 
 		system.addProject(newProject);
-//		BTOProject project = new BTOProject(projectName, Neighborhood, maxTwoRoomUnits, maxThreeRoomUnits, openingDate, closingDate,  this, officerSlots, officers);
 	}
 	
 
@@ -330,22 +304,6 @@ public class HDBManagerActions {
 		int choose = superScanner.nextIntUntilCorrect("Which Project would you like to edit? (enter the corresponding number): ", 1, projects.size());
 		BTOProject selectedProject = projects.get(choose-1);
 		
-//		ArrayList<BTOProject> projects = system.getApplicableProjects(); 
-//		ArrayList<BTOProject> ProjectsFinder = projects.stream()
-//				.filter(p -> p.getProjectName().equalsIgnoreCase(projectName))
-//				.collect(Collectors.toCollection(ArrayList::new));
-//		
-//		if(ProjectsFinder.isEmpty()) {
-//			System.out.println("Project not found");
-//			return;
-//		}
-//		else {
-//		System.out.println("Matching Projects: ");
-//		for(BTOProject p: ProjectsFinder) {
-//			System.out.println(p);
-//			}
-//		}
-
 		System.out.println("What would you like to edit?");
 		
 		new DisplayMenu.Builder()
@@ -662,7 +620,11 @@ public class HDBManagerActions {
 
 
 	
-	
+	/**
+	 * View pending officer requests for a project and review.
+	 * @param manager The manager viewing the pending officer requests.
+	 * @throws Exception 
+	 */
 	private static void viewPendingOfficerRequests(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
