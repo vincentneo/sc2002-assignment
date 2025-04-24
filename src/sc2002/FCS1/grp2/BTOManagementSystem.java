@@ -7,8 +7,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
-
 import java.time.LocalDate;
 
 /**
