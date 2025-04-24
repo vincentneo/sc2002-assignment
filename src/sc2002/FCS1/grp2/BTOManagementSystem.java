@@ -555,7 +555,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 	/**
 	 * Get the active user, and checks for access rights before returning.
-	 * @param <U> The class that conforms to {@type User}
+	 * @param <U> The class that conforms to {@code User}
 	 * @param expectedType The expected access rights user class type
 	 * @return the user, suggests that access rights is granted, based on logged in user.
 	 * @throws InsufficientAccessRightsException access control
