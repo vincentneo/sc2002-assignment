@@ -180,6 +180,13 @@ public class HDBOfficerActions {
 		displayOptions.add(TableColumnOption.MANAGER);
 		displayOptions.add(TableColumnOption.OPENING_DATE);
 		displayOptions.add(TableColumnOption.CLOSING_DATE);
+		displayOptions.add(TableColumnOption.ROOM_ONE_UNITS);
+		displayOptions.add(TableColumnOption.ROOM_ONE_PRICE);
+		displayOptions.add(TableColumnOption.ROOM_TWO_UNITS);
+		displayOptions.add(TableColumnOption.ROOM_TWO_PRICE);
+		displayOptions.add(TableColumnOption.OFFICER_SLOTS);
+		displayOptions.add(TableColumnOption.OFFICERS);
+		displayOptions.add(TableColumnOption.VISIBILITY);
 		
 		ArrayList<BTOProject> projects = system.getProjects();
 		
@@ -196,17 +203,6 @@ public class HDBOfficerActions {
 			System.out.println("You have no approved projects right now.");
 		}
 		else {
-			displayOptions.add(TableColumnOption.MANAGER);
-			displayOptions.add(TableColumnOption.ROOM_ONE_UNITS);
-			displayOptions.add(TableColumnOption.ROOM_ONE_PRICE);
-			displayOptions.add(TableColumnOption.ROOM_TWO_UNITS);
-			displayOptions.add(TableColumnOption.ROOM_TWO_PRICE);
-			displayOptions.add(TableColumnOption.OPENING_DATE);
-			displayOptions.add(TableColumnOption.CLOSING_DATE);
-			displayOptions.add(TableColumnOption.OFFICER_SLOTS);
-			displayOptions.add(TableColumnOption.OFFICERS);
-			displayOptions.add(TableColumnOption.VISIBILITY);
-			displayOptions.add(TableColumnOption.PENDING_OFFICERS);
 			BTOProject.display(approved, displayOptions);
 		}
 		
