@@ -91,9 +91,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
 	 * Call this to link relevant applicant objects to this object, post CSV parse.
 	 * @param applicants Pool of all applicants
 	 */
-    void linkApplicant(List<Applicant> applicants) { //throws Exception {
-    	// if (applicantNRIC == null) throw new IllegalArgumentException();
-    	
+    void linkApplicant(List<Applicant> applicants) { 
     	Applicant applicant = applicants.stream()
     			.filter(ap -> ap.getNric().equalsIgnoreCase(applicantNRIC))
     			.findFirst()
@@ -107,9 +105,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
 	 * Call this to link relevant project to this object, post CSV parse.
 	 * @param projects Pool of all projects
 	 */
-    void linkProject(List<BTOProject> projects) {// throws Exception {
-    	// if (projectName == null) throw new IllegalArgumentException();
-    	
+    void linkProject(List<BTOProject> projects) {
     	BTOProject project = projects.stream()
     			.filter(p -> p.getProjectName().equals(projectName))
     			.findFirst()

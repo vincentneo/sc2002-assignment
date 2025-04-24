@@ -270,8 +270,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     
 
     //region Room Units
-    //TODO: Get and set for room units
-    
     /**
      * Get the applicable flat information for specific flat types.
      * @param applicableTypes Set of flat types to get applicable flats for.
@@ -595,20 +593,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
     public List<HDBOfficer> getPendingOfficers() {
     	return pendingOfficers;
     }
-
-    /**
-     * Print the list of applications for the project.
-     */
-    // public void printApplications() {
-    //     if (applications.isEmpty()) {
-    //         System.out.println("There is no applications for project " + projectName + ".");
-    //         return;
-    //     }
-
-    //     for(int i = 0; i < applications.size(); i++) {
-    //         System.out.println((i + 1) + ": " + applications.get(i));
-    //     }
-    // }
     //endregion
     
     /**
@@ -691,7 +675,6 @@ public class BTOProject extends CSVDecodable implements CSVEncodable {
      */
 	@Override
 	public String encode() {
-		// TODO: Flat Type should be stored not hardcoded.
 		FlatType roomOneType = FlatType.TWO_ROOM;
 		FlatType roomTwoType = FlatType.THREE_ROOM;
 		

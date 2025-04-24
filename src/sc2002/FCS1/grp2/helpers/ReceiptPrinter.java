@@ -22,9 +22,7 @@ public class ReceiptPrinter {
             // create a delay for 30ms, after each character print.
             try {
                 Thread.sleep(30);
-            } catch (InterruptedException e) {
-                //e.printStackTrace();
-            }
+            } catch (InterruptedException e) {}
         }
     }
 }

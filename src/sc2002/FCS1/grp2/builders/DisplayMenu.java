@@ -86,8 +86,6 @@ public class DisplayMenu {
 			width = 20;
 		}
 		
-//		width += title.length();
-		
 		if (title != null) {
 			int spacers = width - title.length();
 			int halfSpacer = spacers / 2;
@@ -106,10 +104,6 @@ public class DisplayMenu {
 			text += String.format("%s%s%s\n", BOX_TOP_LEFT_CORNER, LINE_HORIZONTAL.repeat(width + 2), BOX_TOP_RIGHT_CORNER);
 		}
 		
-//		if (halfSpacer % 2 == 0) {
-//			width += 1;
-//		}
-//		
 		if (contents != null) {
 			int size = contents.size();
 			for (int i = 0; i < size; i++) {
