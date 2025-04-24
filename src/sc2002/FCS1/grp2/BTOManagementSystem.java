@@ -116,6 +116,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 
+	/**
+	 * Check if user exists
+	 * @param nric The NRIC of user
+	 * @return
+	 */
 	public User findUserByNRIC(String nric) {
 		for (User user : allUsers()) {
 			if (user.getNric().equalsIgnoreCase(nric)) {
@@ -125,6 +130,12 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return null;
 	}
 
+	/**
+	 * Try to login; if successful, it will set the user property
+	 * @param user The user
+	 * @param password The attempted password
+	 * @return true, if login is successful, false if login fails.
+	 */
 	public boolean attemptLogin(User user, String password) {
 		boolean result = user.checkPassword(password);
 
@@ -135,6 +146,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return result;
 	}
 	
+	/**
+	 * Call this when login is successful. This will set the user property and setup the enquiries system.
+	 * @param user The user.
+	 */
 	private void login(User user) {
 		this.activeUser = user;
 		
