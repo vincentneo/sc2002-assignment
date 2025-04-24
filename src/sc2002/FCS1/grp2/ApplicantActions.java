@@ -16,7 +16,7 @@ import sc2002.FCS1.grp2.helpers.SuperScanner;
 /**
  * Handles all actions specific to users logged in with applicant role.
  */
-public class ApplicantActions {
+public class ApplicantActions implements IUserActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 	
 	/**
