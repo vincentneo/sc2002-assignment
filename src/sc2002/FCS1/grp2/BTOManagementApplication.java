@@ -22,9 +22,6 @@ public class BTOManagementApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO: Delete once finish debugging
-		system.debugPrintAllUsers();
-		
 		login();
 		
 		startResponseLoop();

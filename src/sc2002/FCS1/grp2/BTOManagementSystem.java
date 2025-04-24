@@ -554,6 +554,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return expectedType.isInstance(activeUser);
 	}
 
+	/**
+	 * Get the active user, and checks for access rights before returning.
+	 * @param <U> The class that conforms to {@type User}
+	 * @param expectedType The expected access rights user class type
+	 * @return the user, suggests that access rights is granted, based on logged in user.
+	 * @throws InsufficientAccessRightsException access control
+	 */
 	@SuppressWarnings("unchecked")
 	public <U extends User> U getActiveUserForPermittedTask(Class<U> expectedType)
 			throws InsufficientAccessRightsException {
@@ -564,6 +571,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 	// endregion
 
+	/**
+	 * Add a project to system, and persist.
+	 * @param project New project to be added.
+	 * @throws Exception access control
+	 */
 	public void addProject(BTOProject project) throws Exception {
 		// always check if logged-in user is permitted for activity, else return;
 		if (!isActiveUserPermitted(HDBManager.class))
@@ -576,6 +588,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		System.out.println(project.toString());
 	}
 
+	/**
+	 * Delete a project.
+	 * @param project The project to be deleted.
+	 * @throws Exception only manager in charge can delete, else throws error.
+	 */
 	public void deleteProject(BTOProject project) throws Exception {
 		if (!isActiveUserPermitted(HDBManager.class))
 			throw new InsufficientAccessRightsException();
@@ -595,10 +612,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		saveChanges(CSVFileTypes.APPLICATIONS_LIST);
 	}
 
-	public ArrayList<Application> getApplications() throws Exception {
-		// if (!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(Applicant.class)))
-		// 	throw new InsufficientAccessRightsException();
-
+	/**
+	 * Get applicable applications, depending on logged in user access rights
+	 * @return manager's in charge project's applications or applicant's applications, depending on logged in user.
+	 */
+	public ArrayList<Application> getApplications() {
 		if (activeUser instanceof HDBManager) {
 			return applications.stream().filter(a -> a.getProject().getManagerInCharge() == activeUser)
 					.collect(Collectors.toCollection(ArrayList::new));
@@ -609,8 +627,13 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 	}
 
+	/**
+	 * Get all applicant's successful applications which the logged in officer is in charge of
+	 * @return applications
+	 * @throws Exception access control
+	 */
 	public ArrayList<Application> getSuccessfulApplications() throws Exception {
-		if (!(isActiveUserPermitted(HDBManager.class) || isActiveUserPermitted(HDBOfficer.class))) throw new InsufficientAccessRightsException();
+		if (!isActiveUserPermitted(HDBOfficer.class)) throw new InsufficientAccessRightsException();
 
 		return applications.stream()
 			.filter(a -> a.getStatus() == ApplicationStatus.SUCCESSFUL && a.getProject().getOfficers().contains(activeUser))
@@ -693,20 +716,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	}
 
 	/**
-	 * call when finished
+	 * Do final cleanup, call when finished
 	 */
 	public void cleanup() {
 		scanner.close();
 	}
-
-	// TODO: Delete once done. This method is only intended for testing.
-	void debugPrintAllUsers() {
-		// del later
-		for (User user : allUsers()) {
-			System.out.printf("%s: ", user.getClass());
-			user.print();
-		}
-
-	}
-
 }
