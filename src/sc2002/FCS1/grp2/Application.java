@@ -113,7 +113,7 @@ public class Application extends CSVDecodable implements CSVEncodable {
     	BTOProject project = projects.stream()
     			.filter(p -> p.getProjectName().equals(projectName))
     			.findFirst()
-    			.orElseThrow();
+    			.orElse(null);
     	
     	this.project = project;
     	this.projectName = null;

@@ -482,6 +482,11 @@ public class HDBManagerActions implements IUserActions {
 		}	
 	}
 	
+	/**
+	 * Approve / reject applicant's application
+	 * @param manager
+	 * @throws Exception
+	 */
 	private static void approveRejectApplication(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);
@@ -496,8 +501,10 @@ public class HDBManagerActions implements IUserActions {
 		for (int i = 0; i < applications.size(); i++) {
 	            System.out.println((i + 1) + ". " + applications.get(i));
 		}
-		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject?", 1, applications.size() );
+		int choice = superScanner.nextIntUntilCorrect("Which Application would you like to approve or reject? (0 to go back): ", 0, applications.size() );
 		
+		if (choice == 0) return;
+
 		Application selectedApplication = applications.get(choice - 1);
 		boolean choose = superScanner.nextBoolUntilCorrect("Would you like to approve or reject this application? (input Y if approve, N if reject): ");
 		
@@ -518,9 +525,6 @@ public class HDBManagerActions implements IUserActions {
 	 * @param manager
 	 * @throws Exception
 	 */
-	
-	
-		
 	private static void approveRejectWithdrawalApplication(HDBManager manager) throws Exception {
 		Scanner scanner = system.getScanner();
 		SuperScanner superScanner = new SuperScanner(scanner);

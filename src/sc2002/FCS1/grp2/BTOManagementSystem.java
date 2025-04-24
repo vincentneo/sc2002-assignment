@@ -160,6 +160,9 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}
 	}
 
+	/**
+	 * Call this when user logout, resets stuff
+	 */
 	public void logout() {
 		this.activeUser.setEnquiriesSystem(null);
 		this.activeUser = null;
@@ -215,6 +218,8 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return users;
 	}
 
+	/** The logged in user.
+	 */
 	public User getActiveUser() {
 		return activeUser;
 	}
@@ -296,8 +301,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 	@Override
 	public List<Enquiry> getOwnEnquiries() {
-//		if (!(isActiveUserPermitted(HDBOfficer.class) || isActiveUserPermitted(Applicant.class))) return new ArrayList<>();
-		
 		return enquiries.stream().filter(e -> e.isUserInvolved(activeUser)).collect(Collectors.toCollection(ArrayList::new));
 	}
 	
@@ -341,10 +344,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	public void updateEnquiry() {
 		this.saveChanges(CSVFileTypes.ENQUIRIES_LIST);
 	}
-
-	// @Override
-	// public void updateEnquiry(Enquiry enquiry) throws Exception {
-	// }
 
 	/**
 	 * Get the projects that are filtered by the active user's filter.
@@ -556,7 +555,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 	/**
 	 * Get the active user, and checks for access rights before returning.
-	 * @param <U> The class that conforms to {@type User}
+	 * @param <U> The class that conforms to {@code User}
 	 * @param expectedType The expected access rights user class type
 	 * @return the user, suggests that access rights is granted, based on logged in user.
 	 * @throws InsufficientAccessRightsException access control
@@ -601,10 +600,16 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (projects.contains(project) == false)
 			throw new Exception("Project not found in system.");
 
+		applications.removeIf(a -> a.getProject().getProjectName().equals(project.getProjectName()));
 		projects.remove(project);
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 
+	/**
+	 * Save an application
+	 * @param application The new application
+	 * @throws Exception access control
+	 */
 	public void addApplication(Application application) throws Exception {
 		if (!(isActiveUserPermitted(Applicant.class) || isActiveUserPermitted(HDBOfficer.class)))
 			throw new InsufficientAccessRightsException();
