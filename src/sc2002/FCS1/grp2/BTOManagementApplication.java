@@ -160,6 +160,11 @@ public class BTOManagementApplication {
 		}
 	}
 	
+	/**
+	 * Handles the option selected by user. Will pass this along to relevant action classes
+	 * @param index The index provided by user.
+	 * @throws Exception 
+	 */
 	private static void handleAction(int index) throws Exception {
 		User user = system.getActiveUser();
 
@@ -241,6 +246,9 @@ public class BTOManagementApplication {
 		}
 	}
 
+	/**
+	 * Show change listing sort options and ask what user want
+	 */
 	private static void changeListingSort() {
 		User user = system.getActiveUser();
 		Scanner scanner = system.getScanner();
@@ -304,6 +312,9 @@ public class BTOManagementApplication {
 		System.out.println("Your listing sort has been updated.");
 	}
 
+	/**
+	 * Show change filter options and ask what user want
+	 */
 	private static void changeListingFilter() {
 		User user = system.getActiveUser();
 		Scanner scanner = system.getScanner();
@@ -352,6 +363,10 @@ public class BTOManagementApplication {
 		System.out.println("Your listing filter has been updated.");
 	}
 	
+	/**
+	 * Different greetings depending on time of day.
+	 * @return the greetings.
+	 */
 	private static String getGreetings() {
 		LocalTime time = LocalTime.now();
 		int hour = time.getHour();
@@ -367,7 +382,9 @@ public class BTOManagementApplication {
 		}
 	}
 	
-
+	/**
+	 * User login flow.
+	 */
 	private static void login() {
 		Scanner scanner = system.getScanner();
 		
