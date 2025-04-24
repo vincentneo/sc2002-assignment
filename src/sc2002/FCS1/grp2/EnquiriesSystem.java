@@ -116,7 +116,7 @@ public class EnquiriesSystem {
 		String projectName = enquiry.getProject().getProjectName();
 		String title = String.format("(%s): %s", projectName, question.getContent());
 		
-		return String.format("%3d. %-50s %s", index, title, responseState);
+		return String.format("%3d. %-70s %s", index, title, responseState);
 	}
 	
 	/**

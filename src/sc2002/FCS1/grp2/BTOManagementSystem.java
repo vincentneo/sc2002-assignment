@@ -314,7 +314,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	@Override
 	public List<Enquiry> getEnquiries() {
 		if (activeUser instanceof HDBManager) {
-			return enquiries;
+			return enquiries.stream().filter(e -> e.getProject().getManagerInCharge().equals(activeUser)).collect(Collectors.toCollection(ArrayList::new));
 		}
 		else if (activeUser instanceof HDBOfficer) {
 			return enquiries.stream()
