@@ -14,7 +14,7 @@ import sc2002.FCS1.grp2.helpers.SuperScanner;
 /**
  * User interactable actions for when logged in user is of HDB Officer role
  */
-public class HDBOfficerActions {
+public class HDBOfficerActions implements IUserActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
 
 	public static void handleAction(HDBOfficer.Menu option, HDBOfficer user) throws Exception {
