@@ -135,6 +135,10 @@ public class CSVCell {
 		return commaSeperatedValues != null;
 	}
 	
+	/**
+	 * Returns true if cell is blank. (e.g. not even a blank space)
+	 * @return ture if cell blank.
+	 */
 	public boolean isBlank() {
 		return value.isBlank();
 	}
