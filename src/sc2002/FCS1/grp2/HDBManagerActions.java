@@ -21,7 +21,8 @@ import sc2002.FCS1.grp2.helpers.SuperScanner;
  */
 public class HDBManagerActions {
 	private static BTOManagementSystem system = BTOManagementSystem.common();
-	
+
+	/** handle action based on user input, passed in from {@code BTOManagementApplication} */
 	public static void handleAction(HDBManager.Menu option, HDBManager user) throws Exception {
 		switch (option) {
 		case VIEW_ALL_PROJECTS:
@@ -57,6 +58,11 @@ public class HDBManagerActions {
 		}
 	}
 	
+	/**
+	 * Flow to view reports for manager
+	 * @param manager
+	 * @throws Exception
+	 */
 	private static void reportsFlow(HDBManager manager) throws Exception {
 		SuperScanner superScanner = new SuperScanner(system.getScanner());
 		ArrayList<Application> applications = system.getApplications();
@@ -653,7 +659,7 @@ public class HDBManagerActions {
 		options.add(TableColumnOption.PENDING_OFFICERS);
 		BTOProject.display(projects, options);
 		
-		int option = superScanner.nextIntUntilCorrect("Which project's pending officers would you like to review? (0 to exit): ", 0, projects.size());
+		int option = superScanner.nextIntUntilCorrect("Which project's pending officers would you like to review? (0 to go back): ", 0, projects.size());
 		
 		if (option == 0) return;
 		
@@ -692,6 +698,7 @@ public class HDBManagerActions {
 		system.saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
 	
+	/** Enter into enquiries system */
 	private static void enterEnquiriesFlow(HDBManager manager) throws Exception {
 		EnquiriesSystem eSystem = manager.getEnquiriesSystem();
 		eSystem.displayEnquiriesMenu();
