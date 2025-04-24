@@ -7,6 +7,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import sc2002.FCS1.grp2.BTOProject.TableColumnOption;
+
 import java.time.LocalDate;
 
 /**
@@ -582,9 +584,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 
 		projects.add(project);
 		saveChanges(CSVFileTypes.PROJECT_LIST);
-//		project.retrieveConnectedUsers(officers);
-		System.out.println("\nProject added successfully : ");
-		System.out.println(project.toString());
 	}
 
 	/**

@@ -267,6 +267,18 @@ public class HDBManagerActions implements IUserActions {
 		}
 
 		system.addProject(newProject);
+
+		// print the table
+		System.out.println("\nProject added successfully : ");
+		var displayable = new ArrayList<BTOProject>();
+		displayable.add(newProject);
+
+		List<TableColumnOption> options = new ArrayList<>();
+		options.add(TableColumnOption.ROOM_ONE_PRICE);
+		options.add(TableColumnOption.ROOM_ONE_UNITS);
+		options.add(TableColumnOption.ROOM_TWO_PRICE);
+		options.add(TableColumnOption.ROOM_TWO_UNITS);
+		BTOProject.display(displayable, options);
 	}
 	
 
