@@ -70,10 +70,18 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		automatedChecks();
 	}
 
+	/**
+	 * The shared object, singleton style.
+	 * @return a common instance of this class.
+	 */
 	public static BTOManagementSystem common() {
 		return commonInstance;
 	}
 
+	/**
+	 * Links necessary objects to certain class types.
+	 * For example, an application is related to both an applicant and project classes. This method links it all together, post parsing.
+	 */
 	private void crosslinking() {
 		for (BTOProject project : projects) {
 			project.retrieveConnectedUsers(officers, managers);
