@@ -12,6 +12,9 @@ import java.util.Scanner;
  * 
  */
 public class CSVParser {
+	/**
+	 * The file directory path which the CSV files are expected to be in.
+	 */
 	private String path;
 	
 	/**
@@ -37,6 +40,13 @@ public class CSVParser {
 		this.path = filesPath;
 	}
 	
+	/**
+	 * Generic method to parse various class types that extends {@code CSVDecodable}
+	 * @param <Decodable> Only CSVDecodable types can be parsed/decoded to.
+	 * @param path The path of the file.
+	 * @param type The expected type which the file should be decoded to.
+	 * @return the parsed/decoded content.
+	 */
 	private<Decodable extends CSVDecodable> ArrayList<Decodable> parse(String path, Class<Decodable> type) {
 		ArrayList<Decodable> decodables = new ArrayList<>();
 		try {
@@ -104,6 +114,7 @@ public class CSVParser {
 		return cells;
 	}
 	
+	//region convenient wrappers for easy parsing of common types.
 	ArrayList<Applicant> parseApplicants() {
 		String filePath = path + CSVFileTypes.APPLICANT_LIST.getFileName();
 		return parse(filePath, Applicant.class);
@@ -133,7 +144,8 @@ public class CSVParser {
 		String filePath = path + CSVFileTypes.APPLICATIONS_LIST.getFileName();
 		return parse(filePath, Application.class);
 	}
-	
+	//endregion
+
 	/**
 	 * Parse all users, regardless of user type.
 	 * @return all user objects.
