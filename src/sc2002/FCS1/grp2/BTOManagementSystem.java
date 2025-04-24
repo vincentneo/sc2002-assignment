@@ -600,6 +600,7 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		if (projects.contains(project) == false)
 			throw new Exception("Project not found in system.");
 
+		applications.removeIf(a -> a.getProject().getProjectName().equals(project.getProjectName()));
 		projects.remove(project);
 		saveChanges(CSVFileTypes.PROJECT_LIST);
 	}
