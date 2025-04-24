@@ -54,11 +54,11 @@ public class HDBOfficer extends Applicant {
 			case VIEW_PROJECTS: 
 				return "View Projects (as Applicant)";
 			case JOIN_PROJECT:
-				return "Join Project";
+				return "Join Project (as Officer)";
 			case ENTER_ENQUIRIES_SYSTEM:
 				return "Enter Enquiries System";
 			case CHECK_PENDING_PROJECT:
-				return "Check Officer Project Application Status";
+				return "View Projects and Application Status (as Officer)";
 			case BOOK_APPLICATION:
 				return "Book Flats for Applicants";
 			case VIEW_MY_APPLICATION:
