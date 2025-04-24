@@ -242,7 +242,6 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 	 *         projects that the officer is involved in; For managers, it will
 	 *         return projects whereby the manager is in charge of.
 	 */
-
 	public ArrayList<BTOProject> getApplicableProjects() {
 		if (activeUser instanceof HDBManager) {
 			return projects.stream().filter(p -> p.getManagerInCharge().equals(activeUser))
@@ -257,6 +256,10 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		return new ArrayList<>();
 	}
 
+	/**
+	 * Get projects that are public visibility (i.e. approved by manager, not expired).
+	 * @return a list of projects 
+	 */
 	private ArrayList<BTOProject> getVisibleProjects() {
 		Applicant ap = (Applicant) activeUser;
 		Set<FlatType> types = ap.getEligibleFlatTypes();
@@ -270,6 +273,11 @@ public class BTOManagementSystem implements EnquiriesDelegate {
 		}).collect(Collectors.toCollection(ArrayList::new));
 	}
 
+	/**
+	 * Projects
+	 * @return
+	 * @throws Exception
+	 */
 	public ArrayList<BTOProject> getApplicableProjectsAsApplicant() throws Exception {
 		if (!isActiveUserPermitted(HDBOfficer.class))
 			throw new InsufficientAccessRightsException();

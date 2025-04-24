@@ -115,6 +115,7 @@ public class BTOManagementApplication {
 	private static void handleUserResponse(String response) {
 		try {
 			int index = Integer.parseInt(response);
+			if (index < 1) throw new NumberFormatException();
 			handleAction(index);
 		}
 		catch (NumberFormatException e) {
